@@ -12,11 +12,16 @@ function drawScreen() {
     return application.process();
 }
 
+window.onresize = () => {
+    application.resizeGrid();
+}
+
 function loop() {
-    zone.innerHTML = "";
-    cursor.innerHTML = application.context.cursor.toString();
-    visible_zone.innerHTML = application.context.camera.getVisibleZoneToString();
-    zone.innerHTML = drawScreen();
+    if(application.redraw) {
+        cursor.innerHTML = application.context.cursor.toString();
+        visible_zone.innerHTML = application.context.camera.getVisibleZoneToString();
+        zone.innerHTML = drawScreen();
+    }
     window.requestAnimationFrame(loop);
 }
 

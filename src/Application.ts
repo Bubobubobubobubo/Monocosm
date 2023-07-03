@@ -48,6 +48,7 @@ export class Application {
     howManyCharactersFitWidth = (): number => {
         const testElement = document.createElement('span');
         testElement.innerText = 'X';
+        testElement.className = 'cell';
         testElement.style.visibility = 'hidden';
         testElement.style.position = 'absolute';
         document.body.appendChild(testElement);
@@ -60,6 +61,7 @@ export class Application {
     howManyCharactersFitHeight = (): number => {
         const testElement = document.createElement('span');
         testElement.innerText = 'X';
+        testElement.className = 'cell';
         testElement.style.visibility = 'hidden';
         testElement.style.position = 'absolute';
         document.body.appendChild(testElement);
@@ -69,7 +71,6 @@ export class Application {
         return Math.floor(viewportHeight / characterHeight);
     }
 
-
     process = (): string => {
         if (this.output_type == 'text') {
             return this.processText(this.context);
@@ -78,14 +79,13 @@ export class Application {
         }
     }
 
-    adaptToScreenSize = () => {
-        // Check the width of a character printed in HTML
-        let test_char = document.getElementById('test_char');
+    processText = (context: Context): string => {
+        return this.drawGrid(context);
     }
 
-    processText = (context: Context): string => {
-        this.adaptToScreenSize();
-        return this.drawGrid(context);
+    resizeGrid = (): void => {
+        this.context.camera.resize(this.howManyCharactersFitHeight(), this.howManyCharactersFitWidth());
+        this.redraw = true;
     }
 
     drawGrid = (context: Context): string => {
@@ -106,27 +106,26 @@ export class Application {
             }
             grid.push('<br>');
         }
-        let foo: string = grid.join("");
-        this.last_grid = foo;
+        this.last_grid = grid.join("");
         this.redraw = false;
         return this.last_grid;
     }
 
     drawCharacter = (char: string, color: string, background: string) => {
-        return `<span style="color:${color};background:${background}">${char}</span>`
+        return `<span class="cell" style="color:${color};background:${background}">${char}</span>`
     }
 
     drawCursor = (color: string, background: string): string => {
-        return `<span style="color:${color};background:${background}">█</span>`
+        return `<span class="cell" style="color:${color};background:${background}">█</span>`
     }
 
     getVisibleZone = (context: Context): VisibleZone => {
         let x = context.cursor.x; let y = context.cursor.y;
         return {
-            'from_x': x - context.camera.x / 2,
-            'to_x': x + context.camera.x / 2,
-            'from_y': y - context.camera.y / 2,
-            'to_y': y + context.camera.y / 2,
+            'from_x': x - Math.floor(context.camera.x / 2),
+            'to_x': x + Math.floor(context.camera.x / 2),
+            'from_y': y - Math.floor(context.camera.y / 2),
+            'to_y': y + Math.floor(context.camera.y / 2),
         }
     }
 }
