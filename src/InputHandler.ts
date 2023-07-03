@@ -19,6 +19,7 @@ export class InputHandler {
             this.enterKeyHandler,
             this.altOHandler,
             this.altRHandler,
+            this.spaceKeyHandler,
         ];
         this.EditingKeyFunctions = [];
         this.setupEventListeners();
@@ -39,6 +40,12 @@ export class InputHandler {
 
     keyUpListener = (event) => {
         this.keyPresses[event.key] = false;
+    }
+
+    spaceKeyHandler = (event) => {
+        if (event.key == ' ') {
+            this.app.context.cursor.x += 1;
+        }
     }
 
     altOHandler = (event) => {
@@ -75,7 +82,7 @@ export class InputHandler {
         // Check if key in alphabet or number
         // Do not capture arrows or special keys
         if (event.key.length == 1) {
-            if (event.key.match(/[a-z0-9 ]/i)) {
+            if (event.key.match(/[a-z0-9]/i)) {
                 this.app.context.tables[this.app.context.current_table].addCell(this.app.context.cursor.x, this.app.context.cursor.y, event.key);
                 this.app.context.cursor.x += 1;
             }
