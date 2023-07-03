@@ -1,18 +1,28 @@
 import type { Application } from "./Application";
 
 export class Table {
+
     cells: object
+    pasteBuffer: object
+
     constructor(public app: Application) {
         this.cells = {}
+        this.pasteBuffer = {};
     }
+
     addCell = (y: number, x: number, char: string) => {
         let id = this.generateID(y, x)
         this.cells[id] = char;
     }
+
     clear = () => this.cells = {}
+
     generateID = (y: number, x: number) => `${y},${x}`
+
     exists = (id: string) => this.cells.hasOwnProperty(id)
+
     existsAt = (y: number, x: number) => this.exists(this.generateID(y, x))
+
     getCell = (y: number, x: number) => {
         let id = this.generateID(y, x);
         if (!this.exists(id)) {
@@ -22,10 +32,38 @@ export class Table {
             return this.cells[id];
         }
     }
+
     removeCell = (y: number, x: number) => {
         let id = this.generateID(y, x);
         if (this.exists(id)) {
             delete this.cells[id];
+        }
+    }
+
+    copy = () => {
+        let { y, x } = this.app.context.cursor;
+        let { height, width } = this.app.context.cursor.size;
+        this.pasteBuffer = {};
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                let cell = this.getCell(y + i, x + j);
+                if (cell) {
+                    this.pasteBuffer[this.generateID(i, j)] = cell;
+                }
+            }
+        }
+    }
+
+    paste = () => {
+        let { y, x } = this.app.context.cursor;
+        let { height, width } = this.app.context.cursor.size;
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                let id = this.generateID(i, j);
+                if (this.pasteBuffer.hasOwnProperty(id)) {
+                    this.addCell(y + i, x + j, this.pasteBuffer[id]);
+                }
+            }
         }
     }
 }

@@ -10,20 +10,18 @@ export class InputHandler {
         this.keyPresses = {};
         this.textEditingMode = false;
         this.NormalKeyFunctions  = [
-            this.keyDownHandler,
-            this.keyUpHandler,
-            this.keyLeftHandler,
-            this.keyRightHandler,
-            this.charInputHandler,
-            this.backSpaceHandler,
-            this.enterKeyHandler,
-            this.altOHandler,
-            this.altRHandler,
-            this.spaceKeyHandler,
-            this.keyDownLeftHandler,
-            this.keyUpLeftHandler,
-            this.keyDownRightHandler,
-            this.keyUpRightHandler,
+            // Directional input
+            this.keyDownLeftHandler, this.keyUpLeftHandler,
+            this.keyDownRightHandler, this.keyUpRightHandler,
+            this.keyDownHandler, this.keyUpHandler,
+            this.keyLeftHandler, this.keyRightHandler,
+            // Regular ASCII input
+            this.charInputHandler, this.spaceKeyHandler,
+            this.backSpaceHandler, this.enterKeyHandler,
+            // Copy and paste mechanics
+            this.copyHandler, this.pasteHandler,
+            // Alt controls
+            this.altOHandler, this.altRHandler,
         ];
         this.EditingKeyFunctions = [];
         this.setupEventListeners();
@@ -32,6 +30,18 @@ export class InputHandler {
     setupEventListeners = () => {
         window.addEventListener('keydown', this.keyDownListener, false);
         window.addEventListener('keyup', this.keyUpListener, false);
+    }
+
+    copyHandler = (event) => {
+        if (event.key == 'c' && this.keyPresses['Control']) {
+            this.app.context.tables[this.app.context.current_table].copy();
+        }
+    }
+
+    pasteHandler = (event) => {
+        if (event.key == 'v' && this.keyPresses['Control']) {
+            this.app.context.tables[this.app.context.current_table].paste();
+        }
     }
 
     keyDownListener = (event) => {
