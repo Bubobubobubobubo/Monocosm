@@ -16,7 +16,6 @@ export interface VisibleZone {
     from_y: number; to_y: number;
 }
 
-
 export class Application {
 
     context: Context;
@@ -61,12 +60,20 @@ export class Application {
         let grid = [];
         for (let y = visible_zone.from_y; y < visible_zone.to_y; y++) {
             for (let x = visible_zone.from_x; x < visible_zone.to_x; x++) {
+                if(this.context.tables[this.context.current_table].existsAt(x,y)) {
+                     grid.push(this.drawCharacter(this.context.tables[this.context.current_table].getCell(x,y), 'white', 'black'));
+                } else if(this.context.cursor.isUnder(y,x)) {
+                    grid.push(this.drawCursor('white', 'black'));
+                } 
+                else {
+                    grid.push(this.drawCharacter('.', 'grey', 'black'));
+                }
             }
+            grid.push('<br>');
         }
-        grid = grid.join("");
-        console.log(grid);
-
-        return grid.join("");
+        let foo: string = grid.join("");
+        console.log(foo);
+        return foo;
     }
 
     addNewlines = (input: string, chunkSize: number): string => {
@@ -75,7 +82,11 @@ export class Application {
     }
 
     drawCharacter = (char: string, color: string, background: string) => {
-        return `<pre style="color:${color};background:${background}">${char}</pre>`
+        return `<span style="color:${color};background:${background}">${char}</span>`
+    }
+
+    drawCursor = (color: string, background: string): string => {
+        return `<span style="color:${color};background:${background}">█</span>`
     }
 
     getVisibleZone = (context: Context): VisibleZone => {

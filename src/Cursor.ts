@@ -25,4 +25,9 @@ export class Cursor {
     toString = (): string => {
         return `Cursor: ${this.x}, ${this.y}`;
     }
+
+    isUnder = (y: number, x: number): boolean => {
+        return y == this.y && x == this.x;
+    }
+
 }
