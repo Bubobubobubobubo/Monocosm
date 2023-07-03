@@ -23,7 +23,7 @@ export class Application {
 
     constructor(public output_type: OutputType) {
         this.context = {
-            'camera': new Camera(this, 20, 40),
+            'camera': new Camera(this, 20, 130),
             'cursor': new Cursor(this, 0, 0, 1, 1),
             'tables': {
                 'default': new Table(this),

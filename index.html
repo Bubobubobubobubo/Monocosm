@@ -5,22 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        code pre {
-            display: inline;
-        }
-        p {
-            font-family: monospace;
+        body {
+            margin: 0;
+            padding: 0;
         }
         code {
-            background: red;
             font-size: 20px;
             line-height: 15pt;
+        }
+        div#interface {
+            display: inline-flex;
+            gap: 50px;
+            line-height: 20px;
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            font-size: 16px;
+            padding: 0;
+        }
+        div#interface p {
+            padding: 0; margin: 0;
         }
     </style>
 </head>
 <body>
-    <p id="cursor">Cursor: 0, 0</p>
-    <p id="visibleZone">Visible: 0, 0</p>
+    <div id="interface">
+        <p id="cursor">Cursor: 0, 0</p>
+        <p id="visibleZone">Visible: 0, 0</p>
+    </div>
     <code id="zone" display="grid"></code>
     <script type="module" src="dist/index.js"></script>
 </body>
