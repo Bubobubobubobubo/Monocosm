@@ -20,6 +20,8 @@ export class Application {
 
     context: Context;
     input: InputHandler;
+    redraw: boolean;
+    last_grid: string;
 
     constructor(public output_type: OutputType) {
         this.context = {
@@ -31,6 +33,7 @@ export class Application {
             'current_table': 'default',
         }
         this.input = new InputHandler(this);
+        this.redraw = true;
 
         // Adding random stuff to the grid for testing
         for (let i=0; i < 50; i++) {
@@ -40,7 +43,6 @@ export class Application {
             let random_letter = String.fromCharCode(Math.floor(Math.random() * 26) + 97);
             this.context.tables[this.context.current_table].addCell(random_x, random_y, random_letter);
         }
-
     }
 
     process = (): string => {
@@ -62,12 +64,14 @@ export class Application {
     }
 
     drawGrid = (context: Context): string => {
-        let visible_zone = this.getVisibleZone(context);
+        if (!this.redraw) { return this.last_grid; }
+        let visible_zone = context.camera.getVisibleZone();
         let grid = [];
         for (let y = visible_zone.from_y; y < visible_zone.to_y; y++) {
             for (let x = visible_zone.from_x; x < visible_zone.to_x; x++) {
                 if(this.context.tables[this.context.current_table].existsAt(x,y)) {
-                     grid.push(this.drawCharacter(this.context.tables[this.context.current_table].getCell(x,y), 'white', 'black'));
+                    grid.push(this.drawCharacter(this.context.tables[this.context.current_table]
+                        .getCell(x,y), 'white', 'black'));
                 } else if(this.context.cursor.isUnder(y,x)) {
                     grid.push(this.drawCursor('white', 'black'));
                 } 
@@ -78,12 +82,9 @@ export class Application {
             grid.push('<br>');
         }
         let foo: string = grid.join("");
-        return foo;
-    }
-
-    addNewlines = (input: string, chunkSize: number): string => {
-        const regex = new RegExp(`(.{${chunkSize}})`, "g");
-        return input.replace(regex, "$1\n");
+        this.last_grid = foo;
+        this.redraw = false;
+        return this.last_grid;
     }
 
     drawCharacter = (char: string, color: string, background: string) => {

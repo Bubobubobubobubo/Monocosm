@@ -30,6 +30,7 @@ export class InputHandler {
     }
 
     keyDownListener = (event) => {
+        this.app.redraw = true;
         this.keyPresses[event.key] = true;
         // Calling each registered key handler.
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
