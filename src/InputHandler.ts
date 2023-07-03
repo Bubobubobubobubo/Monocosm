@@ -1,23 +1,64 @@
 import type { Application } from './Application.js';
 
 export class InputHandler {
-    listeners: { [key: string]: (event) => void };
+    NormalKeyFunctions: Array<Function>;
+    EditingKeyFunctions: Array<Function>;
+    keyPresses: { [key: string]: boolean };
+    textEditingMode: boolean;
 
     constructor(public app: Application) {
-        this.listeners = {
-            'keydown': this.keyDownHandler,
-            'keyup': this.keyUpHandler,
-            'keyleft': this.keyLeftHandler,
-            'keyright': this.keyRightHandler,
-            'charInput': this.charInputHandler,
-            'backSpace': this.backSpaceHandler,
-        }
-        this.setup();
+        this.keyPresses = {};
+        this.textEditingMode = false;
+        this.NormalKeyFunctions  = [
+            this.keyDownHandler,
+            this.keyUpHandler,
+            this.keyLeftHandler,
+            this.keyRightHandler,
+            this.charInputHandler,
+            this.backSpaceHandler,
+            this.enterKeyHandler,
+            this.altOHandler,
+            this.altRHandler,
+        ];
+        this.EditingKeyFunctions = [];
+        this.setupEventListeners();
     }
 
-    setup = () => {
-        for (const listener in this.listeners) {
-            window.addEventListener("keydown", this.listeners[listener]);
+    setupEventListeners = () => {
+        window.addEventListener('keydown', this.keyDownListener, false);
+        window.addEventListener('keyup', this.keyUpListener, false);
+    }
+
+    keyDownListener = (event) => {
+        this.keyPresses[event.key] = true;
+        // Calling each registered key handler.
+        let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
+        keybindings.forEach(func => func(event));
+    }
+
+    keyUpListener = (event) => {
+        this.keyPresses[event.key] = false;
+    }
+
+    altOHandler = (event) => {
+        if (event.key == 'Alt' && (this.keyPresses['o'] || this.keyPresses['O'])) {
+            // reset cursor position to origin
+            this.app.context.cursor.x = 0;
+            this.app.context.cursor.y = 0;
+        }
+    }
+
+    altRHandler = (event) => {
+        // Empty the table if shift + c is pressed
+        if (event.key == 'Alt' && (this.keyPresses['r'] || this.keyPresses['R'])) {
+            this.app.context.tables[this.app.context.current_table].clear();
+        }
+    }
+
+    enterKeyHandler = (event) => {
+        if (event.key == 'Enter') {
+            this.app.context.cursor.y += 1;
+            this.app.context.cursor.x -= 1;
         }
     }
 
