@@ -20,6 +20,10 @@ export class InputHandler {
             this.altOHandler,
             this.altRHandler,
             this.spaceKeyHandler,
+            this.keyDownLeftHandler,
+            this.keyUpLeftHandler,
+            this.keyDownRightHandler,
+            this.keyUpRightHandler,
         ];
         this.EditingKeyFunctions = [];
         this.setupEventListeners();
@@ -41,6 +45,35 @@ export class InputHandler {
     keyUpListener = (event) => {
         this.keyPresses[event.key] = false;
     }
+
+    keyDownLeftHandler = (event) => {
+        if (event.key == 'ArrowDown' && this.keyPresses['ArrowLeft']) {
+            this.app.context.cursor.y += 1;
+            this.app.context.cursor.x -= 1;
+        }
+    }
+
+    keyUpLeftHandler = (event) => {
+        if (event.key == 'ArrowUp' && this.keyPresses['ArrowLeft']) {
+            this.app.context.cursor.y -= 1;
+            this.app.context.cursor.x -= 1;
+        }
+    }
+
+    keyDownRightHandler = (event) => {
+        if (event.key == 'ArrowDown' && this.keyPresses['ArrowRight']) {
+            this.app.context.cursor.y += 1;
+            this.app.context.cursor.x += 1;
+        }
+    }
+
+    keyUpRightHandler = (event) => {
+        if (event.key == 'ArrowUp' && this.keyPresses['ArrowRight']) {
+            this.app.context.cursor.y -= 1;
+            this.app.context.cursor.x += 1;
+        }
+    }
+
 
     spaceKeyHandler = (event) => {
         if (event.key == ' ') {
