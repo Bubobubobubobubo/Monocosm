@@ -2,6 +2,7 @@ import type { VisibleZone, Application } from './Application.js';
 
 export class Camera {
     constructor(public app: Application, public y: number = 50, public x: number = 50) {
+        this.app = app;
         this.y = y;
         this.x = x;
     }
