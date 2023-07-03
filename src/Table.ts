@@ -22,4 +22,10 @@ export class Table {
             return this.cells[id];
         }
     }
+    removeCell = (y: number, x: number) => {
+        let id = this.generateID(y, x);
+        if (this.exists(id)) {
+            delete this.cells[id];
+        }
+    }
 }

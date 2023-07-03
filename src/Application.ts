@@ -23,7 +23,7 @@ export class Application {
 
     constructor(public output_type: OutputType) {
         this.context = {
-            'camera': new Camera(this, 50, 50),
+            'camera': new Camera(this, 20, 40),
             'cursor': new Cursor(this, 0, 0, 1, 1),
             'tables': {
                 'default': new Table(this),
@@ -51,7 +51,13 @@ export class Application {
         }
     }
 
+    adaptToScreenSize = () => {
+        // Check the width of a character printed in HTML
+        let test_char = document.getElementById('test_char');
+    }
+
     processText = (context: Context): string => {
+        this.adaptToScreenSize();
         return this.drawGrid(context);
     }
 
@@ -72,7 +78,6 @@ export class Application {
             grid.push('<br>');
         }
         let foo: string = grid.join("");
-        console.log(foo);
         return foo;
     }
 
