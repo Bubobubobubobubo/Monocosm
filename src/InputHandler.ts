@@ -45,6 +45,8 @@ export class InputHandler {
     }
 
     keyDownListener = (event) => {
+        console.log(this.app.context.cursor)
+        // console.log(event.key)
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         // Calling each registered key handler.
@@ -83,7 +85,6 @@ export class InputHandler {
             this.app.context.cursor.x += 1;
         }
     }
-
 
     spaceKeyHandler = (event) => {
         if (event.key == ' ') {
@@ -136,22 +137,36 @@ export class InputHandler {
     keyDownHandler = (event) => {
         if (event.key == 'ArrowDown') {
             this.app.context.cursor.y += 1;
+        } else if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
+            this.app.context.cursor.y_size += 1;
         }
     }
 
     keyUpHandler = (event) => {
         if (event.key == 'ArrowUp') {
             this.app.context.cursor.y -= 1;
+        } else if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
+            if (this.app.context.cursor.y_size > 0) {
+                this.app.context.cursor.y_size -= 1;
+            }
         }
     }
+
     keyLeftHandler = (event) => {
         if (event.key == 'ArrowLeft') {
             this.app.context.cursor.x -= 1;
+        } else if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
+            if (this.app.context.cursor.x_size > 0) {
+                this.app.context.cursor.x_size -= 1;
+            }
         }
     }
+
     keyRightHandler = (event) => {
         if (event.key == 'ArrowRight') {
             this.app.context.cursor.x += 1;
+        } else if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
+            this.app.context.cursor.x_size += 1;
         }
     }
 }
