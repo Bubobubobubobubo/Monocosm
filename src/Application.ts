@@ -25,7 +25,7 @@ export class Application {
 
     constructor(public output_type: OutputType) {
         this.context = {
-            'camera': new Camera(this, 20, 130),
+            'camera': new Camera(this, this.howManyCharactersFitHeight(), this.howManyCharactersFitWidth()),
             'cursor': new Cursor(this, 0, 0, 1, 1),
             'tables': {
                 'default': new Table(this),
@@ -44,6 +44,31 @@ export class Application {
             this.context.tables[this.context.current_table].addCell(random_x, random_y, random_letter);
         }
     }
+
+    howManyCharactersFitWidth = (): number => {
+        const testElement = document.createElement('span');
+        testElement.innerText = 'X';
+        testElement.style.visibility = 'hidden';
+        testElement.style.position = 'absolute';
+        document.body.appendChild(testElement);
+        const characterWidth = testElement.offsetWidth;
+        const viewportWidth = window.innerWidth;
+        document.body.removeChild(testElement);
+        return Math.floor(viewportWidth / characterWidth);
+    }
+    
+    howManyCharactersFitHeight = (): number => {
+        const testElement = document.createElement('span');
+        testElement.innerText = 'X';
+        testElement.style.visibility = 'hidden';
+        testElement.style.position = 'absolute';
+        document.body.appendChild(testElement);
+        const characterHeight = testElement.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        document.body.removeChild(testElement);
+        return Math.floor(viewportHeight / characterHeight);
+    }
+
 
     process = (): string => {
         if (this.output_type == 'text') {
