@@ -5,6 +5,7 @@ let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor");
 let visible_zone: HTMLElement = document.getElementById("visibleZone");
 let universe: HTMLElement = document.getElementById("universe");
+let prompt: HTMLElement = document.getElementById("prompt");
 
 
 let zone: HTMLElement = document.getElementById("zone");
@@ -29,6 +30,7 @@ function loop() {
         cursor.innerHTML = application.context.cursor.toString();
         visible_zone.innerHTML = application.context.camera.getVisibleZoneToString();
         universe.innerHTML = `Universe: ${application.context.current_table}`;
+        prompt.innerHTML = `> ${application.input.current_command}`;
         zone.innerHTML = drawScreen();
     }
     window.requestAnimationFrame(loop);

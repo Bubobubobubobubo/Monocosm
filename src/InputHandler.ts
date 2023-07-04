@@ -5,10 +5,19 @@ export class InputHandler {
     EditingKeyFunctions: Array<Function>;
     keyPresses: { [key: string]: boolean };
     textEditingMode: boolean;
+    command_history: string[];
+    current_command: string;
 
     constructor(public app: Application) {
-        this.keyPresses = {};
+        // Command-line mode properties
+        this.command_history = [];
+        this.current_command = '';
         this.textEditingMode = false;
+
+        // Storage for pressed keys
+        this.keyPresses = {};
+
+        // List of possible keyHandlers for each mode
         this.NormalKeyFunctions  = [
             // Directional input
             this.keyDownLeftHandler, this.keyUpLeftHandler,
@@ -25,81 +34,103 @@ export class InputHandler {
             // Switch to command mode
             this.commandModeHandler,
         ];
-        this.EditingKeyFunctions = [];
+        this.EditingKeyFunctions = [
+            this.validateCommandHandler,
+            this.editingModeKeysHandler,
+            this.commandModeHandler,
+        ];
+        
+        // Setting up event listeners on the window
         this.setupEventListeners();
     }
 
-    setupEventListeners = () => {
+    setupEventListeners = (): void => {
         window.addEventListener('keydown', this.keyDownListener, false);
         window.addEventListener('keyup', this.keyUpListener, false);
     }
 
-    commandModeHandler = (event) => {
+    keyDownListener = (event): void => {
+        this.app.redraw = true;
+        this.keyPresses[event.key] = true;
+        let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
+        keybindings.forEach(func => func(event));
+    }
+
+    keyUpListener = (event):void => {
+        this.keyPresses[event.key] = false;
+    }
+
+    commandModeHandler = (event):void => {
         if (event.key == '!') {
             console.log('Switching to command mode');
-            this.textEditingMode = false;
+            this.textEditingMode = !this.textEditingMode;
         }
     }
 
-    copyHandler = (event) => {
+    validateCommandHandler = (event):void => {
+        if (event.key == 'Enter') {
+            this.command_history.push(this.current_command);
+            this.current_command = '';
+            this.textEditingMode = !this.textEditingMode;
+        }
+    }
+
+    copyHandler = (event):void => {
         if (event.key == 'c' && this.keyPresses['Control']) {
             this.app.context.tables[this.app.context.current_table].copy();
         }
     }
 
-    pasteHandler = (event) => {
+    pasteHandler = (event):void => {
         if (event.key == 'v' && this.keyPresses['Control']) {
             this.app.context.tables[this.app.context.current_table].paste();
         }
     }
 
-    keyDownListener = (event) => {
-        this.app.redraw = true;
-        this.keyPresses[event.key] = true;
-        // Calling each registered key handler.
-        let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
-        keybindings.forEach(func => func(event));
+    editingModeKeysHandler = (event):void => {
+        // Filter event.key to only include alphanumeric characters
+        if (event.key.match(/^[a-zA-Z0-9]+$/)) {
+            if (this.current_command.length < 80) {
+                this.current_command = this.current_command + event.key;
+            }
+        }
     }
 
-    keyUpListener = (event) => {
-        this.keyPresses[event.key] = false;
-    }
-
-    keyDownLeftHandler = (event) => {
+    keyDownLeftHandler = (event):void => {
         if (event.key == 'ArrowDown' && this.keyPresses['ArrowLeft']) {
             this.app.context.cursor.y += 1;
             this.app.context.cursor.x -= 1;
         }
     }
 
-    keyUpLeftHandler = (event) => {
+    keyUpLeftHandler = (event):void => {
         if (event.key == 'ArrowUp' && this.keyPresses['ArrowLeft']) {
             this.app.context.cursor.y -= 1;
             this.app.context.cursor.x -= 1;
         }
     }
 
-    keyDownRightHandler = (event) => {
+    keyDownRightHandler = (event):void => {
         if (event.key == 'ArrowDown' && this.keyPresses['ArrowRight']) {
             this.app.context.cursor.y += 1;
             this.app.context.cursor.x += 1;
         }
     }
 
-    keyUpRightHandler = (event) => {
+    keyUpRightHandler = (event):void => {
         if (event.key == 'ArrowUp' && this.keyPresses['ArrowRight']) {
             this.app.context.cursor.y -= 1;
             this.app.context.cursor.x += 1;
         }
     }
 
-    spaceKeyHandler = (event) => {
+    spaceKeyHandler = (event):void => {
         if (event.key == ' ') {
             this.app.context.cursor.x += 1;
         }
     }
 
-    altOHandler = (event) => {
+    altOHandler = (event):void => {
         if (event.key == 'Alt' && (this.keyPresses['o'] || this.keyPresses['O'])) {
             // reset cursor position to origin
             this.app.context.cursor.x = 0;
@@ -107,21 +138,21 @@ export class InputHandler {
         }
     }
 
-    altRHandler = (event) => {
+    altRHandler = (event):void => {
         // Empty the table if shift + c is pressed
         if (event.key == 'Alt' && (this.keyPresses['r'] || this.keyPresses['R'])) {
             this.app.context.tables[this.app.context.current_table].clear();
         }
     }
 
-    enterKeyHandler = (event) => {
+    enterKeyHandler = (event):void => {
         if (event.key == 'Enter') {
             this.app.context.cursor.y += 1;
             this.app.context.cursor.x -= 1;
         }
     }
 
-    backSpaceHandler = (event) => {
+    backSpaceHandler = (event):void => {
         if (event.key == 'Backspace') {
             this.app.context.cursor.x -= 1;
             this.app.context.tables[this.app.context.current_table].removeCell(
@@ -129,7 +160,7 @@ export class InputHandler {
         }
     }
 
-    charInputHandler = (event) => {
+    charInputHandler = (event):void => {
         // Check if key in alphabet or number
         // Do not capture arrows or special keys
         if (event.key.length == 1) {
@@ -141,7 +172,7 @@ export class InputHandler {
 
     }
 
-    keyDownHandler = (event) => {
+    keyDownHandler = (event):void => {
         if (event.key == 'ArrowDown') {
             this.app.context.cursor.y += 1;
         } else if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
@@ -149,7 +180,7 @@ export class InputHandler {
         }
     }
 
-    keyUpHandler = (event) => {
+    keyUpHandler = (event):void => {
         if (event.key == 'ArrowUp') {
             this.app.context.cursor.y -= 1;
         } else if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
@@ -159,7 +190,7 @@ export class InputHandler {
         }
     }
 
-    keyLeftHandler = (event) => {
+    keyLeftHandler = (event):void => {
         if (event.key == 'ArrowLeft') {
             this.app.context.cursor.x -= 1;
         } else if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
@@ -169,7 +200,7 @@ export class InputHandler {
         }
     }
 
-    keyRightHandler = (event) => {
+    keyRightHandler = (event):void => {
         if (event.key == 'ArrowRight') {
             this.app.context.cursor.x += 1;
         } else if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
