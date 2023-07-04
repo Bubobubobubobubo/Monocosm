@@ -16,10 +16,11 @@ window.onresize = () => {
     application.interface.resizeGrid();
 }
 
-window.onbeforeunload = () => {
-    console.log('Saving...')
+window.addEventListener('onbeforeunload', (event): null => {
+    event.preventDefault();
     application.save();
-}
+    return null;
+});
 
 function loop() {
     if(application.redraw) {
