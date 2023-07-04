@@ -22,6 +22,8 @@ export class InputHandler {
             this.copyHandler, this.pasteHandler,
             // Alt controls
             this.altOHandler, this.altRHandler,
+            // Switch to command mode
+            this.commandModeHandler,
         ];
         this.EditingKeyFunctions = [];
         this.setupEventListeners();
@@ -30,6 +32,13 @@ export class InputHandler {
     setupEventListeners = () => {
         window.addEventListener('keydown', this.keyDownListener, false);
         window.addEventListener('keyup', this.keyUpListener, false);
+    }
+
+    commandModeHandler = (event) => {
+        if (event.key == '!') {
+            console.log('Switching to command mode');
+            this.textEditingMode = false;
+        }
     }
 
     copyHandler = (event) => {
@@ -45,7 +54,7 @@ export class InputHandler {
     }
 
     keyDownListener = (event) => {
-        // console.log(event.key)
+        console.log(event.key)
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         // Calling each registered key handler.

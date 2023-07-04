@@ -40,15 +40,6 @@ export class Application {
         this.redraw = true;
         this.interface = null;
         this.init()
-
-        // Adding random stuff to the grid for testing
-        // for (let i=0; i < 50; i++) {
-        //     // Add random cells on table
-        //     let random_x = Math.floor(Math.random() * 50);
-        //     let random_y = Math.floor(Math.random() * 50);
-        //     let random_letter = String.fromCharCode(Math.floor(Math.random() * 26) + 97);
-        //     this.context.tables[this.context.current_table].addCell(random_x, random_y, random_letter);
-        // }
     }
 
     init = () => {
