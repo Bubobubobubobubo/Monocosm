@@ -144,6 +144,8 @@ export class InputHandler {
     keyDownHandler = (event):void => {
         if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
             this.app.context.cursor.y += 5;
+        } else if (event.key == 'ArrowDown' && this.keyPresses['Control']) {
+            this.app.context.cursor.y_size += 1;
         } else if (event.key == 'ArrowDown') {
             this.app.context.cursor.y += 1;
         }
@@ -152,6 +154,10 @@ export class InputHandler {
     keyUpHandler = (event):void => {
         if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
             this.app.context.cursor.y -= 5;
+        } else if (event.key == 'ArrowUp' && this.keyPresses['Control']) {
+            if (this.app.context.cursor.y_size > 1) {
+                this.app.context.cursor.y_size -= 1;
+            }
         } else if (event.key == 'ArrowUp') {
             this.app.context.cursor.y -= 1;
         }
@@ -160,6 +166,10 @@ export class InputHandler {
     keyLeftHandler = (event):void => {
         if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
             this.app.context.cursor.x -= 5;
+        } else if (event.key == 'ArrowLeft' && this.keyPresses['Control']) {
+            if (this.app.context.cursor.x_size > 1) {
+                this.app.context.cursor.x_size -= 1;
+            }
         } else if (event.key == 'ArrowLeft') {
             this.app.context.cursor.x -= 1;
         }
@@ -168,6 +178,8 @@ export class InputHandler {
     keyRightHandler = (event):void => {
         if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
             this.app.context.cursor.x += 5;
+        } else if (event.key == 'ArrowRight' && this.keyPresses['Control']) {
+            this.app.context.cursor.x_size += 1;
         } else if (event.key == 'ArrowRight') {
             this.app.context.cursor.x += 1;
         }
