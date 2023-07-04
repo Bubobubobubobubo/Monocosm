@@ -63,8 +63,6 @@ export class InputHandler {
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
-
-
         keybindings.forEach(func => func(event));
     }
 
