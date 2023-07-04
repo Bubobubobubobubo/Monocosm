@@ -33,8 +33,8 @@ export class InputHandler {
             this.commandModeHandler,
         ];
         this.EditingKeyFunctions = [
-            this.validateCommandHandler,
             this.editingModeKeysHandler,
+            this.validateCommandHandler,
             this.commandModeHandler,
         ];
         
@@ -68,8 +68,8 @@ export class InputHandler {
     validateCommandHandler = (event):void => {
         if (event.key == 'Enter') {
             this.command_history.push(this.current_command);
-            this.current_command = '';
             this.textEditingMode = !this.textEditingMode;
+            this.current_command = '';
         }
     }
 
