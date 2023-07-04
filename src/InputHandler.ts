@@ -134,7 +134,7 @@ export class InputHandler {
         // Check if key in alphabet or number
         // Do not capture arrows or special keys
         if (event.key.length == 1) {
-            if (event.key.match(/[a-z0-9]/i)) {
+            if (event.key.match(/^[\x20-\x7E]$/)) {
                 this.app.context.tables[this.app.context.current_table].addCell(this.app.context.cursor.x, this.app.context.cursor.y, event.key);
                 this.app.context.cursor.x += 1;
             }
