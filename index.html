@@ -28,12 +28,20 @@
         div#interface p {
             padding: 0; margin: 0;
         }
+        div#cmd {
+            color: white;
+            background: black;
+        }
     </style>
 </head>
 <body>
     <div id="interface">
         <p id="cursor">Cursor: 0, 0</p>
         <p id="visibleZone">Visible: 0, 0</p>
+        <p id="universe">Universe: default</p>
+    </div>
+    <div id="cmd">
+        <p id="prompt">> </p>
     </div>
     <code id="zone" display="grid"></code>
     <script type="module" src="dist/index.js"></script>

@@ -1,18 +1,41 @@
 import type { Application } from "./Application";
 
+export interface CursorData {
+    x: number
+    y: number
+    y_size: number
+    x_size: number
+}
+
 export class Cursor {
+
+    x: number
+    y: number
+    y_size: number
+    x_size: number
+
     constructor(
         public app: Application,
-        public x: number, 
-        public y: number, 
-        public y_size: number = 1,  
-        public x_size: number = 1
+        x: number, 
+        y: number, 
+        y_size: number = 1,  
+        x_size: number = 1
     ) { 
         this.y = y;
         this.x = x;
         this.y_size = y_size;
         this.x_size = x_size;
     }
+
+    getCursorData = (): CursorData => {
+        let data = {
+            'x': this.x, 'y': this.y,
+            'y_size': this.y_size, 
+            'x_size': this.x_size
+        };
+        return data;
+    }
+
 
     get size() {
         return { height: this.y_size, width: this.x_size };
@@ -34,4 +57,10 @@ export class Cursor {
         return y == this.y && x == this.x;
     }
 
+    loadFromLocalStorage = (data: CursorData) => {
+        this.x = data.x;
+        this.y = data.y;
+        this.y_size = data.y_size;
+        this.x_size = data.x_size;
+    }
 }

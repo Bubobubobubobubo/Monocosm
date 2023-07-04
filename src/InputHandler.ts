@@ -45,7 +45,6 @@ export class InputHandler {
     }
 
     keyDownListener = (event) => {
-        console.log(this.app.context.cursor)
         // console.log(event.key)
         this.app.redraw = true;
         this.keyPresses[event.key] = true;

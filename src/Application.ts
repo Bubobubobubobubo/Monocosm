@@ -1,10 +1,13 @@
 import { Camera } from './Camera.js';
-import { Cursor } from './Cursor.js';
+import { Cursor, CursorData } from './Cursor.js';
 import { Table } from './Table.js';
 import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
 
+// Possible frontend output types
 export type OutputType = 'text' | 'canvas';
+
+// Context is application state
 export interface Context {
     camera: Camera;
     cursor: Cursor;
@@ -12,6 +15,13 @@ export interface Context {
     current_table: string
 };
 
+// Content saved to localstorage
+export interface SavedContext {
+    cursor: CursorData;
+    tables: object;
+}
+
+// Visible zone is the part of the grid that is visible to the user
 export interface VisibleZone {
     from_x: number; to_x: number;
     from_y: number; to_y: number;
@@ -44,25 +54,28 @@ export class Application {
     init = () => {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
-            // Retrieve context from localstorage if possible, else create a new one
-            if (localStorage.getItem('context')) {
-                console.log('Found context in localstorage')
-                let encoded_context = localStorage.getItem('context');
-                let context = JSON.parse(atob(encoded_context));
-                this.context = context;
-            } else {
-                console.log('No context found in localstorage, creating a new one')
-                this.context = {
-                    'camera': new Camera(this, 
-                        this.interface.howManyCharactersFitHeight(), 
-                        this.interface.howManyCharactersFitWidth()
-                    ),
-                    'cursor': new Cursor(this, 0, 0, 1, 1),
-                    'tables': {
-                        'default': new Table(this),
-                    },
-                    'current_table': 'default',
+            this.context = {
+                'camera': new Camera(this, 
+                    this.interface.howManyCharactersFitHeight(), 
+                    this.interface.howManyCharactersFitWidth()
+                ),
+                'cursor': new Cursor(this, 0, 0, 1, 1),
+                'tables': {
+                    'default': new Table(this),
+                },
+                'current_table': 'default',
+            }
+
+            // Resume from localStorage data
+            if (localStorage.getItem('context') !== null) {
+                // Reset the cursor back to its position
+                let saved_context: SavedContext = JSON.parse(localStorage.getItem('context'));
+                this.context.cursor.loadFromLocalStorage(saved_context.cursor);
+                // Load the tables back from localStorage
+                for (const [key, value] of Object.entries(saved_context.tables)) {
+                    this.context.tables[key] = new Table(this, value);
                 }
+
             }
         } else {
             Error('Output type not supported');
@@ -73,9 +86,17 @@ export class Application {
         return this.interface.drawGrid(this.context);
     }
 
-    save = (): void => {
-        let context = JSON.stringify(this.context);
-        let encoded_context = btoa(context);
-        localStorage.setItem('context', encoded_context);
+    // Preparing SavedContext for localstorage
+    save = (): SavedContext => {
+        let tables_state = {}
+        for (const [key, value] of Object.entries(this.context.tables)) {
+            tables_state[key] = value.data;
+        };
+        let cursor_state = this.context.cursor.getCursorData();
+        console.log(cursor_state)
+        return {
+            'tables': tables_state,
+            'cursor': cursor_state,
+        }
     }
 }

@@ -5,9 +5,17 @@ export class Table {
     cells: object
     pasteBuffer: object
 
-    constructor(public app: Application) {
-        this.cells = {}
+    constructor(public app: Application, data?: object) {
+        if (data !== undefined) {
+            this.cells = data['cells'];
+        } else {
+            this.cells = {}
+        }
         this.pasteBuffer = {};
+    }
+
+    public get data():object {
+        return {'cells': this.cells, 'paste_buffer': this.pasteBuffer}
     }
 
     addCell = (y: number, x: number, char: string) => {
