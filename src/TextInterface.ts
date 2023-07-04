@@ -8,7 +8,7 @@ export class TextInterface {
     }
 
     resizeGrid = (): void => {
-        this.context.camera.resize(
+        this.app.context.camera.resize(
             this.howManyCharactersFitHeight(), 
             this.howManyCharactersFitWidth()
         );
