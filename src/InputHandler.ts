@@ -51,6 +51,8 @@ export class InputHandler {
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
+
+
         keybindings.forEach(func => func(event));
     }
 
@@ -59,14 +61,20 @@ export class InputHandler {
     }
 
     commandModeHandler = (event):void => {
-        if (event.key == '!') {
+        if (event.key == '$') {
             console.log('Switching to command mode');
+            let prompt = document.getElementById('prompt');
+            prompt.classList.toggle('unselected');
+            prompt.classList.toggle('selected');
             this.textEditingMode = !this.textEditingMode;
         }
     }
 
     validateCommandHandler = (event):void => {
         if (event.key == 'Enter') {
+            let prompt = document.getElementById('prompt');
+            prompt.classList.toggle('selected');
+            prompt.classList.toggle('unselected');
             this.command_history.push(this.current_command);
             this.app.command.parse(this.current_command);
             this.textEditingMode = !this.textEditingMode;

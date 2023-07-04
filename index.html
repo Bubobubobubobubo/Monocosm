@@ -7,9 +7,11 @@
     <link rel="icon" type="image/x-icon" href="./image/favicon.ico">
     <style>
         body {
-            margin: 0;
-            overflow: hidden;
+            margin: 5pt;
+            margin-right: 5pt;
+            margin-bottom: 5pt;
             padding: 0;
+            overflow: hidden;
             background-color: black;
             font-family: monospace;
             font-size: 16px;
@@ -29,9 +31,24 @@
         div#interface p {
             padding: 0; margin: 0;
         }
+
         div#cmd {
+            margin: 0pt;
+        }
+        
+        .selected {
+            color: black;
+            background: white;
+        }
+
+        .unselected {
             color: white;
             background: black;
+        }
+
+        p#prompt{
+            padding: 0;
+            margin: 0;
         }
     </style>
 </head>
@@ -42,7 +59,7 @@
         <p id="universe">Universe: default</p>
     </div>
     <div id="cmd">
-        <p id="prompt">> </p>
+        <p class="unselected" id="prompt">$ </p>
     </div>
     <code id="zone" display="grid"></code>
     <script type="module" src="dist/index.js"></script>

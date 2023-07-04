@@ -30,7 +30,7 @@ function loop() {
         cursor.innerHTML = application.context.cursor.toString();
         visible_zone.innerHTML = application.context.camera.getVisibleZoneToString();
         universe.innerHTML = `Universe: ${application.context.current_table}`;
-        prompt.innerHTML = `> ${application.input.current_command}`;
+        prompt.innerHTML = `$ ${application.input.current_command}`;
         zone.innerHTML = drawScreen();
     }
     window.requestAnimationFrame(loop);
