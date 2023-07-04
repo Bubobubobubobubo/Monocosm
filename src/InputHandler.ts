@@ -22,6 +22,8 @@ export class InputHandler {
             // Directional input
             this.keyDownHandler, this.keyUpHandler,
             this.keyLeftHandler, this.keyRightHandler,
+            // Tab input
+            this.tabKeyHandler, this.shiftTabKeyHandler,
             // Regular ASCII input
             this.charInputHandler, this.spaceKeyHandler,
             this.backSpaceHandler, this.enterKeyHandler,
@@ -43,6 +45,18 @@ export class InputHandler {
     setupEventListeners = (): void => {
         window.addEventListener('keydown', this.keyDownListener, false);
         window.addEventListener('keyup', this.keyUpListener, false);
+    }
+
+    tabKeyHandler = (event): void => {
+        if (event.key == 'Tab') {
+            event.preventDefault();
+        }
+    }
+
+    shiftTabKeyHandler = (event): void => {
+        if (event.key == 'Tab' && this.keyPresses['Shift']) {
+            event.preventDefault();
+        }
     }
 
     keyDownListener = (event): void => {

@@ -20,6 +20,7 @@ export interface Context {
 export interface SavedContext {
     cursor: CursorData;
     tables: object;
+    current_table: string;
 }
 
 // Visible zone is the part of the grid that is visible to the user
@@ -69,7 +70,8 @@ export class Application {
                 for (const [key, value] of Object.entries(saved_context.tables)) {
                     this.context.tables[key] = new Table(this, value);
                 }
-
+                // Switch to the table that was active
+                this.context.current_table = saved_context.current_table;
             }
         } else {
             Error('Output type not supported');
@@ -87,10 +89,12 @@ export class Application {
             tables_state[key] = value.data;
         };
         let cursor_state = this.context.cursor.getCursorData();
+        let current_table = this.context.current_table;
         console.log(cursor_state)
         return {
             'tables': tables_state,
             'cursor': cursor_state,
+            'current_table': current_table,
         }
     }
 }

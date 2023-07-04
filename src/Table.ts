@@ -3,19 +3,26 @@ import type { Application } from "./Application";
 export class Table {
 
     cells: object
+    script: string
     pasteBuffer: object
 
     constructor(public app: Application, data?: object) {
         if (data !== undefined) {
             this.cells = data['cells'];
+            this.script = data['script'];
         } else {
-            this.cells = {}
+            this.cells = {};
+            this.script = '';
         }
         this.pasteBuffer = {};
     }
 
     public get data():object {
-        return {'cells': this.cells, 'paste_buffer': this.pasteBuffer}
+        return {
+            'cells': this.cells,
+            'paste_buffer': this.pasteBuffer,
+            'script': this.script
+        }
     }
 
     addCell = (y: number, x: number, char: string) => {
