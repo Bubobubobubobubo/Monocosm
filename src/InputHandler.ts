@@ -20,8 +20,6 @@ export class InputHandler {
         // List of possible keyHandlers for each mode
         this.NormalKeyFunctions  = [
             // Directional input
-            this.keyDownLeftHandler, this.keyUpLeftHandler,
-            this.keyDownRightHandler, this.keyUpRightHandler,
             this.keyDownHandler, this.keyUpHandler,
             this.keyLeftHandler, this.keyRightHandler,
             // Regular ASCII input
@@ -96,34 +94,6 @@ export class InputHandler {
         }
     }
 
-    keyDownLeftHandler = (event):void => {
-        if (event.key == 'ArrowDown' && this.keyPresses['ArrowLeft']) {
-            this.app.context.cursor.y += 1;
-            this.app.context.cursor.x -= 1;
-        }
-    }
-
-    keyUpLeftHandler = (event):void => {
-        if (event.key == 'ArrowUp' && this.keyPresses['ArrowLeft']) {
-            this.app.context.cursor.y -= 1;
-            this.app.context.cursor.x -= 1;
-        }
-    }
-
-    keyDownRightHandler = (event):void => {
-        if (event.key == 'ArrowDown' && this.keyPresses['ArrowRight']) {
-            this.app.context.cursor.y += 1;
-            this.app.context.cursor.x += 1;
-        }
-    }
-
-    keyUpRightHandler = (event):void => {
-        if (event.key == 'ArrowUp' && this.keyPresses['ArrowRight']) {
-            this.app.context.cursor.y -= 1;
-            this.app.context.cursor.x += 1;
-        }
-    }
-
     spaceKeyHandler = (event):void => {
         if (event.key == ' ') {
             this.app.context.cursor.x += 1;
@@ -169,42 +139,37 @@ export class InputHandler {
                 this.app.context.cursor.x += 1;
             }
         }
-
     }
 
     keyDownHandler = (event):void => {
-        if (event.key == 'ArrowDown') {
+        if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
+            this.app.context.cursor.y += 5;
+        } else if (event.key == 'ArrowDown') {
             this.app.context.cursor.y += 1;
-        } else if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
-            this.app.context.cursor.y_size += 1;
         }
     }
-
+    
     keyUpHandler = (event):void => {
-        if (event.key == 'ArrowUp') {
+        if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
+            this.app.context.cursor.y -= 5;
+        } else if (event.key == 'ArrowUp') {
             this.app.context.cursor.y -= 1;
-        } else if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
-            if (this.app.context.cursor.y_size > 0) {
-                this.app.context.cursor.y_size -= 1;
-            }
         }
     }
 
     keyLeftHandler = (event):void => {
-        if (event.key == 'ArrowLeft') {
+        if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
+            this.app.context.cursor.x -= 5;
+        } else if (event.key == 'ArrowLeft') {
             this.app.context.cursor.x -= 1;
-        } else if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
-            if (this.app.context.cursor.x_size > 0) {
-                this.app.context.cursor.x_size -= 1;
-            }
         }
     }
 
     keyRightHandler = (event):void => {
-        if (event.key == 'ArrowRight') {
+        if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
+            this.app.context.cursor.x += 5;
+        } else if (event.key == 'ArrowRight') {
             this.app.context.cursor.x += 1;
-        } else if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
-            this.app.context.cursor.x_size += 1;
         }
     }
 }
