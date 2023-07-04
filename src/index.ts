@@ -16,6 +16,11 @@ window.onresize = () => {
     application.interface.resizeGrid();
 }
 
+window.onbeforeunload = () => {
+    console.log('Saving...')
+    application.save();
+}
+
 function loop() {
     if(application.redraw) {
         cursor.innerHTML = application.context.cursor.toString();
