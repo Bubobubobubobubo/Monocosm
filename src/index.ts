@@ -13,7 +13,7 @@ function drawScreen() {
 }
 
 window.onresize = () => {
-    application.resizeGrid();
+    application.interface.resizeGrid();
 }
 
 function loop() {
