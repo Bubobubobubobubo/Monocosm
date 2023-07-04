@@ -1,4 +1,5 @@
-import type { Application } from "./Application";
+import type { Application } from "./Application.js";
+import { Table } from "./Table.js";
 
 export class Command {
 
@@ -10,6 +11,7 @@ export class Command {
             'teleport': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
+            'universe': this.universe,
         }
     }
 
@@ -39,6 +41,16 @@ export class Command {
         // Get cursor back at origin
         this.app.context.cursor.y = 0;
         this.app.context.cursor.x = 0;
+    }
+
+    universe = (universe_name: string):void => {
+        if (universe_name in this.app.context.tables) { 
+            this.app.context.current_table = universe_name;
+        } else {
+            this.app.context.tables[universe_name] = new Table(this.app);
+            this.app.context.current_table = universe_name;
+        }
+
     }
 
     clear = ():void => {

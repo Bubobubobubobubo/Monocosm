@@ -27,8 +27,6 @@ export class InputHandler {
             this.backSpaceHandler, this.enterKeyHandler,
             // Copy and paste mechanics
             this.copyHandler, this.pasteHandler,
-            // Alt controls
-            this.altOHandler, this.altRHandler,
             // Switch to command mode
             this.commandModeHandler,
         ];
@@ -96,7 +94,7 @@ export class InputHandler {
 
     editingModeKeysHandler = (event):void => {
         // Filter event.key to only include alphanumeric characters
-        if (event.key.match(/^[a-zA-Z0-9]+$/)) {
+        if (event.key.match(/^[a-zA-Z0-9\s]+$/)) {
             if (this.current_command.length < 80) {
                 this.current_command = this.current_command + event.key;
             }
@@ -106,21 +104,6 @@ export class InputHandler {
     spaceKeyHandler = (event):void => {
         if (event.key == ' ') {
             this.app.context.cursor.x += 1;
-        }
-    }
-
-    altOHandler = (event):void => {
-        if (event.key == 'Alt' && (this.keyPresses['o'] || this.keyPresses['O'])) {
-            // reset cursor position to origin
-            this.app.context.cursor.x = 0;
-            this.app.context.cursor.y = 0;
-        }
-    }
-
-    altRHandler = (event):void => {
-        // Empty the table if shift + c is pressed
-        if (event.key == 'Alt' && (this.keyPresses['r'] || this.keyPresses['R'])) {
-            this.app.context.tables[this.app.context.current_table].clear();
         }
     }
 
