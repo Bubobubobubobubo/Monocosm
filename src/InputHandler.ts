@@ -68,6 +68,7 @@ export class InputHandler {
     validateCommandHandler = (event):void => {
         if (event.key == 'Enter') {
             this.command_history.push(this.current_command);
+            this.app.command.parse(this.current_command);
             this.textEditingMode = !this.textEditingMode;
             this.current_command = '';
         }
