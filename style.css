@@ -45,6 +45,7 @@ span.cell {
     line-height: 20pt;
     background-color: var(--primary);
     color: var(--secondary);
+    white-space: pre;
 }
 
 div#interface {

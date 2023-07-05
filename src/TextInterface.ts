@@ -75,7 +75,11 @@ export class TextInterface {
                     grid.push(this.drawCursor());
                 } 
                 else {
-                    grid.push(this.drawCharacter('.'));
+                    if (y % 5 == 0 && x % 5 == 0) {
+                         grid.push(this.drawCharacter('·'));
+                    } else {
+                        grid.push(this.drawCharacter(' '));
+                    }
                 }
             }
             grid.push('<br>');
