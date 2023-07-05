@@ -63,10 +63,10 @@ export class Table {
     // but coordinates will start again at 0 0 
     copy = () => {
         let { y, x } = this.app.context.cursor;
-        let { height, width } = this.app.context.cursor.size;
+        let { y_size , x_size } = this.app.context.cursor.size;
         this.pasteBuffer = {};
-        for (let i = 0; i < height; i++) {
-            for (let j = 0; j < width; j++) {
+        for (let i = 0; i < y_size ; i++) {
+            for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 if (this.existsAt(y + i, x + j)) {
                     this.pasteBuffer[id] = this.getCell(y + i, x + j);
@@ -78,9 +78,9 @@ export class Table {
 
     paste = () => {
         let { y, x } = this.app.context.cursor;
-        let { height, width } = this.app.context.cursor.size;
-        for (let i = 0; i < height; i++) {
-            for (let j = 0; j < width; j++) {
+        let { y_size , x_size } = this.app.context.cursor.size;
+        for (let i = 0; i < y_size ; i++) {
+            for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 if (this.pasteBuffer.hasOwnProperty(id)) {
                     this.addCell(y + i, x + j, this.pasteBuffer[id]);
@@ -91,9 +91,9 @@ export class Table {
 
     eraseZone = () => {
         let { y, x } = this.app.context.cursor;
-        let { height, width } = this.app.context.cursor.size;
-        for (let i = 0; i < height; i++) {
-            for (let j = 0; j < width; j++) {
+        let { y_size, x_size } = this.app.context.cursor.size;
+        for (let i = 0; i < y_size; i++) {
+            for (let j = 0; j < x_size; j++) {
                 this.removeCell(y + i, x + j);
             }
         }
