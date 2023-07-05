@@ -111,7 +111,6 @@ span.row {
 
 span.cell {
     font-size: 20px;
-    line-height: 20pt;
     background-color: var(--primary);
     color: var(--secondary);
     white-space: pre;
@@ -119,7 +118,6 @@ span.cell {
 
 span.reversed-cell {
     font-size: 20px;
-    line-height: 20pt;
     background-color: var(--secondary);
     color: var(--primary);
     white-space: pre;
