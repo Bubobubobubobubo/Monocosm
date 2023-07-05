@@ -11,9 +11,22 @@ export class MidiOut {
 
     onMIDISuccess = (midiAccess: MIDIAccess): void => {
         console.log('MIDI Access Object', midiAccess);
-        // Connect this.output to the first available MIDI port
         this.output = midiAccess.outputs.values().next().value;
         console.log('MIDI Output Object', this.output)
+    }
+
+    chooseMidiOuptut = (output_name: string): void => {
+        navigator.requestMIDIAccess().then(
+            (midiAccess: MIDIAccess) => {
+                for (let output of midiAccess.outputs.values()) {
+                    if (output.name === output_name) {
+                        this.output = output;
+                        console.log('MIDI Output Object', this.output)
+                    }
+                }
+            },
+            this.onMIDIFailure
+        );
     }
 
     onMIDIFailure = (): void => {

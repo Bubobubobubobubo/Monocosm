@@ -9,6 +9,7 @@ export class Command {
         // Create a command list that takes a string and returns a function
         this.commands = {
             'midi': this.miditest,
+            'midioutput': this.midioutput,
             'teleport': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
@@ -42,6 +43,10 @@ export class Command {
         // Test MIDI output
         this.app.midi._noteOn(60, 127, 0);
         this.app.midi._noteOff(60, 0);
+    }
+
+    midioutput = (output_name: string):void => {
+        this.app.midi.chooseMidiOutput(output_name);
     }
 
     origin = ():void => {

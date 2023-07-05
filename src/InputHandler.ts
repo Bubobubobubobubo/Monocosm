@@ -1,3 +1,4 @@
+import { Key } from 'readline';
 import type { Application } from './Application.js';
 
 export class InputHandler {
@@ -47,34 +48,33 @@ export class InputHandler {
         window.addEventListener('keyup', this.keyUpListener, false);
     }
 
-    tabKeyHandler = (event): void => {
+    tabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used to switch to script mode
         if (event.key == 'Tab') {
             event.preventDefault();
         }
     }
 
-    shiftTabKeyHandler = (event): void => {
+    shiftTabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used for something else
         if (event.key == 'Tab' && this.keyPresses['Shift']) {
             event.preventDefault();
         }
     }
 
-    keyDownListener = (event): void => {
+    keyDownListener = (event: KeyboardEvent): void => {
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
         keybindings.forEach(func => func(event));
     }
 
-    keyUpListener = (event):void => {
+    keyUpListener = (event: KeyboardEvent):void => {
         this.keyPresses[event.key] = false;
     }
 
-    commandModeHandler = (event):void => {
+    commandModeHandler = (event: KeyboardEvent):void => {
         if (event.key == '$') {
-            console.log('Switching to command mode');
             let prompt = document.getElementById('prompt');
             prompt.classList.toggle('unselected');
             prompt.classList.toggle('selected');
@@ -82,7 +82,7 @@ export class InputHandler {
         }
     }
 
-    validateCommandHandler = (event):void => {
+    validateCommandHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
             let prompt = document.getElementById('prompt');
             prompt.classList.toggle('selected');
@@ -94,19 +94,19 @@ export class InputHandler {
         }
     }
 
-    copyHandler = (event):void => {
+    copyHandler = (event:KeyboardEvent):void => {
         if (event.key == 'c' && this.keyPresses['Control']) {
             this.app.context.tables[this.app.context.current_table].copy();
         }
     }
 
-    pasteHandler = (event):void => {
+    pasteHandler = (event:KeyboardEvent):void => {
         if (event.key == 'v' && this.keyPresses['Control']) {
             this.app.context.tables[this.app.context.current_table].paste();
         }
     }
 
-    editingModeKeysHandler = (event):void => {
+    editingModeKeysHandler = (event:KeyboardEvent):void => {
         // Filter event.key to only include alphanumeric characters
         if (event.key.match(/^[a-zA-Z0-9\s]+$/)) {
             if (this.current_command.length < 80) {
@@ -115,20 +115,20 @@ export class InputHandler {
         }
     }
 
-    spaceKeyHandler = (event):void => {
+    spaceKeyHandler = (event:KeyboardEvent):void => {
         if (event.key == ' ') {
             this.app.context.cursor.x += 1;
         }
     }
 
-    enterKeyHandler = (event):void => {
+    enterKeyHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
             this.app.context.cursor.y += 1;
             this.app.context.cursor.x -= 1;
         }
     }
 
-    backSpaceHandler = (event):void => {
+    backSpaceHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Backspace') {
             this.app.context.cursor.x -= 1;
             this.app.context.tables[this.app.context.current_table].removeCell(
@@ -136,7 +136,7 @@ export class InputHandler {
         }
     }
 
-    charInputHandler = (event):void => {
+    charInputHandler = (event:KeyboardEvent):void => {
         // Check if key in alphabet or number
         // Do not capture arrows or special keys
         if (event.key.length == 1) {
@@ -147,7 +147,7 @@ export class InputHandler {
         }
     }
 
-    keyDownHandler = (event):void => {
+    keyDownHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
             this.app.context.cursor.y += 5;
         } else if (event.key == 'ArrowDown' && this.keyPresses['Control']) {
@@ -157,7 +157,7 @@ export class InputHandler {
         }
     }
     
-    keyUpHandler = (event):void => {
+    keyUpHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
             this.app.context.cursor.y -= 5;
         } else if (event.key == 'ArrowUp' && this.keyPresses['Control']) {
@@ -169,7 +169,7 @@ export class InputHandler {
         }
     }
 
-    keyLeftHandler = (event):void => {
+    keyLeftHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
             this.app.context.cursor.x -= 5;
         } else if (event.key == 'ArrowLeft' && this.keyPresses['Control']) {
@@ -181,7 +181,7 @@ export class InputHandler {
         }
     }
 
-    keyRightHandler = (event):void => {
+    keyRightHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
             this.app.context.cursor.x += 5;
         } else if (event.key == 'ArrowRight' && this.keyPresses['Control']) {
