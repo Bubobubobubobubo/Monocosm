@@ -1,12 +1,11 @@
 import type { Application } from "./Application";
 
-interface PasteBuffer {
-    [key: string]: string
-}
+interface PasteBuffer { [key: string]: string }
+interface Cells { [key: string]: string }
 
 export class Table {
 
-    cells: object
+    cells: Cells
     script: string
     pasteBuffer: PasteBuffer
 
@@ -20,6 +19,8 @@ export class Table {
         }
         this.pasteBuffer = {};
     }
+
+    resetPasteBuffer = () => this.pasteBuffer = {}
 
     public get data():object {
         return {
@@ -59,12 +60,12 @@ export class Table {
         }
     }
 
-    // Copy will get all the cells under the cursor position (with cursor zone) and put it in a similar table
-    // but coordinates will start again at 0 0 
-    copy = () => {
+
+
+    copyUnderCursor = () => {
         let { y, x } = this.app.context.cursor;
         let { y_size , x_size } = this.app.context.cursor.size;
-        this.pasteBuffer = {};
+        this.resetPasteBuffer();
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
@@ -73,7 +74,6 @@ export class Table {
                 }
             }
         }
-        console.log('Copy buffer: ', this.pasteBuffer)
     }
 
     paste = () => {

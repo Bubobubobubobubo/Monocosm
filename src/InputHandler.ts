@@ -26,13 +26,14 @@ export class InputHandler {
             // Tab input
             this.tabKeyHandler, this.shiftTabKeyHandler,
             // Regular ASCII input
-            this.charInputHandler, this.spaceKeyHandler,
+            this.spaceKeyHandler,
             this.backSpaceHandler, this.enterKeyHandler,
             // Copy and paste mechanics
             this.copyHandler, this.pasteHandler,
             this.escapeKeyHandler,
             // Switch to command mode
             this.commandModeHandler,
+            this.charInputHandler, 
         ];
         this.EditingKeyFunctions = [
             this.editingModeKeysHandler,
@@ -103,7 +104,8 @@ export class InputHandler {
 
     copyHandler = (event:KeyboardEvent):void => {
         if (event.key == 'c' && this.keyPresses['Control']) {
-            this.app.context.tables[this.app.context.current_table].copy();
+            this.app.context.tables[this.app.context.current_table].copyUnderCursor();
+            console.log(this.app.context.tables[this.app.context.current_table].pasteBuffer)
         }
     }
 
@@ -136,7 +138,6 @@ export class InputHandler {
     }
 
     backSpaceHandler = (event:KeyboardEvent):void => {
-        console.log("Je suis trigger")
         if (event.key === "Backspace") {
             if (this.app.context.cursor.x_size == 1 && this.app.context.cursor.y_size == 1) {
                 this.app.context.tables[this.app.context.current_table].removeCell(
@@ -153,9 +154,7 @@ export class InputHandler {
     }
 
     charInputHandler = (event:KeyboardEvent):void => {
-        // Check if key in alphabet or number
-        // Do not capture arrows or special keys
-        if (event.key.length == 1) {
+        if (event.key.length == 1 && !this.keyPresses['Control'] && !this.keyPresses['Shift']) {
             if (event.key.match(/^[\x21-\x7E]$/)) {
                 this.app.context.tables[this.app.context.current_table].addCell(this.app.context.cursor.x, this.app.context.cursor.y, event.key);
                 this.app.context.cursor.x += 1;
