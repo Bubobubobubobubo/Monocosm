@@ -109,6 +109,14 @@ span.cell {
     white-space: pre;
 }
 
+span.reversed-cell {
+    font-size: 20px;
+    line-height: 20pt;
+    background-color: var(--secondary);
+    color: var(--primary);
+    white-space: pre;
+}
+
 div#interface {
     display: inline-flex;
     gap: 50px;

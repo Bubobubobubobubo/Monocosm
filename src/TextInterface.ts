@@ -45,6 +45,10 @@ export class TextInterface {
         return `<span class="cell">${char}</span>`
     }
 
+    drawReversedCharacter = (char: string) => {
+        return `<span class="reversed-cell">${char}</span>`
+    }
+
     drawCursor = (): string => {
         return `<span class="cell">█</span>`
     }
@@ -67,7 +71,7 @@ export class TextInterface {
                 if(context.tables[context.current_table].existsAt(x,y)) {
                     // If the cursor is on the cell, draw it in reverse
                     if (context.cursor.isUnder(y,x)) {
-                        grid.push(this.drawCharacter(context.tables[context.current_table].getCell(x,y)));
+                        grid.push(this.drawReversedCharacter(context.tables[context.current_table].getCell(x,y)));
                     } else {
                         grid.push(this.drawCharacter(context.tables[context.current_table].getCell(x,y)));
                     }
@@ -76,7 +80,7 @@ export class TextInterface {
                 } 
                 else {
                     if (y % 5 == 0 && x % 5 == 0) {
-                         grid.push(this.drawCharacter('·'));
+                        grid.push(this.drawCharacter('·'));
                     } else {
                         grid.push(this.drawCharacter(' '));
                     }
