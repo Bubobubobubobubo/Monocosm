@@ -1,9 +1,13 @@
 import type { Application } from "./Application.js";
 import { Table } from "./Table.js";
 
+interface Commands {
+    [key: string]: Function;
+}
+
 export class Command {
 
-    commands: object;
+    commands: Commands;
 
     constructor(public app: Application) {
         // Create a command list that takes a string and returns a function
@@ -22,6 +26,8 @@ export class Command {
     }
 
     parse = (expression: string): void => {
+
+        console.log('Received expression: ' + expression)
 
         // Remove the word 'Enter' from expression ending
         expression = expression.slice(0, -5);

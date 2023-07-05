@@ -86,13 +86,12 @@ export class InputHandler {
 
     validateCommandHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
-            this.current_command = document.getElementById('prompt').value;
-            document.getElementById('prompt').value = '';
-            document.getElementById("prompt").disabled = true;
+            let prompt = document.getElementById('prompt');
+            this.current_command = String(prompt.value);
+            prompt.value = ''; prompt.disabled = true;
             this.command_history.push(this.current_command);
             this.textEditingMode = !this.textEditingMode;
             this.app.command.parse(this.current_command);
-            let prompt = document.getElementById('prompt');
             prompt?.classList.toggle('selected');
             prompt?.classList.toggle('unselected');
             this.current_command = '';
