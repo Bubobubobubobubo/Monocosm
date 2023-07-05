@@ -31,15 +31,22 @@ export class Command {
 
         console.log('Received expression: ' + expression)
 
-        // Break the expression at whitespace and separate command from arguments
-        let [command, ...args] = expression.split(' ');
+        // Multiple commands can exist, they are separated by ;
+        let commands = expression.split(';');
 
-        if (command in this.commands) {
-            this.commands[command](args);
-        } else {
-            Error('Command not found'); 
-        };
+        // Remove whitespace in front of command if whitespace
+        commands = commands.map(command => command.trim());
 
+        // Every command is composed by a command and its arguments
+        commands.forEach(command => {
+            let [cmd, ...args] = command.split(' ');
+            if (cmd in this.commands) {
+                console.log('Launching command ' + cmd + ' with args ' + args)
+                this.commands[cmd](args);
+            } else {
+                Error('Command not found');
+            }
+        })
     }
 
     teleport = (y: number, x: number) => {
