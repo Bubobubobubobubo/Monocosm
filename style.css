@@ -101,6 +101,10 @@ body {
     background: var(--primary);
 }
 
+span.row {
+    display: block;
+}
+
 span.cell {
     font-size: 20px;
     line-height: 20pt;

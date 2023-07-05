@@ -53,6 +53,14 @@ export class TextInterface {
         return `<span class="cell">█</span>`
     }
 
+    startRow = (row: number): string => {
+        return `<span class="row" id="row_${row}">`;
+    }
+
+    endRow = (): string => {
+        return '</span>';
+    }
+
     loadTheme = (theme: string) => {
         document.documentElement.className = "theme-"+theme;
     }
@@ -66,7 +74,9 @@ export class TextInterface {
         if (!this.app.redraw) { return this.app.last_grid; }
         let visible_zone = context.camera.getVisibleZone();
         let grid = [];
+        let row = 0;
         for (let y = visible_zone.from_y; y < visible_zone.to_y; y++) {
+            grid.push(this.startRow(row++));
             for (let x = visible_zone.from_x; x < visible_zone.to_x; x++) {
                 if(context.tables[context.current_table].existsAt(x,y)) {
                     // If the cursor is on the cell, draw it in reverse
@@ -86,7 +96,7 @@ export class TextInterface {
                     }
                 }
             }
-            grid.push('<br>');
+            grid.push(this.endRow());
         }
         this.app.last_grid = grid.join("");
         this.app.redraw = false;

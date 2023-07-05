@@ -71,7 +71,7 @@ export class Table {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 if (this.pasteBuffer.hasOwnProperty(id)) {
-                    this.addCell(x + i, y + j, this.pasteBuffer[id]);
+                    this.addCell(x + j, y + i, this.pasteBuffer[id]);
                 }
             }
         }
@@ -92,7 +92,7 @@ export class Table {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
-                this.pasteBuffer[id] = this.getCell(x + i, y + j);
+                this.pasteBuffer[id] = this.getCell(x + j, y + i);
             }
         }
     }
