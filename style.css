@@ -8,6 +8,47 @@
     --secondary: white;
 }
 
+.theme-black {
+    --primary: black;
+    --secondary: white;
+}
+
+
+.theme-royal {
+    --primary: #00539C;
+    --secondary: #EEA47F;
+}
+
+.theme-bee {
+    --primary: #101820;
+    --secondary:#FEE715;
+}
+
+.theme-lavender {
+    --primary: #7689de;
+    --secondary: #a9dce3;
+}
+
+.theme-jungle {
+    --primary: #008970;
+    --secondary: #99eedf;
+}
+
+.theme-forest {
+    --primary: #2C5F2D;
+    --secondary: #97BC62FF;
+}
+
+.theme-sky {
+    --primary: #89ABE3FF;
+    --secondary: #FCF6F5FF;
+}
+
+.theme-cherry {
+    --primary: #990011FF;
+    --secondary: #FCF6F5FF;
+}
+
 .theme-blue {
     --primary: #0000AA;
     --secondary: #0088FF;
@@ -16,6 +57,26 @@
 .theme-yellow {
     --primary: black;
     --secondary: #ffff33;
+}
+
+.theme-hurt {
+    --primary: #F93822FF;
+    --secondary: #FDD20EFF;
+}
+
+.theme-sugar {
+    --primary: #F1F4FFFF;
+    --secondary: #A2A2A1FF;
+}
+
+.theme-neon {
+    --primary: #1C1C1BFF;
+    --secondary: #CE4A7EFF;
+}
+
+.theme-atoll {
+    --primary: #00B1D2FF;
+    --secondary: #FDDB27FF;
 }
 
 body {
