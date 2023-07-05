@@ -56,8 +56,14 @@ export class TextInterface {
         for (let y = visible_zone.from_y; y < visible_zone.to_y; y++) {
             for (let x = visible_zone.from_x; x < visible_zone.to_x; x++) {
                 if(context.tables[context.current_table].existsAt(x,y)) {
-                    grid.push(this.drawCharacter(context.tables[context.current_table]
-                        .getCell(x,y), 'white', 'black'));
+                    // If the cursor is on the cell, draw it in reverse
+                    if (context.cursor.isUnder(y,x)) {
+                        grid.push(this.drawCharacter(context.tables[context.current_table]
+                            .getCell(x,y), 'black', 'white'));
+                    } else {
+                        grid.push(this.drawCharacter(context.tables[context.current_table]
+                            .getCell(x,y), 'white', 'black'));
+                    }
                 } else if(context.cursor.isUnder(y,x)) {
                     grid.push(this.drawCursor('white', 'black'));
                 } 

@@ -54,7 +54,8 @@ export class Cursor {
     }
 
     isUnder = (y: number, x: number): boolean => {
-        return y == this.y && x == this.x;
+        // Refactor this to check if it's in the range of the cursor selection
+        return y >= this.y && y < this.y + this.y_size && x >= this.x && x < this.x + this.x_size;
     }
 
     loadFromLocalStorage = (data: CursorData) => {
