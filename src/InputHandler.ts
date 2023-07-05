@@ -86,13 +86,17 @@ export class InputHandler {
 
     validateCommandHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
+            this.current_command = document.getElementById('prompt').value;
+            document.getElementById('prompt').value = '';
+            document.getElementById("prompt").disabled = true;
+            this.command_history.push(this.current_command);
+            this.textEditingMode = !this.textEditingMode;
+            this.app.command.parse(this.current_command);
             let prompt = document.getElementById('prompt');
             prompt?.classList.toggle('selected');
             prompt?.classList.toggle('unselected');
-            this.command_history.push(this.current_command);
-            this.app.command.parse(this.current_command);
-            this.textEditingMode = !this.textEditingMode;
             this.current_command = '';
+
         }
     }
 
@@ -116,12 +120,8 @@ export class InputHandler {
     }
 
     editingModeKeysHandler = (event:KeyboardEvent):void => {
-        // Filter event.key to only include alphanumeric characters
-        if (event.key.match(/^[a-zA-Z0-9\s]+$/)) {
-            if (this.current_command.length < 80) {
-                this.current_command = this.current_command + event.key;
-            }
-        }
+        document.getElementById("prompt").disabled = false;
+        document.getElementById("prompt").focus();
     }
 
     spaceKeyHandler = (event:KeyboardEvent):void => {
