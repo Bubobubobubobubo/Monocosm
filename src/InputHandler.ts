@@ -151,11 +151,20 @@ export class InputHandler {
         }
     }
 
+    charInputFilter = (event:KeyboardEvent):boolean => {
+        let forbiddenKeys = "$"
+        return forbiddenKeys.includes(event.key)? false : true;
+    }
+
     charInputHandler = (event:KeyboardEvent):void => {
         if (event.key.length == 1 && !this.keyPresses['Control']) {
             if (event.key.match(/^[\x21-\x7E]$/)) {
-                this.app.context.tables[this.app.context.current_table].addCell(this.app.context.cursor.x, this.app.context.cursor.y, event.key);
-                this.app.context.cursor.x += 1;
+                if (this.charInputFilter(event)) {
+                    this.app.context.tables[this.app.context.current_table].addCell(
+                        this.app.context.cursor.x, this.app.context.cursor.y, event.key
+                    );
+                    this.app.context.cursor.x += 1;
+                }
             }
         }
     }
