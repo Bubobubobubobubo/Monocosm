@@ -38,7 +38,7 @@ export class Cursor {
 
 
     get size() {
-        return { height: this.y_size, width: this.x_size };
+        return { y: this.y_size, x: this.x_size };
     }
 
     resetCursorSize = (): void => {

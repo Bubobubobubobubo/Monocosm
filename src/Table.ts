@@ -1,10 +1,14 @@
 import type { Application } from "./Application";
 
+interface PasteBuffer {
+    [key: string]: string
+}
+
 export class Table {
 
     cells: object
     script: string
-    pasteBuffer: object
+    pasteBuffer: PasteBuffer
 
     constructor(public app: Application, data?: object) {
         if (data !== undefined) {
@@ -55,18 +59,21 @@ export class Table {
         }
     }
 
+    // Copy will get all the cells under the cursor position (with cursor zone) and put it in a similar table
+    // but coordinates will start again at 0 0 
     copy = () => {
         let { y, x } = this.app.context.cursor;
         let { height, width } = this.app.context.cursor.size;
         this.pasteBuffer = {};
         for (let i = 0; i < height; i++) {
             for (let j = 0; j < width; j++) {
-                let cell = this.getCell(y + i, x + j);
-                if (cell) {
-                    this.pasteBuffer[this.generateID(i, j)] = cell;
+                let id = this.generateID(i, j);
+                if (this.existsAt(y + i, x + j)) {
+                    this.pasteBuffer[id] = this.getCell(y + i, x + j);
                 }
             }
         }
+        console.log('Copy buffer: ', this.pasteBuffer)
     }
 
     paste = () => {
@@ -78,6 +85,16 @@ export class Table {
                 if (this.pasteBuffer.hasOwnProperty(id)) {
                     this.addCell(y + i, x + j, this.pasteBuffer[id]);
                 }
+            }
+        }
+    }
+
+    eraseZone = () => {
+        let { y, x } = this.app.context.cursor;
+        let { height, width } = this.app.context.cursor.size;
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
+                this.removeCell(y + i, x + j);
             }
         }
     }

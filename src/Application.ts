@@ -10,12 +10,17 @@ import { MidiOut } from './IO/Midi.js';
 // Possible frontend output types
 export type OutputType = 'text' | 'canvas';
 
+// Typing the tables
+interface Tables {
+    [key: string]: Table
+}
+
 // Context is application state
 export interface Context {
     camera: Camera;
     cursor: Cursor;
-    tables: object,
-    current_table: string
+    tables: Tables;
+    current_table: string;
 };
 
 // Content saved to localstorage
@@ -36,7 +41,7 @@ export class Application {
     clock: Clock
     command: Command;
     midi: MidiOut;
-    context: Context;
+    context!: Context;
     input: InputHandler;
     redraw: boolean;
     last_grid: string;

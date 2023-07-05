@@ -138,8 +138,13 @@ export class InputHandler {
     backSpaceHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Backspace') {
             this.app.context.cursor.x -= 1;
-            this.app.context.tables[this.app.context.current_table].removeCell(
-                this.app.context.cursor.x, this.app.context.cursor.y);
+            // If cursor size is 1 1, removeCEll, else removeZone
+            if (this.app.context.cursor.size.x == 1 && this.app.context.cursor.size.y == 1) {
+                this.app.context.tables[this.app.context.current_table].removeCell(
+                    this.app.context.cursor.x, this.app.context.cursor.y);
+            } else {
+                this.app.context.tables[this.app.context.current_table].eraseZone()
+            }
         }
     }
 
