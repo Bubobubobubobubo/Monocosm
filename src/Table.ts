@@ -29,7 +29,8 @@ export class Table {
         return {
             'cells': this.cells,
             'paste_buffer': this.pasteBuffer,
-            'script': this.script
+            'script': this.script,
+            'theme': this.theme
         }
     }
 
