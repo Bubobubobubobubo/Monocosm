@@ -8,6 +8,10 @@ export class Command {
     constructor(public app: Application) {
         // Create a command list that takes a string and returns a function
         this.commands = {
+            'right': this.moveRight,
+            'left': this.moveLeft,
+            'up': this.moveUp,
+            'down': this.moveDown,
             'midi': this.miditest,
             'midioutput': this.midioutput,
             'teleport': this.teleport,
@@ -68,5 +72,41 @@ export class Command {
     clear = ():void => {
         // Clear the grid
         this.app.context.tables[this.app.context.current_table].clear();
+    }
+
+    moveRight = (args: string[]):void => {
+        // Move the cursor right
+        if (args.length > 0) {
+            this.app.context.cursor.x += parseInt(args[0]);
+        } else {
+            this.app.context.cursor.x += 1;
+        }
+    }
+
+    moveUp = (args: string[]):void => {
+        // Move the cursor up
+        if (args.length > 0) {
+            this.app.context.cursor.y -= parseInt(args[0]);
+        } else {
+            this.app.context.cursor.y -= 1;
+        } 
+    }
+
+    moveLeft = (args: string[]):void => {
+        // Move the cursor left
+        if (args.length > 0) {
+            this.app.context.cursor.x -= parseInt(args[0]);
+        } else {
+            this.app.context.cursor.x -= 1;
+        }
+    }
+
+    moveDown = (args: string[]):void => {
+        // Move the cursor down
+        if (args.length > 0) {
+            this.app.context.cursor.y += parseInt(args[0]);
+        } else {
+            this.app.context.cursor.y += 1;
+        }
     }
 }
