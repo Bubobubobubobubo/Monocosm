@@ -85,10 +85,14 @@ body {
     margin-bottom: 5pt;
     padding: 0;
     overflow: hidden;
-    font-family: monospace;
+    font-family: "jgs7";
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
+}
+
+span {
+    font-family: "jgs7";
 }
 
 .selected {
@@ -135,7 +139,7 @@ div#cmd {
 
 input#prompt{
     font-size: 16px;
-    font-family: monospace;
+    font-family: "jgs7";
     padding: 0;
     border: none;
     margin: 0;
