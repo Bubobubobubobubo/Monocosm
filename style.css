@@ -8,6 +8,12 @@
     --secondary: white;
 }
 
+.theme-black {
+    --primary: black;
+    --secondary: white;
+}
+
+
 .theme-royal {
     --primary: #00539C;
     --secondary: #EEA47F;
