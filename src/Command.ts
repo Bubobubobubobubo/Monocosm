@@ -49,10 +49,17 @@ export class Command {
         })
     }
 
-    teleport = (y: number, x: number) => {
-        // Teleport the cursor to a given position
+    move = (y: number, x:number) => {
+        // Move the cursor to a given position
         this.app.context.cursor.y = y;
         this.app.context.cursor.x = x;
+    }
+
+    teleport = (args: string[]):void => {
+        if (args.length < 2) { return ; }
+        // Teleport the cursor to a given position
+        this.app.context.cursor.y = parseInt(args[0]);
+        this.app.context.cursor.x = parseInt(args[1]);
     }
 
     miditest = ():void => {
