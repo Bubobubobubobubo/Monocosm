@@ -73,7 +73,6 @@ export class Table {
         }
     }
 
-    // Remove all cells covered by x, y, x_size, y_size
     removeZone = (y: number, x: number, y_size: number, x_size: number) => {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
@@ -82,17 +81,16 @@ export class Table {
         }
     }
 
-    // Copy Under Cursor inspired by the function remove all cells
     copyUnderCursor = () => {
         let { x, y } = this.app.context.cursor;
         let { y_size , x_size } = this.app.context.cursor.size;
+        this.resetPasteBuffer();
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 this.pasteBuffer[id] = this.getCell(x + i, y + j);
             }
         }
-        console.log(this.pasteBuffer)
     }
 
 }
