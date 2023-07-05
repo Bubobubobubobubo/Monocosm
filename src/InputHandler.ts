@@ -30,6 +30,7 @@ export class InputHandler {
             this.backSpaceHandler, this.enterKeyHandler,
             // Copy and paste mechanics
             this.copyHandler, this.pasteHandler,
+            this.escapeKeyHandler,
             // Switch to command mode
             this.commandModeHandler,
         ];
@@ -91,6 +92,12 @@ export class InputHandler {
             this.app.command.parse(this.current_command);
             this.textEditingMode = !this.textEditingMode;
             this.current_command = '';
+        }
+    }
+
+    escapeKeyHandler = (event:KeyboardEvent):void => {
+        if (event.key == 'Escape') {
+            this.app.context.cursor.resetCursorSize();
         }
     }
 
