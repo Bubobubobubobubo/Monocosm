@@ -41,12 +41,12 @@ export class TextInterface {
         return Math.floor(viewportHeight / characterHeight);
     }
 
-    drawCharacter = (char: string, color: string, background: string) => {
-        return `<span class="cell" style="color:${color};background:${background}">${char}</span>`
+    drawCharacter = (char: string) => {
+        return `<span class="cell">${char}</span>`
     }
 
-    drawCursor = (color: string, background: string): string => {
-        return `<span class="cell" style="color:${color};background:${background}">█</span>`
+    drawCursor = (): string => {
+        return `<span class="cell">█</span>`
     }
 
     drawGrid = (context: Context): string => {
@@ -58,17 +58,15 @@ export class TextInterface {
                 if(context.tables[context.current_table].existsAt(x,y)) {
                     // If the cursor is on the cell, draw it in reverse
                     if (context.cursor.isUnder(y,x)) {
-                        grid.push(this.drawCharacter(context.tables[context.current_table]
-                            .getCell(x,y), 'black', 'white'));
+                        grid.push(this.drawCharacter(context.tables[context.current_table].getCell(x,y)));
                     } else {
-                        grid.push(this.drawCharacter(context.tables[context.current_table]
-                            .getCell(x,y), 'white', 'black'));
+                        grid.push(this.drawCharacter(context.tables[context.current_table].getCell(x,y)));
                     }
                 } else if(context.cursor.isUnder(y,x)) {
-                    grid.push(this.drawCursor('white', 'black'));
+                    grid.push(this.drawCursor());
                 } 
                 else {
-                    grid.push(this.drawCharacter('.', 'grey', 'black'));
+                    grid.push(this.drawCharacter('.'));
                 }
             }
             grid.push('<br>');

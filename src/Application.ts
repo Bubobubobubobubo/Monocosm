@@ -84,10 +84,20 @@ export class Application {
                 }
                 // Switch to the table that was active
                 this.context.current_table = saved_context.current_table;
+                this.loadTheme(this.context.tables[this.context.current_table].theme);
             }
         } else {
             Error('Output type not supported');
         }
+    }
+
+    loadTheme(theme: string) {
+        document.documentElement.className = "theme-"+theme;
+    }
+
+    setTheme(theme: string) {
+        this.context.tables[this.context.current_table].theme = theme;
+        this.loadTheme(theme);
     }
 
     process = (): string => {

@@ -1,26 +1,58 @@
+.theme-white {
+    --primary:  white;
+    --secondary: black;
+}
+
+.theme-dark {
+    --primary: black;
+    --secondary: white;
+}
+
+.theme-blue {
+    --primary: #0000AA;
+    --secondary: #0088FF;
+}
+
+.theme-yellow {
+    --primary: black;
+    --secondary: #ffff33;
+}
+
 body {
     margin: 5pt;
     margin-right: 5pt;
     margin-bottom: 5pt;
     padding: 0;
     overflow: hidden;
-    background-color: black;
     font-family: monospace;
     font-size: 16px;
     letter-spacing: normal;
+    background-color: var(--primary);
+}
+
+.selected {
+    color: var(--primary);
+    background: var(--secondary);
+}
+
+.unselected {
+    color: var(--secondary);
+    background: var(--primary);
 }
 
 span.cell {
     font-size: 20px;
     line-height: 20pt;
+    background-color: var(--primary);
+    color: var(--secondary);
 }
 
 div#interface {
     display: inline-flex;
     gap: 50px;
-    background-color: black;
-    color: white;
     padding: 0;
+    background-color: var(--primary);
+    color: var(--secondary);
 }
 
 div#interface p {
@@ -29,16 +61,6 @@ div#interface p {
 
 div#cmd {
     margin: 0pt;
-}
-
-.selected {
-    color: black;
-    background: white;
-}
-
-.unselected {
-    color: white;
-    background: black;
 }
 
 input#prompt{

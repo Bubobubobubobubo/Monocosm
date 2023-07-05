@@ -7,15 +7,18 @@ export class Table {
 
     cells: Cells
     script: string
+    theme: string
     pasteBuffer: PasteBuffer
 
     constructor(public app: Application, data?: object) {
         if (data !== undefined) {
             this.cells = data['cells'];
             this.script = data['script'];
+            this.theme = data['theme'];
         } else {
             this.cells = {};
             this.script = '';
+            this.theme = 'dark';
         }
         this.pasteBuffer = {};
     }
