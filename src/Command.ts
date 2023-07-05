@@ -73,16 +73,26 @@ export class Command {
 
     theme = (theme_name: string):void => {
         console.log('Setting theme to ' + theme_name);
-        this.app.interface.setTheme(theme_name);
+        this.app.interface?.setTheme(theme_name);
     }
 
-    universe = (universe_name: string):void => {
+    isTheme = (theme_name: string):boolean => {
+        return ["white", "dark", "black", "royal", "bee", "lavender", "jungle", "forest", "sky", "cherry", "blue", "yellow", "hurt", "sugar", "neon", "atoll"].includes(theme_name)
+    }
+
+    universe = (universe_name: string|string[]):void => {
+        if(Array.isArray(universe_name)) {
+            universe_name = universe_name.join(" ");
+        }
         if (universe_name in this.app.context.tables) { 
             this.app.context.current_table = universe_name;
-            this.app.interface.loadTheme(this.app.context.tables[universe_name].theme);
+            this.app.interface?.loadTheme(this.app.context.tables[universe_name].theme);
         } else {
             this.app.context.tables[universe_name] = new Table(this.app);
             this.app.context.current_table = universe_name;
+            if(this.isTheme(universe_name)) {
+                this.app.interface?.setTheme(universe_name);
+            }
         }
     }
 
