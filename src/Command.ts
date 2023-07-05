@@ -29,9 +29,6 @@ export class Command {
 
         console.log('Received expression: ' + expression)
 
-        // Remove the word 'Enter' from expression ending
-        expression = expression.slice(0, -5);
-
         // Break the expression at whitespace and separate command from arguments
         let [command, ...args] = expression.split(' ');
 

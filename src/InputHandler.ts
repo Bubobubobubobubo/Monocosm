@@ -89,13 +89,12 @@ export class InputHandler {
             let prompt = document.getElementById('prompt');
             this.current_command = String(prompt.value);
             prompt.value = ''; prompt.disabled = true;
+            this.app.command.parse(this.current_command);
             this.command_history.push(this.current_command);
             this.textEditingMode = !this.textEditingMode;
-            this.app.command.parse(this.current_command);
             prompt?.classList.toggle('selected');
             prompt?.classList.toggle('unselected');
             this.current_command = '';
-
         }
     }
 
