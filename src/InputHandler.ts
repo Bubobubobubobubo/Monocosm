@@ -136,14 +136,18 @@ export class InputHandler {
     }
 
     backSpaceHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'Backspace') {
-            this.app.context.cursor.x -= 1;
-            // If cursor size is 1 1, removeCEll, else removeZone
-            if (this.app.context.cursor.size.x == 1 && this.app.context.cursor.size.y == 1) {
+        console.log("Je suis trigger")
+        if (event.key === "Backspace") {
+            if (this.app.context.cursor.x_size == 1 && this.app.context.cursor.y_size == 1) {
                 this.app.context.tables[this.app.context.current_table].removeCell(
                     this.app.context.cursor.x, this.app.context.cursor.y);
+                this.app.context.cursor.x -= 1;
             } else {
-                this.app.context.tables[this.app.context.current_table].eraseZone()
+                this.app.context.tables[this.app.context.current_table].removeZone(
+                    this.app.context.cursor.x, this.app.context.cursor.y,
+                    this.app.context.cursor.x_size, this.app.context.cursor.y_size
+                )
+                this.app.context.cursor.x -= 1;
             }
         }
     }
