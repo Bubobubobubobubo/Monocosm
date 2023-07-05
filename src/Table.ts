@@ -50,8 +50,7 @@ export class Table {
     getCell = (y: number, x: number) => {
         let id = this.generateID(y, x);
         if (!this.exists(id)) {
-            this.addCell(y, x, '');
-            return this.cells[id];
+            return '';
         } else {
             return this.cells[id];
         }
@@ -70,7 +69,7 @@ export class Table {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
-                if (this.pasteBuffer.hasOwnProperty(id)) {
+                if (this.pasteBuffer.hasOwnProperty(id) && this.pasteBuffer[id] !== '') {
                     this.addCell(x + j, y + i, this.pasteBuffer[id]);
                 }
             }
