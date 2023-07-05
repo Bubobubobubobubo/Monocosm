@@ -8,6 +8,7 @@ export class Command {
     constructor(public app: Application) {
         // Create a command list that takes a string and returns a function
         this.commands = {
+            'midi': this.miditest,
             'teleport': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
@@ -35,6 +36,12 @@ export class Command {
         // Teleport the cursor to a given position
         this.app.context.cursor.y = y;
         this.app.context.cursor.x = x;
+    }
+
+    miditest = ():void => {
+        // Test MIDI output
+        this.app.midi._noteOn(60, 127, 0);
+        this.app.midi._noteOff(60, 0);
     }
 
     origin = ():void => {

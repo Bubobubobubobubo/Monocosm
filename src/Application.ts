@@ -1,10 +1,11 @@
+import { Clock } from './Clock.js';
 import { Camera } from './Camera.js';
 import { Cursor, CursorData } from './Cursor.js';
 import { Table } from './Table.js';
 import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
 import { Command } from './Command.js';
-
+import { MidiOut } from './IO/Midi.js';
 
 // Possible frontend output types
 export type OutputType = 'text' | 'canvas';
@@ -32,7 +33,9 @@ export interface VisibleZone {
 
 export class Application {
 
+    clock: Clock
     command: Command;
+    midi: MidiOut;
     context: Context;
     input: InputHandler;
     redraw: boolean;
@@ -40,6 +43,9 @@ export class Application {
     interface: TextInterface | null;
 
     constructor(public output_type: OutputType) {
+        this.clock = new Clock(120, 4);
+        this.midi = new MidiOut();
+        this.last_grid = '';
         this.input = new InputHandler(this);
         this.command = new Command(this);
         this.redraw = true;
