@@ -76,7 +76,7 @@ export class InputHandler {
     }
 
     commandModeHandler = (event: KeyboardEvent):void => {
-        if (event.key == '$') {
+        if (event.key == '§' || event.key == '²') {
             let prompt = document.getElementById('prompt');
             prompt?.classList.toggle('unselected');
             prompt?.classList.toggle('selected');
@@ -151,7 +151,7 @@ export class InputHandler {
     }
 
     charInputFilter = (event:KeyboardEvent):boolean => {
-        let forbiddenKeys = "$"
+        let forbiddenKeys = "§²"
         return forbiddenKeys.includes(event.key)? false : true;
     }
 
