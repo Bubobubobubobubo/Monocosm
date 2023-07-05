@@ -63,22 +63,6 @@ export class Table {
         }
     }
 
-
-
-    copyUnderCursor = () => {
-        let { y, x } = this.app.context.cursor;
-        let { y_size , x_size } = this.app.context.cursor.size;
-        this.resetPasteBuffer();
-        for (let i = 0; i < y_size ; i++) {
-            for (let j = 0; j < x_size ; j++) {
-                let id = this.generateID(i, j);
-                if (this.existsAt(y + i, x + j)) {
-                    this.pasteBuffer[id] = this.getCell(y + i, x + j);
-                }
-            }
-        }
-    }
-
     paste = () => {
         let { y, x } = this.app.context.cursor;
         let { y_size , x_size } = this.app.context.cursor.size;
@@ -86,17 +70,28 @@ export class Table {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 if (this.pasteBuffer.hasOwnProperty(id)) {
-                    this.addCell(y + i, x + j, this.pasteBuffer[id]);
+                    this.addCell(x + i, y + j, this.pasteBuffer[id]);
                 }
             }
         }
     }
 
-    // Remove all cells covered by x, y, x_size, y_size
     removeZone = (y: number, x: number, y_size: number, x_size: number) => {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 this.removeCell(y + i, x + j);
+            }
+        }
+    }
+
+    copyUnderCursor = () => {
+        let { x, y } = this.app.context.cursor;
+        let { y_size , x_size } = this.app.context.cursor.size;
+        this.resetPasteBuffer();
+        for (let i = 0; i < y_size ; i++) {
+            for (let j = 0; j < x_size ; j++) {
+                let id = this.generateID(i, j);
+                this.pasteBuffer[id] = this.getCell(x + i, y + j);
             }
         }
     }
