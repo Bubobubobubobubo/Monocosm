@@ -154,7 +154,7 @@ export class InputHandler {
     }
 
     charInputHandler = (event:KeyboardEvent):void => {
-        if (event.key.length == 1 && !this.keyPresses['Control'] && !this.keyPresses['Shift']) {
+        if (event.key.length == 1 && !this.keyPresses['Control']) {
             if (event.key.match(/^[\x21-\x7E]$/)) {
                 this.app.context.tables[this.app.context.current_table].addCell(this.app.context.cursor.x, this.app.context.cursor.y, event.key);
                 this.app.context.cursor.x += 1;
