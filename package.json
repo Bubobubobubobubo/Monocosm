@@ -1,0 +1,32 @@
+{
+  "name": "batoncaillou",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "author": {
+    "name": "Raphaël Forment",
+    "email": "raphael.forment@gmail.com",
+    "url": "https://raphaelforment.fr"
+  },
+  "keywords": [
+    "Livecoding",
+    "ASCII"
+  ],
+  "contributors": [
+    {
+      "name": "Miika Alonen",
+      "email": "amiika@gmail.com",
+      "url": "https://github.com/amiika"
+    }
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9"
+  },
+  "licence": "MIT"
+}

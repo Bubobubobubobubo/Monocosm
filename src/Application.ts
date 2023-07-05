@@ -5,6 +5,7 @@ import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
 import { Command } from './Command.js';
 
+
 // Possible frontend output types
 export type OutputType = 'text' | 'canvas';
 
@@ -64,7 +65,7 @@ export class Application {
             // Resume from localStorage data
             if (localStorage.getItem('context') !== null) {
                 // Reset the cursor back to its position
-                let saved_context: SavedContext = JSON.parse(localStorage.getItem('context'));
+                const saved_context: SavedContext = JSON.parse(localStorage.getItem('context'));
                 this.context.cursor.loadFromLocalStorage(saved_context.cursor);
                 // Load the tables back from localStorage
                 for (const [key, value] of Object.entries(saved_context.tables)) {
@@ -84,7 +85,7 @@ export class Application {
 
     // Preparing SavedContext for localstorage
     save = (): SavedContext => {
-        let tables_state = {}
+        const tables_state = {}
         for (const [key, value] of Object.entries(this.context.tables)) {
             tables_state[key] = value.data;
         };

@@ -1,0 +1,48 @@
+body {
+    margin: 5pt;
+    margin-right: 5pt;
+    margin-bottom: 5pt;
+    padding: 0;
+    overflow: hidden;
+    background-color: black;
+    font-family: monospace;
+    font-size: 16px;
+    letter-spacing: normal;
+}
+
+span.cell {
+    font-size: 20px;
+    line-height: 20pt;
+}
+
+div#interface {
+    display: inline-flex;
+    gap: 50px;
+    background-color: black;
+    color: white;
+    padding: 0;
+}
+
+div#interface p {
+    padding: 0; margin: 0;
+}
+
+div#cmd {
+    margin: 0pt;
+}
+
+.selected {
+    color: black;
+    background: white;
+}
+
+.unselected {
+    color: white;
+    background: black;
+}
+
+p#prompt{
+    padding: 0;
+    margin: 0;
+}
+

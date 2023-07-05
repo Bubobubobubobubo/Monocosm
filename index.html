@@ -1,58 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terrible Application</title>
-    <link rel="icon" type="image/x-icon" href="./image/favicon.ico">
-    <style>
-        body {
-            margin: 5pt;
-            margin-right: 5pt;
-            margin-bottom: 5pt;
-            padding: 0;
-            overflow: hidden;
-            background-color: black;
-            font-family: monospace;
-            font-size: 16px;
-            letter-spacing: normal;
-        }
-        span.cell {
-            font-size: 20px;
-            line-height: 20pt;
-        }
-        div#interface {
-            display: inline-flex;
-            gap: 50px;
-            background-color: black;
-            color: white;
-            padding: 0;
-        }
-        div#interface p {
-            padding: 0; margin: 0;
-        }
-
-        div#cmd {
-            margin: 0pt;
-        }
-        
-        .selected {
-            color: black;
-            background: white;
-        }
-
-        .unselected {
-            color: white;
-            background: black;
-        }
-
-        p#prompt{
-            padding: 0;
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
     <div id="interface">
         <p id="cursor">Cursor: 0, 0</p>
         <p id="visibleZone">Visible: 0, 0</p>
@@ -62,6 +17,6 @@
         <p class="unselected" id="prompt">$ </p>
     </div>
     <code id="zone" display="grid"></code>
-    <script type="module" src="dist/index.js"></script>
-</body>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
 </html>

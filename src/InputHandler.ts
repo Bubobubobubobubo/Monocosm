@@ -48,12 +48,14 @@ export class InputHandler {
     }
 
     tabKeyHandler = (event): void => {
+        // This key will be used to switch to script mode
         if (event.key == 'Tab') {
             event.preventDefault();
         }
     }
 
     shiftTabKeyHandler = (event): void => {
+        // This key will be used for something else
         if (event.key == 'Tab' && this.keyPresses['Shift']) {
             event.preventDefault();
         }
