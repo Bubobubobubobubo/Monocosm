@@ -66,13 +66,13 @@ export class Command {
 
     theme = (theme_name: string):void => {
         console.log('Setting theme to ' + theme_name);
-        this.app.setTheme(theme_name);
+        this.app.interface.setTheme(theme_name);
     }
 
     universe = (universe_name: string):void => {
         if (universe_name in this.app.context.tables) { 
             this.app.context.current_table = universe_name;
-            this.app.loadTheme(this.app.context.tables[universe_name].theme);
+            this.app.interface.loadTheme(this.app.context.tables[universe_name].theme);
         } else {
             this.app.context.tables[universe_name] = new Table(this.app);
             this.app.context.current_table = universe_name;

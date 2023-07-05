@@ -49,6 +49,15 @@ export class TextInterface {
         return `<span class="cell">█</span>`
     }
 
+    loadTheme = (theme: string) => {
+        document.documentElement.className = "theme-"+theme;
+    }
+
+    setTheme = (theme: string) => {
+        this.app.context.tables[this.app.context.current_table].theme = theme;
+        this.app.interface.loadTheme(theme);
+    }
+
     drawGrid = (context: Context): string => {
         if (!this.app.redraw) { return this.app.last_grid; }
         let visible_zone = context.camera.getVisibleZone();

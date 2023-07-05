@@ -76,7 +76,9 @@ export class Application {
             // Resume from localStorage data
             if (localStorage.getItem('context') !== null) {
                 // Reset the cursor back to its position
-                const saved_context: SavedContext = JSON.parse(localStorage.getItem('context'));
+                const saved_context: SavedContext = JSON.parse(
+                    localStorage.getItem('context')
+                );
                 this.context.cursor.loadFromLocalStorage(saved_context.cursor);
                 // Load the tables back from localStorage
                 for (const [key, value] of Object.entries(saved_context.tables)) {
@@ -84,21 +86,15 @@ export class Application {
                 }
                 // Switch to the table that was active
                 this.context.current_table = saved_context.current_table;
-                this.loadTheme(this.context.tables[this.context.current_table].theme);
+                this.interface.loadTheme(this.context.tables[
+                    this.context.current_table].theme);
             }
         } else {
             Error('Output type not supported');
         }
     }
 
-    loadTheme(theme: string) {
-        document.documentElement.className = "theme-"+theme;
-    }
 
-    setTheme(theme: string) {
-        this.context.tables[this.context.current_table].theme = theme;
-        this.loadTheme(theme);
-    }
 
     process = (): string => {
         return this.interface.drawGrid(this.context);
