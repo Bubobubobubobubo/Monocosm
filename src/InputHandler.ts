@@ -107,7 +107,6 @@ export class InputHandler {
     copyHandler = (event:KeyboardEvent):void => {
         if (event.key == 'c' && this.keyPresses['Control']) {
             this.app.context.tables[this.app.context.current_table].copyUnderCursor();
-            console.log(this.app.context.tables[this.app.context.current_table].pasteBuffer)
         }
     }
 
