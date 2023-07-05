@@ -21,6 +21,7 @@ export class Command {
             'teleport': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
+            'erase': this.erase,
             'universe': this.universe,
         }
     }
@@ -111,5 +112,13 @@ export class Command {
         } else {
             this.app.context.cursor.y += 1;
         }
+    }
+
+    // Erase from x, y to x, y
+    erase = (args: string[]):void => {
+        let [x1, y1, x2, y2] = args;
+        this.app.context.tables[this.app.context.current_table].removeZone(
+            parseInt(x1), parseInt(y1), parseInt(x2), parseInt(y2)
+        );
     }
 }
