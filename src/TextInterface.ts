@@ -22,7 +22,7 @@ export class TextInterface {
         testElement.style.visibility = 'hidden';
         testElement.style.position = 'absolute';
         document.body.appendChild(testElement);
-        const characterWidth = testElement.offsetWidth;
+        const characterWidth = testElement.offsetWidth+0.05;
         const viewportWidth = window.innerWidth;
         document.body.removeChild(testElement);
         return Math.floor(viewportWidth / characterWidth);
