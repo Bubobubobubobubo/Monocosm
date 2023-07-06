@@ -31,7 +31,6 @@ export class Command {
 
     parse = (expression: string): void => {
 
-        console.log('Received expression: ' + expression)
 
         // Multiple commands can exist, they are separated by ;
         let commands = expression.split(';');
@@ -43,7 +42,6 @@ export class Command {
         commands.forEach(command => {
             let [cmd, ...args] = command.split(' ');
             if (cmd in this.commands) {
-                console.log('Launching command ' + cmd + ' with args ' + args)
                 this.commands[cmd](args);
             } else {
                 Error('Command not found');
