@@ -76,7 +76,7 @@ export class InputHandler {
     }
 
     commandModeHandler = (event: KeyboardEvent):void => {
-        if (event.key == '§' || event.key == '²') {
+        if (event.key == '§' || event.key == '²' && this.textEditingMode == false) {
             if (this.app.output_type == 'text') {
                 let prompt = document.getElementById('prompt');
                 prompt?.classList.toggle('unselected');
