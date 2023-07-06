@@ -67,7 +67,7 @@ export class TextInterface {
 
     setTheme = (theme: string) => {
         this.app.context.tables[this.app.context.current_table].theme = theme;
-        this.app.interface.loadTheme(theme);
+        this.app.interface?.loadTheme(theme);
     }
 
     drawGrid = (context: Context): string => {

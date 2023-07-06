@@ -78,28 +78,37 @@ export class Command {
         this.app.context.cursor.x = 0;
     }
 
+    // Themes from the CSS
+    themes = ["white", "dark", "black", "royal", "bee", "lavender", "jungle", "forest", "sky", "cherry", "blue", "yellow", "hurt", "sugar", "neon", "atoll"]
+
+    isTheme = (theme_name: string):boolean => {
+        return this.themes.includes(theme_name)
+    }
+
     theme = (theme_name: string):void => {
-        console.log('Setting theme to ' + theme_name);
         this.app.interface?.setTheme(theme_name);
     }
 
-    isTheme = (theme_name: string):boolean => {
-        return ["white", "dark", "black", "royal", "bee", "lavender", "jungle", "forest", "sky", "cherry", "blue", "yellow", "hurt", "sugar", "neon", "atoll"].includes(theme_name)
+    getUniverseTheme = (universe_name: string):string => {
+        // If part of the universe name is same as one of the themes, find first match
+        let theme = this.themes.find(theme => universe_name.includes(theme));
+        if (theme) {
+            return theme;
+        } else {
+            // Get random theme
+            return this.themes[Math.floor(Math.random() * this.themes.length)];
+        }
     }
 
-    universe = (universe_name: string|string[]):void => {
-        if(Array.isArray(universe_name)) {
-            universe_name = universe_name.join(" ");
-        }
+    universe = (universe_params: string[]):void => {
+        const universe_name = universe_params.join(' ');
         if (universe_name in this.app.context.tables) { 
             this.app.context.current_table = universe_name;
             this.app.interface?.loadTheme(this.app.context.tables[universe_name].theme);
         } else {
             this.app.context.tables[universe_name] = new Table(this.app);
             this.app.context.current_table = universe_name;
-            if(this.isTheme(universe_name)) {
-                this.app.interface?.setTheme(universe_name);
-            }
+            this.app.interface?.loadTheme(this.getUniverseTheme(universe_name));
         }
     }
 
