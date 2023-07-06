@@ -1,5 +1,7 @@
 import "zyklus";
 
+// This is just super dumb. This file should be eraased and rebuilt from scratch
+
 export class Clock {
 
     public bpb: number = 4
