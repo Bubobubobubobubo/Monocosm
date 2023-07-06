@@ -13,7 +13,7 @@ export class MidiOut {
         this.output = midiAccess.outputs.values().next().value;
     }
 
-    chooseMidiOuptut = (output_name: string): void => {
+    chooseMidiOutput = (output_name: string): void => {
         navigator.requestMIDIAccess().then(
             (midiAccess: MIDIAccess) => {
                 for (let output of midiAccess.outputs.values()) {

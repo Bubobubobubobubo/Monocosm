@@ -1,34 +1,12 @@
 import { Clock } from './Clock.js';
 import { Camera } from './Camera.js';
-import { Cursor, CursorData } from './Cursor.js';
+import { Cursor } from './Cursor.js';
 import { Table } from './Table.js';
 import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
 import { Command } from './Command.js';
 import { MidiOut } from './IO/Midi.js';
-
-export type OutputType = 'text' | 'canvas';
-interface Tables { [key: string]: Table }
-
-export interface Context {
-    camera: Camera;
-    cursor: Cursor;
-    tables: Tables;
-    current_table: string;
-};
-
-// Content saved to localstorage
-export interface SavedContext {
-    cursor: CursorData;
-    tables: object;
-    current_table: string;
-}
-
-// Visible zone is the part of the grid that is visible to the user
-export interface VisibleZone {
-    from_x: number; to_x: number;
-    from_y: number; to_y: number;
-}
+import { Context, SavedContext, OutputType } from './Types.js';
 
 export class Application {
 

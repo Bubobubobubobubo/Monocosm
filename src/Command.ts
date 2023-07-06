@@ -1,9 +1,19 @@
 import type { Application } from "./Application.js";
 import { Table } from "./Table.js";
+import type { Commands } from './Types.js';
 
-interface Commands {
-    [key: string]: Function;
-}
+// Themes from the CSS
+const themes: string[] = [
+    "white", "dark",
+    "black", "royal",
+    "bee", "lavender",
+    "jungle", "forest",
+    "sky", "cherry",
+    "blue", "yellow",
+    "hurt", "sugar",
+    "neon", "atoll"
+]
+
 
 export class Command {
 
@@ -50,7 +60,7 @@ export class Command {
         })
     }
 
-    move = (y: number, x:number) => {
+    move = (y: number, x:number):void  => {
         // Move the cursor to a given position
         this.app.context.cursor.y = y;
         this.app.context.cursor.x = x;
@@ -79,11 +89,9 @@ export class Command {
         this.app.context.cursor.x = 0;
     }
 
-    // Themes from the CSS
-    themes = ["white", "dark", "black", "royal", "bee", "lavender", "jungle", "forest", "sky", "cherry", "blue", "yellow", "hurt", "sugar", "neon", "atoll"]
 
     isTheme = (theme_name: string):boolean => {
-        return this.themes.includes(theme_name)
+        return themes.includes(theme_name)
     }
 
     theme = (theme_name: string):void => {
@@ -92,12 +100,12 @@ export class Command {
 
     getUniverseTheme = (universe_name: string):string => {
         // If part of the universe name is same as one of the themes, find first match
-        let theme = this.themes.find(theme => universe_name.includes(theme));
+        let theme = themes.find(theme => universe_name.includes(theme));
         if (theme) {
             return theme;
         } else {
             // Get random theme
-            return this.themes[Math.floor(Math.random() * this.themes.length)];
+            return themes[Math.floor(Math.random() * themes.length)];
         }
     }
 

@@ -1,11 +1,5 @@
 import type { Application } from "./Application";
 
-export interface CursorData {
-    x: number
-    y: number
-    y_size: number
-    x_size: number
-}
 
 export class Cursor {
 
