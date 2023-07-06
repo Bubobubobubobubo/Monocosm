@@ -124,6 +124,10 @@ export class Application {
         }
     }
 
+    startAudioContext = () => {
+        this.audio_context.resume();
+    }
+
     // Get context from local storage and hash it to url parameter
     getHash = (): string => {
         return btoa(JSON.stringify(this.save()));

@@ -32,6 +32,6 @@
   "licence": "MIT",
   "dependencies": {
     "codemirror": "^6.0.1",
-    "zyklus": "^0.1.3"
+    "zyklus": "^0.1.4"
   }
 }

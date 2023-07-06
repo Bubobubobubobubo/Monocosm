@@ -1,5 +1,5 @@
 import { Application } from './Application.js';
-import type { OutputType, SavedContext } from './Application.js';
+import type { SavedContext } from './Application.js';
 
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor");
@@ -9,6 +9,10 @@ let prompt: HTMLElement = document.getElementById("prompt");
 
 let zone: HTMLElement = document.getElementById("zone");
 
+
+function start() {
+    application.startAudioContext();
+}
 
 function drawScreen() {
     return application.process();
