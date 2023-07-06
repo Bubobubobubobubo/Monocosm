@@ -1,7 +1,6 @@
 import { Application } from './Application.js';
 import type { SavedContext } from './Application.js';
 
-
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;

@@ -7,15 +7,9 @@ import { TextInterface } from './TextInterface.js';
 import { Command } from './Command.js';
 import { MidiOut } from './IO/Midi.js';
 
-// Possible frontend output types
 export type OutputType = 'text' | 'canvas';
+interface Tables { [key: string]: Table }
 
-// Typing the tables
-interface Tables {
-    [key: string]: Table
-}
-
-// Context is application state
 export interface Context {
     camera: Camera;
     cursor: Cursor;
@@ -52,7 +46,7 @@ export class Application {
 
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();
-        this.clock = new Clock(this.audio_context, 120, 4);
+        this.clock = new Clock(this.audio_context);
         this.midi = new MidiOut();
         this.last_grid = '';
         this.input = new InputHandler(this);
@@ -81,17 +75,17 @@ export class Application {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('context')) {
                 // Try to parse the hash using parseHash
-                const url_context = this.parseHash(urlParams.get('context'));
+                const url_context = this.parseHash(urlParams.get('context') as string);
                 this.loadFromSavedContext(url_context);
             } else if (localStorage.getItem('context') !== null) {
                 // Resume from localStorage data
                 const saved_context: SavedContext = JSON.parse(
-                    localStorage.getItem('context')
+                    localStorage.getItem('context') as string
                 );
                 this.loadFromSavedContext(saved_context);
             }
         } else {
-            Error('Output type not supported');
+            throw new Error('Output type not supported');
         }
     }
 
@@ -107,13 +101,14 @@ export class Application {
         this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
     }
 
-    process = (): string => {
-        return this.interface.drawGrid(this.context);
+    process = (): string | void  => {
+        if (this.interface) return this.interface.drawGrid(this.context);
+        else throw new Error("Can't process without interface");
     }
 
     // Preparing SavedContext for localstorage
     save = (): SavedContext => {
-        const tables_state = {}
+        const tables_state: {[key: string]: object} = {}
         for (const [key, value] of Object.entries(this.context.tables)) {
             tables_state[key] = value.data;
         };
