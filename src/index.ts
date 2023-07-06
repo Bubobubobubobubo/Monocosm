@@ -9,6 +9,7 @@ let universe: HTMLElement = document.getElementById("universe");
 let prompt: HTMLElement = document.getElementById("prompt");
 let play_button: HTMLElement = document.getElementById("play"); 
 let zone: HTMLElement = document.getElementById("zone");
+let clock: HTMLElement = document.getElementById("clock");
 
 play_button.addEventListener("click", () => {
     if (!RUNNING) {
@@ -43,6 +44,8 @@ function loop() {
         universe.innerHTML = `${application.context.current_table}`;
         zone.innerHTML = drawScreen();
     }
+    // The clock should always move
+    clock.innerHTML = application.clock.toString();
     window.requestAnimationFrame(loop);
 }
 

@@ -12,6 +12,7 @@ export class Command {
     constructor(public app: Application) {
         // Create a command list that takes a string and returns a function
         this.commands = {
+            'bpm': this.bpm,
             'right': this.moveRight,
             'left': this.moveLeft,
             'up': this.moveUp,
@@ -176,5 +177,7 @@ export class Command {
         this.app.init();
     }
 
-
+    bpm = (bpm: string[]):void => {
+        this.app.clock.bpm = parseFloat(bpm[0]);
+    }
 }
