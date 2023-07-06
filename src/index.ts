@@ -31,7 +31,7 @@ window.onbeforeunload = function(event): null {
 function loop() {
     if(application.redraw) {
         cursor.innerHTML = application.context.cursor.toString();
-        universe.innerHTML = `Universe: ${application.context.current_table}`;
+        universe.innerHTML = `${application.context.current_table}`;
         zone.innerHTML = drawScreen();
     }
     window.requestAnimationFrame(loop);

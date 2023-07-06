@@ -50,7 +50,7 @@ export class Cursor {
     incrementX = (amount: number) => this.x_size += amount;
 
     toString = (): string => {
-        return `Cursor: ${this.x}, ${this.y} | Size: ${this.x_size}, ${this.y_size}`;
+        return `( ${this.x}, ${this.y} )`;
     }
 
     isUnder = (y: number, x: number): boolean => {

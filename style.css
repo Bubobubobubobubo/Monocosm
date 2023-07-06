@@ -134,7 +134,7 @@ div#interface {
 }
 
 div#interface p:before {
-    content: "}} ";
+    content: "⬢ ";
 }
 
 
