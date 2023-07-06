@@ -24,6 +24,7 @@ export class Command {
             'erase': this.erase,
             'universe': this.universe,
             'theme': this.theme,
+            'share': this.share,
         }
     }
 
@@ -160,4 +161,14 @@ export class Command {
             parseInt(x1), parseInt(y1), parseInt(x2), parseInt(y2)
         );
     }
+
+    // Share context to url paramater
+    share = ():void => {
+        const hash_context = this.app.getHash();
+        const url = new URL(window.location.href);
+        url.searchParams.set('context', hash_context);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+
 }

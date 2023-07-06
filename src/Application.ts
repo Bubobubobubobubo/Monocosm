@@ -73,28 +73,35 @@ export class Application {
                 'current_table': 'default',
             }
 
-            // Resume from localStorage data
-            if (localStorage.getItem('context') !== null) {
-                // Reset the cursor back to its position
+            // Resume from ?context parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('context')) {
+                // Try to parse the hash using parseHash
+                const url_context = this.parseHash(urlParams.get('context'));
+                this.loadFromSavedContext(url_context);
+            } else if (localStorage.getItem('context') !== null) {
+                // Resume from localStorage data
                 const saved_context: SavedContext = JSON.parse(
                     localStorage.getItem('context')
                 );
-                this.context.cursor.loadFromLocalStorage(saved_context.cursor);
-                // Load the tables back from localStorage
-                for (const [key, value] of Object.entries(saved_context.tables)) {
-                    this.context.tables[key] = new Table(this, value);
-                }
-                // Switch to the table that was active
-                this.context.current_table = saved_context.current_table;
-                this.interface.loadTheme(this.context.tables[
-                    this.context.current_table].theme);
+                this.loadFromSavedContext(saved_context);
             }
         } else {
             Error('Output type not supported');
         }
     }
 
+    loadFromSavedContext = (saved_context: SavedContext) => {
+        this.context.cursor.createFromStoredContext(saved_context.cursor);
 
+        // Load tables from saved context
+        for (const [key, value] of Object.entries(saved_context.tables)) {
+            this.context.tables[key] = new Table(this, value);
+        }
+
+        this.context.current_table = saved_context.current_table;
+        this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
+    }
 
     process = (): string => {
         return this.interface.drawGrid(this.context);
@@ -115,4 +122,15 @@ export class Application {
             'current_table': current_table,
         }
     }
+
+    // Get context from local storage and hash it to url parameter
+    getHash = (): string => {
+        return btoa(JSON.stringify(this.save()));
+    }
+
+    // Parse context from hashed string
+    parseHash = (hash: string) => {
+        return JSON.parse(atob(hash));
+    }
+
 }

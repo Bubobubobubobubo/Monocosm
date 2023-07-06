@@ -58,7 +58,7 @@ export class Cursor {
         return y >= this.y && y < this.y + this.y_size && x >= this.x && x < this.x + this.x_size;
     }
 
-    loadFromLocalStorage = (data: CursorData) => {
+    createFromStoredContext = (data: CursorData) => {
         this.x = data.x;
         this.y = data.y;
         this.y_size = data.y_size;
