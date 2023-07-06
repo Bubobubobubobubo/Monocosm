@@ -26,13 +26,12 @@
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
-    "@types/path-browserify": "^1.0.0",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.4.0"
   },
   "licence": "MIT",
   "dependencies": {
-    "abletonlink": "^0.2.0-beta.0",
-    "path-browserify": "^1.0.1"
+    "codemirror": "^6.0.1",
+    "zyklus": "^0.1.3"
   }
 }

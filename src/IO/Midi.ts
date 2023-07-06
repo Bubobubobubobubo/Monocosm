@@ -10,9 +10,7 @@ export class MidiOut {
     }
 
     onMIDISuccess = (midiAccess: MIDIAccess): void => {
-        console.log('MIDI Access Object', midiAccess);
         this.output = midiAccess.outputs.values().next().value;
-        console.log('MIDI Output Object', this.output)
     }
 
     chooseMidiOuptut = (output_name: string): void => {
@@ -21,7 +19,6 @@ export class MidiOut {
                 for (let output of midiAccess.outputs.values()) {
                     if (output.name === output_name) {
                         this.output = output;
-                        console.log('MIDI Output Object', this.output)
                     }
                 }
             },
@@ -30,7 +27,6 @@ export class MidiOut {
     }
 
     onMIDIFailure = (): void => {
-        console.log('Could not access your MIDI devices.');
     }
 
     _noteOn(note: number, velocity: number, channel: number) {

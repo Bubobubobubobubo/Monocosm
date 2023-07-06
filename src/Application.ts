@@ -38,6 +38,7 @@ export interface VisibleZone {
 
 export class Application {
 
+    audio_context: AudioContext;
     clock: Clock
     command: Command;
     midi: MidiOut;
@@ -48,7 +49,8 @@ export class Application {
     interface: TextInterface | null;
 
     constructor(public output_type: OutputType) {
-        this.clock = new Clock(120, 4);
+        this.audio_context = new AudioContext();
+        this.clock = new Clock(this.audio_context, 120, 4);
         this.midi = new MidiOut();
         this.last_grid = '';
         this.input = new InputHandler(this);
@@ -115,7 +117,6 @@ export class Application {
         };
         let cursor_state = this.context.cursor.getCursorData();
         let current_table = this.context.current_table;
-        console.log(cursor_state)
         return {
             'tables': tables_state,
             'cursor': cursor_state,
