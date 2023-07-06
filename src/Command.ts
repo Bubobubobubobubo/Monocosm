@@ -25,6 +25,7 @@ export class Command {
             'universe': this.universe,
             'theme': this.theme,
             'share': this.share,
+            'apocalypse': this.apocalypse,
         }
     }
 
@@ -168,6 +169,13 @@ export class Command {
         const url = new URL(window.location.href);
         url.searchParams.set('context', hash_context);
         window.history.replaceState({}, '', url.toString());
+    }
+
+    // Clear context from localstorage
+    apocalypse = ():void => {
+        localStorage.removeItem('context');
+        window.history.replaceState({}, '', window.location.href.split('?')[0]);
+        this.app.init();
     }
 
 
