@@ -47,6 +47,8 @@ export class Application {
     redraw: boolean;
     last_grid: string;
     interface: TextInterface | null;
+    running: boolean = false
+
 
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();

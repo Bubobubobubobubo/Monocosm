@@ -1,26 +1,23 @@
 import { Application } from './Application.js';
 import type { SavedContext } from './Application.js';
 
-let RUNNING: boolean = false;
 
 let application: Application = new Application('text');
-let cursor: HTMLElement = document.getElementById("cursor");
-let universe: HTMLElement = document.getElementById("universe");
-let prompt: HTMLElement = document.getElementById("prompt");
-let play_button: HTMLElement = document.getElementById("play"); 
-let zone: HTMLElement = document.getElementById("zone");
-let clock: HTMLElement = document.getElementById("clock");
+let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
+let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
+let play_button: HTMLElement = document.getElementById("play") as HTMLElement; 
+let zone: HTMLElement = document.getElementById("zone") as HTMLElement;
+let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
 
 play_button.addEventListener("click", () => {
-    if (!RUNNING) {
+    if (!application.running) {
     application.startAudioContext();
     play_button.innerHTML = "⏸";
-    RUNNING = !RUNNING;
     } else {
     play_button.innerHTML = "⏵";
     application.audio_context.suspend();
-    RUNNING = !RUNNING;
     }
+    application.running= !application;
 }); 
 
 
@@ -29,10 +26,10 @@ function drawScreen() {
 }
 
 window.onresize = () => {
-    application.interface.resizeGrid();
+    if (application.interface) application.interface.resizeGrid();
 }
 
-window.onbeforeunload = function(event): null {
+window.onbeforeunload = function(): null {
     let saved_context: SavedContext = application.save();
     localStorage.setItem('context', JSON.stringify(saved_context));
     return null;
