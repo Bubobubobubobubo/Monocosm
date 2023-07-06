@@ -77,24 +77,38 @@ export class InputHandler {
 
     commandModeHandler = (event: KeyboardEvent):void => {
         if (event.key == '§' || event.key == '²') {
-            let prompt = document.getElementById('prompt');
-            prompt?.classList.toggle('unselected');
-            prompt?.classList.toggle('selected');
+            if (this.app.output_type == 'text') {
+                let prompt = document.getElementById('prompt');
+                prompt?.classList.toggle('unselected');
+                prompt?.classList.toggle('selected');
+            }
             this.textEditingMode = !this.textEditingMode;
         }
     }
 
     validateCommandHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
-            let prompt = document.getElementById('prompt');
-            this.current_command = String(prompt.value);
-            prompt.value = ''; prompt.disabled = true;
+
+            // Fetching the prompt element (HTMLInput or whatever)
+            if (this.app.output_type == 'text') {
+                let prompt = document.getElementById('prompt') as HTMLInputElement;
+                this.current_command = String(prompt?.value);
+                prompt.value = '';
+                prompt.disabled = true;
+            }
+
+            // Actual logic
             this.app.command.parse(this.current_command);
             this.command_history.push(this.current_command);
             this.textEditingMode = !this.textEditingMode;
-            prompt?.classList.toggle('selected');
-            prompt?.classList.toggle('unselected');
             this.current_command = '';
+
+            // Style the prompt
+            if (this.app.output_type == 'text') {
+                let prompt = document.getElementById('prompt') as HTMLInputElement;
+                prompt.classList.toggle('selected');
+                prompt.classList.toggle('unselected');
+            }
         }
     }
 
@@ -117,8 +131,11 @@ export class InputHandler {
     }
 
     editingModeKeysHandler = (event:KeyboardEvent):void => {
-        document.getElementById("prompt").disabled = false;
-        document.getElementById("prompt").focus();
+        if (this.app.output_type == 'text') {
+            let prompt = document.getElementById('prompt') as HTMLInputElement;
+            prompt.disabled = false;
+            prompt.focus();
+        }
     }
 
     spaceKeyHandler = (event:KeyboardEvent):void => {
