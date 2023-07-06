@@ -1,5 +1,5 @@
 import { Application } from './Application.js';
-import type { SavedContext } from './Application.js';
+import type { SavedContext } from './Types.js';
 
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
@@ -38,7 +38,7 @@ function loop() {
     if(application.redraw) {
         cursor.innerHTML = application.context.cursor.toString();
         universe.innerHTML = `${application.context.current_table}`;
-        zone.innerHTML = drawScreen();
+        zone.innerHTML = drawScreen() as string;
     }
     // The clock should always move
     clock.innerHTML = application.clock.toString();

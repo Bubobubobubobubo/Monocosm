@@ -1,4 +1,5 @@
 import type { Application } from "./Application";
+import type { CursorData } from "./Types";
 
 
 export class Cursor {
@@ -21,6 +22,9 @@ export class Cursor {
         this.x_size = x_size;
     }
 
+    incrementY = (amount: number) => this.y_size += amount;
+    incrementX = (amount: number) => this.x_size += amount;
+
     getCursorData = (): CursorData => {
         let data = {
             'x': this.x, 'y': this.y,
@@ -30,7 +34,6 @@ export class Cursor {
         return data;
     }
 
-
     get size() {
         return { y_size: this.y_size, x_size: this.x_size };
     }
@@ -39,9 +42,6 @@ export class Cursor {
         this.y_size = 1;
         this.x_size = 1;
     }
-
-    incrementY = (amount: number) => this.y_size += amount;
-    incrementX = (amount: number) => this.x_size += amount;
 
     toString = (): string => {
         return `( ${this.x}, ${this.y} )`;
