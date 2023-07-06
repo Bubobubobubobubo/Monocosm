@@ -30,6 +30,7 @@ export class Command {
             'midi': this.miditest,
             'midioutput': this.midioutput,
             'teleport': this.teleport,
+            'tp': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
             'erase': this.erase,
