@@ -2,6 +2,15 @@ import type { Camera } from './Camera.js';
 import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
 
+export interface TableData {
+    cells: Cells
+    script: string
+    theme: string
+}
+
+export interface PasteBuffer { [key: string]: string }
+export interface Cells { [key: string]: string }
+
 export interface Commands {
     [key: string]: Function;
 }

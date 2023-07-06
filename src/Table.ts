@@ -1,7 +1,6 @@
 import type { Application } from "./Application";
+import type { TableData, PasteBuffer, Cells } from "./Types";
 
-interface PasteBuffer { [key: string]: string }
-interface Cells { [key: string]: string }
 
 export class Table {
 
@@ -10,7 +9,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
 
-    constructor(public app: Application, data?: object) {
+    constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
             this.cells = data['cells'];
             this.script = data['script'];
