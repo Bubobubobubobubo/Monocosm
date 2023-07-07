@@ -1,6 +1,9 @@
 import { Application } from './Application.js';
 import type { SavedContext } from './Types.js';
 
+const FPS: number = 30;
+const FPS_INTERVAL: number = 1000 / FPS;
+
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
@@ -37,14 +40,15 @@ window.onbeforeunload = function(): null {
 function loop(time: DOMHighResTimeStamp) {
     console.log(time)
     if(application.redraw) {
-        cursor.innerHTML = application.context.cursor.toString();
-        universe.innerHTML = `${application.context.current_table}`;
+        cursor.textContent = application.context.cursor.toString();
+        universe.textContent = `${application.context.current_table}`;
         zone.innerHTML = drawScreen() as string;
     }
     // The clock should always move
     clock.innerHTML = application.clock.toString();
 
     window.requestAnimationFrame(loop);
+
 }
 
 // First frame
