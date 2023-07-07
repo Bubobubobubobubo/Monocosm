@@ -19,9 +19,8 @@ export class Application {
     redraw: boolean;
     last_grid: DocumentFragment | null;
     interface: TextInterface | null;
-    running: boolean = false
-
-
+    running: boolean = false;
+    
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();
         this.clock = new Clock(this.audio_context);

@@ -105,24 +105,22 @@ span {
     background: var(--primary);
 }
 
-span.row {
-    display: block;
-}
-
 span.cell {
     font-size: 20px;
     line-height: 1em;
     background-color: var(--primary);
     color: var(--secondary);
     white-space: pre;
+    position: absolute;
 }
 
-span.reversed-cell {
+span.inverted-cell {
     font-size: 20px;
     line-height: 1em;
     background-color: var(--secondary);
     color: var(--primary);
     white-space: pre;
+    position: absolute;
 }
 
 div#interface {

@@ -2,78 +2,74 @@ import type { Application, Context } from './Application';
 
 export class TextInterface {
     context: Context
+    characterWidth: number
+    characterHeight: number
+    charactersForWidth: number
+    charactersForHeight: number
 
     constructor(public app: Application) {
         this.context = this.app.context;
+        const characterHeightAndWidth = this.calculateCharacterWidth();
+        this.characterWidth = characterHeightAndWidth[0];
+        this.characterHeight = characterHeightAndWidth[1];
+        this.charactersForWidth = this.howManyCharactersFitWidth();
+        this.charactersForHeight = this.howManyCharactersFitHeight();
+    }
+
+    calculateCharacterWidth = () => {
+        const testElement = document.createElement('span');
+        testElement.innerText = ' ';
+        testElement.className = 'cell';
+        testElement.style.whiteSpace = 'pre';
+        testElement.style.visibility = 'hidden';
+        testElement.style.position = 'absolute';
+        document.body.appendChild(testElement);
+        const characterWidth = testElement.offsetWidth;
+        const characterHeight = testElement.offsetHeight;
+        document.body.removeChild(testElement);
+        return [characterWidth, characterHeight]
     }
 
     resizeGrid = (): void => {
-        this.app.context.camera.resize(
-            this.howManyCharactersFitHeight(), 
-            this.howManyCharactersFitWidth()
-        );
+        const characterHeightAndWidth = this.calculateCharacterWidth();
+        const charWidth = characterHeightAndWidth[0];
+        const charHeight = characterHeightAndWidth[1];
+        this.characterWidth = charWidth;
+        this.characterHeight = charHeight;
+        const charsForWidth = Math.floor(window.innerWidth/charWidth);
+        const charsForHeight = Math.floor(window.innerHeight/charHeight);
+        this.charactersForHeight = charsForHeight;
+        this.charactersForWidth = charsForWidth;
+        this.app.context.camera.resize(charsForHeight, charsForWidth);
         this.app.redraw = true;
     }
 
     howManyCharactersFitWidth = (): number => {
-        const testElement = document.createElement('span');
-        testElement.innerText = 'X';
-        testElement.className = 'cell';
-        testElement.style.visibility = 'hidden';
-        testElement.style.position = 'absolute';
-        document.body.appendChild(testElement);
-        const characterWidth = testElement.offsetWidth+0.05;
         const viewportWidth = window.innerWidth;
-        document.body.removeChild(testElement);
-        return Math.floor(viewportWidth / characterWidth);
+        return Math.floor(viewportWidth / this.characterWidth);
     }
 
     howManyCharactersFitHeight = (): number => {
-        const testElement = document.createElement('span');
-        testElement.innerText = 'X';
-        testElement.className = 'cell';
-        testElement.style.visibility = 'hidden';
-        testElement.style.position = 'absolute';
-        document.body.appendChild(testElement);
-        const characterHeight = testElement.offsetHeight;
         const viewportHeight = window.innerHeight;
-        document.body.removeChild(testElement);
-        return Math.floor(viewportHeight / characterHeight);
+        return Math.floor(viewportHeight / this.characterHeight);
     }
 
-    createCell = (char: string): HTMLElement => {
+    createCell = (char: string, x: number, y: number): HTMLElement => {
         let cell = document.createElement('span');
         cell.className = 'cell';
         cell.innerText = char;
+        cell.style.top = (y * this.characterHeight) + 'px';
+        cell.style.left = (x * this.characterWidth) + 'px';
         return cell;
     }
 
-    createInvertedCell = (char: string): HTMLElement => {
+    createInvertedCell = (char: string, x: number, y: number): HTMLElement => {
         let cell = document.createElement('span');
-        cell.className = 'reversed-cell';
+        cell.className = 'inverted-cell';
         cell.innerText = char;
+        cell.style.top = (y * this.characterHeight) + 'px';
+        cell.style.left = (x * this.characterWidth) + 'px';
         return cell;
-    }
-
-    createEmptyCell = (): HTMLElement => {
-        let cell = document.createElement('span')
-        cell.className = 'cell'
-        cell.innerText = ' '
-        return cell
-    }
-
-    createCursor = (): HTMLElement => {
-        let cell = document.createElement('span');
-        cell.className = 'cell';
-        cell.innerText = '█';
-        return cell;
-    }
-
-    createRow = (rowNumber: number): HTMLElement => {
-        let row = document.createElement('span');
-        row.className = 'row';
-        row.id = 'row_'+rowNumber;
-        return row;
     }
 
     loadTheme = (theme: string) => {
@@ -90,31 +86,25 @@ export class TextInterface {
         const currentTable = this.app.getCurrentTable();
         const cursor = this.app.getCursor();
         const visible_zone = this.app.getVisibleZone();
-        let emptyCell = this.createEmptyCell();
-        let row = 0;
         let grid = document.createDocumentFragment();
-        for (let y = visible_zone.from_y; y < visible_zone.to_y; y++) {
-            let rowElement = this.createRow(row++);
-            for (let x = visible_zone.from_x; x < visible_zone.to_x; x++) {
-                if(currentTable.existsAt(x,y)) {
+        for (let y = 0; y < this.charactersForHeight; y++) {
+            for (let x = 0; x < this.charactersForWidth; x++) {
+
+                // Calculate offsets for coordinates
+                let vx = x + visible_zone.from_x;
+                let vy = y + visible_zone.from_y;
+
+                if(currentTable.existsAt(vx,vy)) {
                     // If the cursor is on the cell, draw it in reverse
-                    if (cursor.isUnder(y,x)) {
-                        rowElement.appendChild(this.createInvertedCell(currentTable.getCell(x,y)));
+                    if (cursor.isUnder(vy,vx)) {
+                        grid.appendChild(this.createInvertedCell(currentTable.getCell(vx,vy),x,y));
                     } else {
-                        rowElement.appendChild(this.createCell(currentTable.getCell(x,y)));
+                        grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y));
                     }
-                } else if(cursor.isUnder(y,x)) {
-                    rowElement.appendChild(this.createCursor());
-                } 
-                else {
-                    if (y % 5 == 0 && x % 5 == 0) {
-                        rowElement.appendChild(this.createCell('·'));
-                    } else {
-                        rowElement.appendChild(emptyCell.cloneNode(true));
-                    }
+                } else if(cursor.isUnder(vy,vx)) {
+                    grid.appendChild(this.createCell('█',x,y));
                 }
             }
-            grid.appendChild(rowElement);
         }
         this.app.last_grid = grid;
         this.app.redraw = false;
