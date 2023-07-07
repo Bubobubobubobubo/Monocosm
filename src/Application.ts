@@ -17,7 +17,7 @@ export class Application {
     context!: Context;
     input: InputHandler;
     redraw: boolean;
-    last_grid: string;
+    last_grid: DocumentFragment | null;
     interface: TextInterface | null;
     running: boolean = false
 
@@ -26,10 +26,10 @@ export class Application {
         this.audio_context = new AudioContext();
         this.clock = new Clock(this.audio_context);
         this.midi = new MidiOut();
-        this.last_grid = '';
         this.input = new InputHandler(this);
         this.command = new Command(this);
         this.redraw = true;
+        this.last_grid = null;
         this.interface = null;
         this.init()
     }
@@ -79,8 +79,8 @@ export class Application {
         this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
     }
 
-    process = (): string | void  => {
-        if (this.interface) return this.interface.drawGrid(this.context);
+    process = (): DocumentFragment | void | null => {
+        if (this.interface) return this.interface.createGrid();
         else throw new Error("Can't process without interface");
     }
 
@@ -111,6 +111,18 @@ export class Application {
     // Parse context from hashed string
     parseHash = (hash: string) => {
         return JSON.parse(atob(hash));
+    }
+
+    getCurrentTable = () => {
+        return this.context.tables[this.context.current_table];
+    }
+
+    getVisibleZone = () => {
+        return this.context.camera.getVisibleZone();
+    }
+
+    getCursor = () => {
+        return this.context.cursor;
     }
 
 }

@@ -22,11 +22,6 @@ play_button.addEventListener("click", () => {
     application.running= !application;
 }); 
 
-
-function drawScreen() {
-    return application.process();
-}
-
 window.onresize = () => {
     if (application.interface) application.interface.resizeGrid();
 }
@@ -38,11 +33,13 @@ window.onbeforeunload = function(): null {
 }
 
 function loop(time: DOMHighResTimeStamp) {
-    console.log(time)
     if(application.redraw) {
         cursor.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
-        zone.innerHTML = drawScreen() as string;
+        const newGrid = application.interface?.createGrid();
+        if(newGrid) {
+            zone.replaceChildren(newGrid);
+        }
     }
     // The clock should always move
     clock.textContent = application.clock.toString();
