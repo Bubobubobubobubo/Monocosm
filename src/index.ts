@@ -34,7 +34,8 @@ window.onbeforeunload = function(): null {
     return null;
 }
 
-function loop() {
+function loop(time: DOMHighResTimeStamp) {
+    console.log(time)
     if(application.redraw) {
         cursor.innerHTML = application.context.cursor.toString();
         universe.innerHTML = `${application.context.current_table}`;
@@ -42,6 +43,7 @@ function loop() {
     }
     // The clock should always move
     clock.innerHTML = application.clock.toString();
+
     window.requestAnimationFrame(loop);
 }
 
