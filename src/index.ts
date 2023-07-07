@@ -14,9 +14,9 @@ let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
 play_button.addEventListener("click", () => {
     if (!application.running) {
     application.startAudioContext();
-    play_button.innerHTML = "⏸";
+    play_button.textContent = "⏸";
     } else {
-    play_button.innerHTML = "⏵";
+    play_button.textContent = "⏵";
     application.audio_context.suspend();
     }
     application.running= !application;
@@ -45,7 +45,7 @@ function loop(time: DOMHighResTimeStamp) {
         zone.innerHTML = drawScreen() as string;
     }
     // The clock should always move
-    clock.innerHTML = application.clock.toString();
+    clock.textContent = application.clock.toString();
 
     window.requestAnimationFrame(loop);
 
