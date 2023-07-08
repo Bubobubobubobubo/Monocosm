@@ -126,9 +126,8 @@ export class TextInterface {
 
     createEditor = (): DocumentFragment => {
         console.log('Inserting the editor')
-        // Inject the codemirror into the same zone as the grid
+        this.app.input.disable()
         let editor = document.createDocumentFragment();
-        // Return the CodeMirror editor into the Document Fragment
         editor.appendChild(this.editor.dom);
         return editor;
     }

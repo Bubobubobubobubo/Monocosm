@@ -7,6 +7,7 @@ export class InputHandler {
     textEditingMode: boolean;
     command_history: string[];
     current_command: string;
+    isCapturingInput: boolean = true;
 
     constructor(public app: Application) {
         // Command-line mode properties
@@ -44,6 +45,14 @@ export class InputHandler {
         this.setupEventListeners();
     }
 
+    disable = (): void => {
+        this.isCapturingInput = false;
+    }
+
+    enable = (): void => {
+        this.isCapturingInput = true;
+    }
+
     setupEventListeners = (): void => {
         window.addEventListener('keydown', this.keyDownListener, false);
         window.addEventListener('keyup', this.keyUpListener, false);
@@ -69,7 +78,12 @@ export class InputHandler {
         this.app.redraw = true;
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
-        keybindings.forEach(func => func(event));
+        if (this.isCapturingInput) {
+            const authorizedFunctions = [this.tabKeyHandler,]
+            authorizedFunctions.forEach(func => func(event));
+        } else {
+            keybindings.forEach(func => func(event));
+        }
     }
 
     keyUpListener = (event: KeyboardEvent):void => {
