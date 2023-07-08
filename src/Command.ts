@@ -33,6 +33,8 @@ export class Command {
             'tp': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
+            'clear.script': this.clearScripts,
+            'clear.all': this.apocalypse,
             'erase': this.erase,
             'universe': this.universe,
             'theme': this.theme,
@@ -129,6 +131,13 @@ export class Command {
     clear = ():void => {
         // Clear the grid
         this.app.context.tables[this.app.context.current_table].clear();
+    }
+
+    clearScripts = ():void => {
+        // Clear the scripts for all tables
+        for (let table in this.app.context.tables) {
+            this.app.context.tables[table].script = "";
+        }
     }
 
     moveRight = (args: string[]):void => {
