@@ -1,31 +1,11 @@
-# Terrible App
+# Scriptograph(e)
 
-## TODO
+**Scriptographe** is a TypeScript based algorithmic music sequencer. It offers an infinite 2D playground on which you can lay down ideas using ASCII symbols before turning them into music by scripting them. **Scriptographe** is not currently working. We are still in the alpha stage of implementation. You can test it by visiting [https://scriptographe.raphaelforment.fr](https://scriptographe.raphaelforment.fr).
 
-## Graphics 
 
-- [ ] Fixing remaining grid glitches
-- [ ] Adding an optional tertiary color for every CSS theme
-- [ ]
+## Installation (dev version)
 
-## Input
-
-- [ ] Copy and Paste are shared with the system (copy and paste ASCII art from browser)
-- [ ] Fix bug when the ² key is entered in the command-line prompt
-
-## Design / Architecture
-
-- [ ] Why can't we import any module? ESBuild not working + Vite unable to resolve dependencies
-- [ ] Serve multiple running environments
-  - [ ] Web Browser (with node modules)
-  - [ ] Desktop Env (with Tauri / Electron)
-
-- [ ] **TAB** key should switch to a script editor for the current universe.
-  - controls and appearance should be similar, the script is executed every tick.
-  - determine a suitable scripting language for that environment. 
-  - Scripts are supposed to be minimal. They should fit in x lines of y characters each.
-  - the script is tied to a universe and will activate stuff in that universe.
-
-- [ ] **Adding more commands**
-  - [ ] **Beware of redundancies between script mode and command-line operations**
-  - [ ] Universe merging
+This project is a [NodeJS](https://nodejs.org/en) based application developed using [Vite](https://vitejs.dev/). You can install it on your computer rather easily:
+- clone the project using [Git](https://git-scm.com/): `git clone https://github.com/Bubobubobubobubo/Scriptographe`
+- install using `npm install`
+- run using `npm run dev`
