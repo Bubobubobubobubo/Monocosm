@@ -65,6 +65,9 @@ export class Application {
         } else {
             throw new Error('Output type not supported');
         }
+
+        // Loading the current script for universe
+        this.interface?.loadScript(this.getCurrentTable().script);
     }
 
     loadFromSavedContext = (saved_context: SavedContext) => {
