@@ -8,6 +8,7 @@ import { javascript } from "@codemirror/lang-javascript"
 
 export class TextInterface {
     editor: EditorView
+    editorElement: DocumentFragment | null = null
     context: Context
     characterWidth: number
     characterHeight: number
@@ -124,11 +125,27 @@ export class TextInterface {
         return grid;
     }
 
-    createEditor = (): DocumentFragment => {
+    createEditor = (): DocumentFragment | null => {
         console.log('Inserting the editor')
-        this.app.input.disable()
-        let editor = document.createDocumentFragment();
-        editor.appendChild(this.editor.dom);
-        return editor;
+        this.app.input.isCapturingInput = false;
+
+        let zone = document.getElementById('zone');
+
+        // Check if the zone first element is an HTML span
+        if (zone?.firstElementChild?.tagName === 'SPAN') {
+            let editor = document.createDocumentFragment();
+            editor.appendChild(this.editor.dom);
+            // Focus on class cm-editor
+            let cmEditor = document.getElementsByClassName('cm-editor')[0];
+            cmEditor?.focus();
+            this.editor.focus();
+
+            return editor;
+        } else {
+            return this.editorElement;
+        }
+
+
+
     }
 }

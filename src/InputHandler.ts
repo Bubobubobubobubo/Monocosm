@@ -7,7 +7,7 @@ export class InputHandler {
     textEditingMode: boolean;
     command_history: string[];
     current_command: string;
-    isCapturingInput: boolean = false;
+    isCapturingInput: boolean = true;
 
     constructor(public app: Application) {
         // Command-line mode properties
@@ -64,6 +64,7 @@ export class InputHandler {
             console.log('Tab pressed');
             event.preventDefault();
             this.app.gridMode = !this.app.gridMode;
+            this.isCapturingInput = !this.isCapturingInput;
         }
     }
 
@@ -79,10 +80,11 @@ export class InputHandler {
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
         if (this.isCapturingInput) {
+            keybindings.forEach(func => func(event));
+        } else {
             const authorizedFunctions = [this.tabKeyHandler,]
             authorizedFunctions.forEach(func => func(event));
-        } else {
-            keybindings.forEach(func => func(event));
+
         }
     }
 
