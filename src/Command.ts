@@ -138,6 +138,7 @@ export class Command {
         for (let table in this.app.context.tables) {
             this.app.context.tables[table].script = "";
         }
+        this.app.interface?.loadScript("");
     }
 
     moveRight = (args: string[]):void => {
