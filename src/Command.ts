@@ -65,7 +65,7 @@ export class Command {
         })
     }
 
-    move = (y: number, x:number):void  => {
+    move = (x: number, y:number):void  => {
         // Move the cursor to a given position
         this.app.context.cursor.y = y;
         this.app.context.cursor.x = x;

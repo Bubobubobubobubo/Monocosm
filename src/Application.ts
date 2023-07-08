@@ -38,9 +38,9 @@ export class Application {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
-                'camera': new Camera(this, 
-                    this.interface.howManyCharactersFitHeight(), 
-                    this.interface.howManyCharactersFitWidth()
+                'camera': new Camera(this,
+                    this.interface.howManyCharactersFitWidth(),
+                    this.interface.howManyCharactersFitHeight()
                 ),
                 'cursor': new Cursor(this, 0, 0, 1, 1),
                 'tables': {

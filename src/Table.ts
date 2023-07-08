@@ -33,21 +33,21 @@ export class Table {
         }
     }
 
-    addCell = (y: number, x: number, char: string) => {
-        let id = this.generateID(y, x)
+    addCell = (x: number, y: number, char: string) => {
+        let id = this.generateID(x, y)
         this.cells[id] = char;
     }
 
     clear = () => this.cells = {}
 
-    generateID = (y: number, x: number) => `${y},${x}`
+    generateID = (x: number, y: number) => `${x},${y}`
 
     exists = (id: string) => this.cells.hasOwnProperty(id)
 
-    existsAt = (y: number, x: number) => this.exists(this.generateID(y, x))
+    existsAt = (x: number, y: number) => this.exists(this.generateID(x, y))
 
-    getCell = (y: number, x: number) => {
-        let id = this.generateID(y, x);
+    getCell = (x: number, y: number) => {
+        let id = this.generateID(x, y);
         if (!this.exists(id)) {
             return '';
         } else {
@@ -55,16 +55,16 @@ export class Table {
         }
     }
 
-    removeCell = (y: number, x: number) => {
-        let id = this.generateID(y, x);
+    removeCell = (x: number, y: number) => {
+        let id = this.generateID(x, y);
         if (this.exists(id)) {
             delete this.cells[id];
         }
     }
 
     paste = () => {
-        let { y, x } = this.app.context.cursor;
-        let { y_size , x_size } = this.app.context.cursor.size;
+        let { x, y } = this.app.context.cursor;
+        let { x_size , y_size } = this.app.context.cursor.size;
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
@@ -75,17 +75,17 @@ export class Table {
         }
     }
 
-    removeZone = (y: number, x: number, y_size: number, x_size: number) => {
+    removeZone = (x: number, y: number, x_size: number, y_size: number) => {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
-                this.removeCell(y + i, x + j);
+                this.removeCell(x + i, y + j);
             }
         }
     }
 
     copyUnderCursor = () => {
         let { x, y } = this.app.context.cursor;
-        let { y_size , x_size } = this.app.context.cursor.size;
+        let { x_size , y_size } = this.app.context.cursor.size;
         this.resetPasteBuffer();
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {

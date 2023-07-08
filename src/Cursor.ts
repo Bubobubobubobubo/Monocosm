@@ -12,9 +12,9 @@ export class Cursor {
     constructor(
         public app: Application,
         x: number, 
-        y: number, 
-        y_size: number = 1,  
-        x_size: number = 1
+        y: number,
+        x_size: number = 1,
+        y_size: number = 1,
     ) { 
         this.y = y;
         this.x = x;
@@ -47,7 +47,7 @@ export class Cursor {
         return `( ${this.x}, ${this.y} )`;
     }
 
-    isUnder = (y: number, x: number): boolean => {
+    isUnder = (x: number, y: number): boolean => {
         // Refactor this to check if it's in the range of the cursor selection
         return y >= this.y && y < this.y + this.y_size && x >= this.x && x < this.x + this.x_size;
     }

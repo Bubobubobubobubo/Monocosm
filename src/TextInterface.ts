@@ -66,7 +66,7 @@ export class TextInterface {
         const charsForHeight = Math.floor(window.innerHeight/charHeight);
         this.charactersForHeight = charsForHeight;
         this.charactersForWidth = charsForWidth;
-        this.app.context.camera.resize(charsForHeight, charsForWidth);
+        this.app.context.camera.resize(charsForWidth, charsForHeight);
         this.app.redraw = true;
         this.scaleBackgroundGrid();
     }
@@ -89,6 +89,8 @@ export class TextInterface {
         let cell = document.createElement('span');
         cell.className = 'cell';
         cell.innerText = char;
+        // TODO: Test translate instead of absolute positioning
+        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
         cell.style.top = (y * this.characterHeight) + 'px';
         cell.style.left = (x * this.characterWidth) + 'px';
         return cell;
@@ -98,6 +100,8 @@ export class TextInterface {
         let cell = document.createElement('span');
         cell.className = 'inverted-cell';
         cell.innerText = char;
+        // TODO: Test translate instead of absolute positioning
+        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
         cell.style.top = (y * this.characterHeight) + 'px';
         cell.style.left = (x * this.characterWidth) + 'px';
         return cell;
@@ -127,12 +131,12 @@ export class TextInterface {
 
                 if(currentTable.existsAt(vx,vy)) {
                     // If the cursor is on the cell, draw it in reverse
-                    if (cursor.isUnder(vy,vx)) {
+                    if (cursor.isUnder(vx,vy)) {
                         grid.appendChild(this.createInvertedCell(currentTable.getCell(vx,vy),x,y));
                     } else {
                         grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y));
                     }
-                } else if(cursor.isUnder(vy,vx)) {
+                } else if(cursor.isUnder(vx,vy)) {
                     grid.appendChild(this.createCell('█',x,y));
                 }
             }

@@ -89,7 +89,7 @@ body {
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
-    background-image: radial-gradient(var(--secondary) 1px, transparent 0);
+    background-image: radial-gradient(var(--secondary) 0.5px, transparent 0);
 }
 
 span {
