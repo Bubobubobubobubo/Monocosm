@@ -42,7 +42,9 @@ export class Command {
     }
 
     parse = (expression: string): void => {
-
+        
+        // Make the expression case insensitive
+        expression = expression.toLowerCase();
 
         // Multiple commands can exist, they are separated by ;
         let commands = expression.split(';');
