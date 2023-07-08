@@ -4,6 +4,24 @@ import type { Context } from './Types.js';
 import { EditorView, basicSetup } from "codemirror"
 import { javascript } from "@codemirror/lang-javascript"
 
+const theme = EditorView.theme({
+    '.cm-activeLine': {
+        backgroundColor: 'var(--codemirror-active-line)',
+    },
+    '.cm-content': {
+        height: 'var(--codemirror-height)',
+    },
+    '.cm-scroller': {
+        overflow: 'hidden',
+    },
+    '.cm-wrap': {
+        height: 'var(--codemirror-height)',
+        border: '1px solid silver',
+    },
+});
+
+
+
 
 
 export class TextInterface {
@@ -136,9 +154,11 @@ export class TextInterface {
             let editor = document.createDocumentFragment();
             editor.appendChild(this.editor.dom);
             // Focus on class cm-editor
-            let cmEditor = document.getElementsByClassName('cm-editor')[0];
-            cmEditor?.focus();
-            this.editor.focus();
+            const timer = setInterval(() => {
+                this.editor.focus();
+                if(this.editor.hasFocus) clearInterval(timer);
+            }, 1);
+
 
             return editor;
         } else {
