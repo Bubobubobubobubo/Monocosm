@@ -147,7 +147,7 @@ export class InputHandler {
         }
     }
 
-    editingModeKeysHandler = (event:KeyboardEvent):void => {
+    editingModeKeysHandler = ():void => {
         if (this.app.output_type == 'text') {
             let prompt = document.getElementById('prompt') as HTMLInputElement;
             prompt.disabled = false;

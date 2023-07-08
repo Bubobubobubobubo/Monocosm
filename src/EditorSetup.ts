@@ -20,12 +20,10 @@ import {
     syntaxHighlighting, 
     indentOnInput, 
     bracketMatching,
-    foldGutter, 
     foldKeymap
 } from "@codemirror/language"
 import {
     defaultKeymap, 
-    history, 
     historyKeymap
 } from "@codemirror/commands"
 import {
