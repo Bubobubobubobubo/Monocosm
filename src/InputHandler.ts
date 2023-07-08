@@ -7,7 +7,7 @@ export class InputHandler {
     textEditingMode: boolean;
     command_history: string[];
     current_command: string;
-    isCapturingInput: boolean = true;
+    isCapturingInput: boolean = false;
 
     constructor(public app: Application) {
         // Command-line mode properties
