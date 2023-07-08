@@ -1,7 +1,7 @@
 import type { Application } from './Application';
 import type { Context } from './Types.js';
-
-import { EditorView, basicSetup } from "codemirror"
+import { EditorView } from "codemirror"
+import { editorSetup } from './EditorSetup.js';
 import { javascript } from "@codemirror/lang-javascript"
 
 const theme = EditorView.theme({
@@ -20,11 +20,8 @@ const theme = EditorView.theme({
     },
 });
 
-
-
-
-
 export class TextInterface {
+
     editor: EditorView
     editorElement: DocumentFragment | null = null
     context: Context
@@ -32,7 +29,6 @@ export class TextInterface {
     characterHeight: number
     charactersForWidth: number
     charactersForHeight: number
-
 
     constructor(public app: Application) {
         this.context = this.app.context;
@@ -42,7 +38,7 @@ export class TextInterface {
         this.charactersForWidth = this.howManyCharactersFitWidth();
         this.charactersForHeight = this.howManyCharactersFitHeight();
         this.editor = new EditorView({
-            extensions: [basicSetup, javascript()],
+            extensions: [editorSetup, javascript()],
             parent: undefined
         })
 
@@ -158,14 +154,9 @@ export class TextInterface {
                 this.editor.focus();
                 if(this.editor.hasFocus) clearInterval(timer);
             }, 1);
-
-
             return editor;
         } else {
             return this.editorElement;
         }
-
-
-
     }
 }
