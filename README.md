@@ -1,5 +1,7 @@
 # Scriptograph(e)
 
+![frog](frog.jpeg | width=50)
+
 **Scriptographe** is a TypeScript based algorithmic music sequencer. It offers an infinite 2D playground on which you can lay down ideas using ASCII symbols before turning them into music by scripting them. **Scriptographe** is not currently working. We are still in the alpha stage of implementation. You can test it by visiting [https://scriptographe.raphaelforment.fr](https://scriptographe.raphaelforment.fr).
 
 
