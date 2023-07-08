@@ -31,6 +31,16 @@ export class TextInterface {
         })
     }
 
+    loadScript = (script: string) => {
+        this.editor.dispatch({
+            changes: {
+                from: 0,
+                to: this.editor.state.doc.length,
+                insert: script
+            }
+        })
+    }
+
     calculateCharacterWidth = () => {
         const testElement = document.createElement('span');
         testElement.innerText = ' ';

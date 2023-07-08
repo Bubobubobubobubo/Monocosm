@@ -117,10 +117,12 @@ export class Command {
         if (universe_name in this.app.context.tables) { 
             this.app.context.current_table = universe_name;
             this.app.interface?.loadTheme(this.app.context.tables[universe_name].theme);
+            this.app.interface?.loadScript(this.app.context.tables[universe_name].script)
         } else {
             this.app.context.tables[universe_name] = new Table(this.app);
             this.app.context.current_table = universe_name;
             this.app.interface?.loadTheme(this.getUniverseTheme(universe_name));
+            this.app.interface?.loadScript(this.app.context.tables[universe_name].script)
         }
     }
 
