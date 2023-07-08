@@ -2,7 +2,6 @@ import type { Application } from './Application';
 import type { Context } from './Types.js';
 import { EditorView } from "codemirror"
 import { editorSetup } from './EditorSetup.js';
-import { javascript } from "@codemirror/lang-javascript"
 
 const theme = EditorView.theme({
     '.cm-activeLine': {
@@ -38,7 +37,7 @@ export class TextInterface {
         this.charactersForWidth = this.howManyCharactersFitWidth();
         this.charactersForHeight = this.howManyCharactersFitHeight();
         this.editor = new EditorView({
-            extensions: [editorSetup, javascript()],
+            extensions: [editorSetup],
             parent: undefined
         })
 

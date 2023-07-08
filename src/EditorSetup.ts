@@ -1,3 +1,5 @@
+import {EditorView} from "@codemirror/view"
+import { javascript } from "@codemirror/lang-javascript"
 import {
     keymap, 
     highlightSpecialChars, 
@@ -5,8 +7,8 @@ import {
     highlightActiveLine, 
     dropCursor,
     rectangularSelection, 
+    lineNumbers,
     crosshairCursor,
-    lineNumbers, 
     highlightActiveLineGutter
 } from "@codemirror/view"
 import {
@@ -79,12 +81,44 @@ import {
 /// and an array literal), copy it into your own code, and adjust it
 /// as desired.
 
+let myTheme = EditorView.theme({
+    ".cm-content, .cm-gutter": {
+        minHeight: "200px"
+    },
+    "&": {
+        color: "black",
+        backgroundColor: "white"
+    },
+    ".cm-content": {
+        fontFamily: "jgs7",
+        caretColor: "#0e9"
+    },
+    "&.cm-focused .cm-cursor": {
+        borderLeftColor: "#0e9"
+    },
+    "&.cm-activeLineGutter": {
+        color: "red",
+        fontSize: "40px", 
+    },
+    "&.cm-focused .cm-selectionBackground, ::selection": {
+        backgroundColor: "white"
+    },
+    ".cm-gutters": {
+        fontFamily: "jgs7",
+        backgroundColor: "white",
+        color: "white",
+        border: "none"
+    }
+}, {dark: true})
+
 export const editorSetup: Extension = (() => [
+    myTheme,
     lineNumbers(),
+    javascript(),
     highlightActiveLineGutter(),
     highlightSpecialChars(),
-    history(),
-    foldGutter(),
+    // history(),
+    // foldGutter(),
     drawSelection(),
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
