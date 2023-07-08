@@ -3,22 +3,6 @@ import type { Context } from './Types.js';
 import { EditorView } from "codemirror"
 import { editorSetup } from './EditorSetup.js';
 
-const theme = EditorView.theme({
-    '.cm-activeLine': {
-        backgroundColor: 'var(--codemirror-active-line)',
-    },
-    '.cm-content': {
-        height: 'var(--codemirror-height)',
-    },
-    '.cm-scroller': {
-        overflow: 'hidden',
-    },
-    '.cm-wrap': {
-        height: 'var(--codemirror-height)',
-        border: '1px solid silver',
-    },
-});
-
 export class TextInterface {
 
     editor: EditorView
@@ -37,10 +21,14 @@ export class TextInterface {
         this.charactersForWidth = this.howManyCharactersFitWidth();
         this.charactersForHeight = this.howManyCharactersFitHeight();
         this.editor = new EditorView({
-            extensions: [editorSetup],
+            extensions: [
+                editorSetup,
+                EditorView.updateListener.of((e) => {
+                    this.app.getCurrentTable().script = e.state.doc.toString();
+                })
+            ],
             parent: undefined
         })
-
     }
 
     calculateCharacterWidth = () => {
@@ -139,9 +127,7 @@ export class TextInterface {
     }
 
     createEditor = (): DocumentFragment | null => {
-        console.log('Inserting the editor')
         this.app.input.isCapturingInput = false;
-
         let zone = document.getElementById('zone');
 
         // Check if the zone first element is an HTML span
