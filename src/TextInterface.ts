@@ -29,6 +29,7 @@ export class TextInterface {
             ],
             parent: undefined
         })
+        this.scaleBackgroundGrid();
     }
 
     loadScript = (script: string) => {
@@ -67,6 +68,11 @@ export class TextInterface {
         this.charactersForWidth = charsForWidth;
         this.app.context.camera.resize(charsForHeight, charsForWidth);
         this.app.redraw = true;
+        this.scaleBackgroundGrid();
+    }
+
+    scaleBackgroundGrid = (): void => {
+        document.body.style.backgroundSize = this.characterWidth*5 + 'px' + ' ' + this.characterHeight*5 + 'px';
     }
 
     howManyCharactersFitWidth = (): number => {
@@ -131,6 +137,8 @@ export class TextInterface {
                 }
             }
         }
+        document.body.style.backgroundPositionX = -cursor.x*this.characterWidth + "px";
+        document.body.style.backgroundPositionY = -cursor.y*this.characterHeight + "px";
         this.app.last_grid = grid;
         this.app.redraw = false;
         return grid;

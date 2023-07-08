@@ -89,9 +89,7 @@ body {
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
-    background-size: 4em 4em;
     background-image: radial-gradient(var(--secondary) 1px, transparent 0);
-    background-position: -2em -3em;
 }
 
 span {
@@ -112,6 +110,7 @@ span.cell {
     font-size: 20px;
     line-height: 1em;
     color: var(--secondary);
+    background-color: var(--primary);
     white-space: pre;
     position: absolute;
 }
