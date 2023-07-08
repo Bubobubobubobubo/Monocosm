@@ -1,4 +1,3 @@
-import { Key } from 'readline';
 import type { Application } from './Application.js';
 
 export class InputHandler {
@@ -53,7 +52,9 @@ export class InputHandler {
     tabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used to switch to script mode
         if (event.key == 'Tab') {
+            console.log('Tab pressed');
             event.preventDefault();
+            this.app.gridMode = !this.app.gridMode;
         }
     }
 

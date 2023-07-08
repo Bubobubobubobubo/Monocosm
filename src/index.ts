@@ -36,10 +36,8 @@ function loop(time: DOMHighResTimeStamp) {
     if(application.redraw) {
         cursor.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
-        const newGrid = application.interface?.createGrid();
-        if(newGrid) {
-            zone.replaceChildren(newGrid);
-        }
+        const newContent = application.process();
+        if (newContent) zone.replaceChildren(newContent);
     }
     // The clock should always move
     clock.textContent = application.clock.toString();

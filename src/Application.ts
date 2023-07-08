@@ -20,6 +20,7 @@ export class Application {
     last_grid: DocumentFragment | null;
     interface: TextInterface | null;
     running: boolean = false;
+    gridMode: boolean = true;
     
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();
@@ -79,8 +80,13 @@ export class Application {
     }
 
     process = (): DocumentFragment | void | null => {
-        if (this.interface) return this.interface.createGrid();
-        else throw new Error("Can't process without interface");
+        if (this.gridMode) {
+            if (this.interface) return this.interface.createGrid();
+            else throw new Error("Can't process without interface");
+        } else {
+            if (this.interface) return this.interface.createEditor();
+            else throw new Error("Can't process without interface");
+        } 
     }
 
     // Preparing SavedContext for localstorage

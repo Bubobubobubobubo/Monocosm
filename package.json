@@ -31,6 +31,7 @@
   },
   "licence": "MIT",
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.9",
     "codemirror": "^6.0.1",
     "zyklus": "^0.1.4"
   }

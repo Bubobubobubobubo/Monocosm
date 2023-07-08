@@ -1,11 +1,19 @@
-import type { Application, Context } from './Application';
+import type { Application } from './Application';
+import type { Context } from './Types.js';
+
+import { EditorView, basicSetup } from "codemirror"
+import { javascript } from "@codemirror/lang-javascript"
+
+
 
 export class TextInterface {
+    editor: EditorView
     context: Context
     characterWidth: number
     characterHeight: number
     charactersForWidth: number
     charactersForHeight: number
+
 
     constructor(public app: Application) {
         this.context = this.app.context;
@@ -14,6 +22,11 @@ export class TextInterface {
         this.characterHeight = characterHeightAndWidth[1];
         this.charactersForWidth = this.howManyCharactersFitWidth();
         this.charactersForHeight = this.howManyCharactersFitHeight();
+        this.editor = new EditorView({
+            extensions: [basicSetup, javascript()],
+            parent: undefined
+        })
+
     }
 
     calculateCharacterWidth = () => {
@@ -111,4 +124,12 @@ export class TextInterface {
         return grid;
     }
 
+    createEditor = (): DocumentFragment => {
+        console.log('Inserting the editor')
+        // Inject the codemirror into the same zone as the grid
+        let editor = document.createDocumentFragment();
+        // Return the CodeMirror editor into the Document Fragment
+        editor.appendChild(this.editor.dom);
+        return editor;
+    }
 }
