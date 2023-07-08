@@ -1,9 +1,6 @@
 import { Application } from './Application.js';
 import type { SavedContext } from './Types.js';
 
-const FPS: number = 30;
-const FPS_INTERVAL: number = 1000 / FPS;
-
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
@@ -32,7 +29,7 @@ window.onbeforeunload = function(): null {
     return null;
 }
 
-function loop(time: DOMHighResTimeStamp) {
+function loop() {
     if(application.redraw) {
         cursor.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
