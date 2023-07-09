@@ -1,4 +1,5 @@
-import "zyklus";
+import * as Tone from 'tone';
+import type { Application } from './Application';
 
 export class Clock {
 
@@ -11,13 +12,15 @@ export class Clock {
     public rate: number = 0.1
     private clock: any
 
-    constructor(public ctx: AudioContext) {
-        // this.clock = this.ctx.createClock((time: number, duration: number, tick: number) => {
-        //     this.time = time;
-        //     this.tick = tick;
-        //     // console.log(time, duration, tick);
-        //     this.updateClock()
-        // }, this.bpmToRate()).start();
+    constructor(public app: Application) {
+        Tone.Transport.start();
+        Tone.Transport.bpm.value = this.bpm;
+        Tone.Transport.scheduleRepeat((time) => {
+            // print the content of every script in known universes
+            for (const [key, value] of Object.entries(this.app.context.tables)) {
+                console.log(key, value.script)
+            }
+        }, "64n")
     }
 
     // Setters and getters

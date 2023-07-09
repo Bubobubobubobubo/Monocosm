@@ -24,7 +24,7 @@ export class Application {
     
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();
-        this.clock = new Clock(this.audio_context);
+        this.clock = new Clock(this);
         this.midi = new MidiOut();
         this.input = new InputHandler(this);
         this.command = new Command(this);
