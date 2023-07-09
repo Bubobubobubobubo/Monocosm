@@ -10,9 +10,9 @@ const themes: string[] = [
     "bee", "lavender",
     "jungle", "forest",
     "sky", "cherry",
-    "blue", "yellow",
-    "hurt", "sugar",
-    "neon", "atoll"
+    "blue", "hurt",
+    "sugar", "neon",
+    "atoll"
 ]
 
 
@@ -23,6 +23,7 @@ export class Command {
     constructor(public app: Application) {
         // Create a command list that takes a string and returns a function
         this.commands = {
+            'bigbang': this.bigbang,
             'bpm': this.bpm,
             'right': this.moveRight,
             'left': this.moveLeft,
@@ -34,7 +35,8 @@ export class Command {
             'tp': this.teleport,
             'origin': this.origin,
             'clear': this.clear,
-            'clear.script': this.clearScripts,
+            'clear.script': this.clearScript,
+            'clear.mainscript': this.clearMainScript,
             'clear.all': this.apocalypse,
             'erase': this.erase,
             'universe': this.universe,
@@ -135,13 +137,14 @@ export class Command {
         this.app.context.tables[this.app.context.current_table].clear();
     }
 
-    clearScripts = ():void => {
-        // Clear the scripts for all tables
-        for (let table in this.app.context.tables) {
-            this.app.context.tables[table].script = "";
-        }
-        this.app.interface?.loadScript("");
+    clearScript = ():void => {
+        this.app.context.tables[this.app.context.current_table].script = '';
     }
+
+    clearMainScript = ():void => {
+        this.app.context.mainScript = '';
+    }
+
 
     moveRight = (args: string[]):void => {
         // Move the cursor right
@@ -209,5 +212,9 @@ export class Command {
     start = ():void => {
         // Start the ToneJS engine
         Tone.start();
+    }
+
+    bigbang = ():void => {
+        this.app.clock.tick = 0;
     }
 }

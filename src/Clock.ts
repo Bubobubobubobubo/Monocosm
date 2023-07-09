@@ -3,10 +3,12 @@ import type { Application } from './Application';
 
 export class Clock {
 
-    public bpb: number = 4
     public bpm: number = 120
-    public bar: number = -1
-    public beat: number = 0
+    public bpb: number = 4
+    public tickPerBeat: number = 4
+
+    public bar: number = 0
+    public beat: number = 1
     public tick: number = 0
     public time: number = 0.0
     public rate: number = 0.1
@@ -16,10 +18,10 @@ export class Clock {
         Tone.Transport.start();
         Tone.Transport.bpm.value = this.bpm;
         Tone.Transport.scheduleRepeat((time) => {
-            // print the content of every script in known universes
-            for (const [key, value] of Object.entries(this.app.context.tables)) {
-                console.log(key, value.script)
-            }
+            this.tick++;
+            this.beat = Math.floor(this.tick / Math.floor(this.tickPerBeat * this.bpb)) + 1;
+            this.bar = Math.floor(this.beat / this.bpb)
+            console.log(this.tick, this.app.context.mainScript);
         }, "64n")
     }
 
