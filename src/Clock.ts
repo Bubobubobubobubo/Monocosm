@@ -21,7 +21,13 @@ export class Clock {
             this.tick++;
             this.beat = Math.floor(this.tick / Math.floor(this.tickPerBeat * this.bpb)) + 1;
             this.bar = Math.floor(this.beat / this.bpb)
-            console.log(this.tick, this.app.context.mainScript);
+
+            // Evaluate the main script but catch error if it fails
+            try {
+                if (this.beat % this.bpb == 0) eval(this.app.context.mainScript);
+            } catch (e) {
+                console.log(e);
+            }
         }, "64n")
     }
 

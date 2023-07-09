@@ -2,15 +2,21 @@ import type { Camera } from './Camera.js';
 import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
 
+export interface Script {
+    'text': string;
+    'dirty': boolean;
+}
+
 export interface TableData {
     variables: { [key: string]: number | string | boolean }
     cells: Cells
-    script: string
+    script: Script 
     theme: string
 }
 
 export interface PasteBuffer { [key: string]: string }
 export interface Cells { [key: string]: string }
+
 
 export interface Commands {
     [key: string]: Function;
@@ -26,7 +32,7 @@ export interface CursorData {
 }
 
 export interface Context {
-    mainScript: string;
+    mainScript: Script;
     camera: Camera;
     cursor: Cursor;
     tables: Tables;
@@ -35,7 +41,7 @@ export interface Context {
 
 // Content saved to localstorage
 export interface SavedContext {
-    mainScript: string;
+    mainScript: Script;
     cursor: CursorData;
     tables: object;
     current_table: string;

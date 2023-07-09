@@ -1,11 +1,11 @@
 import type { Application } from "./Application";
-import type { TableData, PasteBuffer, Cells } from "./Types";
+import type { Script, TableData, PasteBuffer, Cells } from "./Types";
 
 
 export class Table {
 
     cells: Cells
-    script: string
+    script: Script
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
@@ -21,7 +21,7 @@ export class Table {
         } else {
             this.cells = {};
             this.walkers = {};
-            this.script = '';
+            this.script = {'text': '', 'dirty': true};
             this.theme = 'dark';
             this.variables = {};
         }

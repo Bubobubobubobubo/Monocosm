@@ -38,7 +38,7 @@ export class Application {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
-                'mainScript': '/* MAIN SCRIPT */',
+                'mainScript': {text: '/* MAIN SCRIPT */', dirty: true},
                 'camera': new Camera(this,
                     this.interface.howManyCharactersFitWidth(),
                     this.interface.howManyCharactersFitHeight()

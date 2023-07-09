@@ -1,5 +1,5 @@
 import type { Application } from './Application';
-import type { Context } from './Types.js';
+import type { Context, Script } from './Types.js';
 import { EditorView } from "codemirror"
 import { editorSetup } from './EditorSetup.js';
 
@@ -25,7 +25,7 @@ export class TextInterface {
             extensions: [
                 editorSetup,
                 EditorView.updateListener.of((e) => {
-                    this.app.getCurrentTable().script = e.state.doc.toString();
+                    this.app.getCurrentTable().script.text = e.state.doc.toString();
                 })
             ],
             parent: undefined
@@ -36,7 +36,7 @@ export class TextInterface {
             extensions: [
                 editorSetup,
                 EditorView.updateListener.of((e) => {
-                    this.app.context.mainScript = e.state.doc.toString();
+                    this.app.context.mainScript.text = e.state.doc.toString();
                 })
             ],
             parent: undefined
@@ -45,13 +45,13 @@ export class TextInterface {
         this.scaleBackgroundGrid();
     }
 
-    loadScript = (script: string, editor: string = 'local') => {
+    loadScript = (script: Script, editor: string = 'local') => {
         const selectedEditor = editor == 'local' ? this.editor : this.globalEditor;
         selectedEditor.dispatch({
             changes: {
                 from: 0,
                 to: selectedEditor.state.doc.length,
-                insert: script
+                insert: script.text
             }
         })
     }
