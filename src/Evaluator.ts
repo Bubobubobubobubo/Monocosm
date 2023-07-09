@@ -1,9 +1,10 @@
 import type { Script } from './Types';
+import type { Application } from './Application';
 
-export const tryEvaluate = (script: Script): void => {
+export const tryEvaluate = (app: Application, script: Script, ...args: object[]): void => {
     let isValidCode: boolean;
     try {
-        Function(script.temporary_code)()
+        Function(script.temporary_code).call(app, args)
         isValidCode = true;
     } catch (error) {
         Function(script.committed_code)()
@@ -15,6 +16,6 @@ export const tryEvaluate = (script: Script): void => {
     } 
 }
 
-export const evaluate = (script: Script, ...args: object[]): void => {
-    Function(script.committed_code)(...args)
+export const evaluate = (application: Application, script: Script, ...args: object[]): void => {
+    Function(script.committed_code).call(application, args)
 }

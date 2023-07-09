@@ -1,3 +1,17 @@
+@keyframes blinker {
+    25% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+
+}
+
+
 .theme-white {
     --primary:  white;
     --secondary: black;

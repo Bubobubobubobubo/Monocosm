@@ -22,7 +22,7 @@ export class Clock {
             this.tick++;
             this.beat = Math.floor(this.tick / Math.floor(this.tickPerBeat * this.bpb)) + 1;
             this.bar = Math.floor(this.beat / this.bpb)
-            evaluate(this.app.context.mainScript);
+            evaluate(this.app, this.app.context.mainScript);
         }, "64n")
     }
 

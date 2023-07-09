@@ -113,11 +113,18 @@ export class InputHandler {
 
     submitCodeHandler = (event: KeyboardEvent):void => {
         if (event.key == 'Enter' && this.keyPresses['Control']) {
-            console.log('Submitting code')
+            console.log('Submitting code...')
+            let editor = document.getElementsByClassName('cm-editor')[0] as HTMLElement;
+            if (editor) {
+                editor.style.animation  = "blinker 0.1s linear" ;
+                setTimeout(() => {
+                    editor.style.animation=""; 
+                }, 100);
+            }
             if (this.app.gridMode == 'local') {
-                tryEvaluate(this.app.getCurrentTable().script)
+                tryEvaluate(this.app, this.app.getCurrentTable().script)
             } else if (this.app.gridMode == 'global') {
-                tryEvaluate(this.app.context.mainScript)
+                tryEvaluate(this.app, this.app.context.mainScript)
             }
         }
     }
