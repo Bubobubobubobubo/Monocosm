@@ -1,5 +1,6 @@
 import * as Tone from 'tone';
 import type { Application } from './Application';
+import { evaluate, tryEvaluate } from './Evaluator';
 
 export class Clock {
 
@@ -21,13 +22,7 @@ export class Clock {
             this.tick++;
             this.beat = Math.floor(this.tick / Math.floor(this.tickPerBeat * this.bpb)) + 1;
             this.bar = Math.floor(this.beat / this.bpb)
-
-            // Evaluate the main script but catch error if it fails
-            try {
-                if (this.beat % this.bpb == 0) eval(this.app.context.mainScript);
-            } catch (e) {
-                console.log(e);
-            }
+            evaluate(this.app.context.mainScript);
         }, "64n")
     }
 

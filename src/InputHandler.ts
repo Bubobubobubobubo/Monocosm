@@ -1,6 +1,5 @@
 import type { Application } from './Application.js';
-
-
+import { tryEvaluate } from './Evaluator.js';
 
 export class InputHandler {
     NormalKeyFunctions: Array<Function>;
@@ -98,7 +97,11 @@ export class InputHandler {
         if (this.isCapturingInput) {
             keybindings.forEach(func => func(event));
         } else {
-            const authorizedFunctions = [this.tabKeyHandler, this.shiftTabKeyHandler]
+            const authorizedFunctions = [
+                this.tabKeyHandler, 
+                this.shiftTabKeyHandler, 
+                this.submitCodeHandler
+            ];
             authorizedFunctions.forEach(func => func(event));
 
         }
@@ -106,6 +109,17 @@ export class InputHandler {
 
     keyUpListener = (event: KeyboardEvent):void => {
         this.keyPresses[event.key] = false;
+    }
+
+    submitCodeHandler = (event: KeyboardEvent):void => {
+        if (event.key == 'Enter' && this.keyPresses['Control']) {
+            console.log('Submitting code')
+            if (this.app.gridMode == 'local') {
+                tryEvaluate(this.app.getCurrentTable().script)
+            } else if (this.app.gridMode == 'global') {
+                tryEvaluate(this.app.context.mainScript)
+            }
+        }
     }
 
     commandModeHandler = (event: KeyboardEvent):void => {

@@ -3,7 +3,9 @@ import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
 
 export interface Script {
-    'text': string;
+    'temporary_code': string;
+    'committed_code': string;
+
     'dirty': boolean;
 }
 

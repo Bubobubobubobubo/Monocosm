@@ -25,7 +25,7 @@ export class TextInterface {
             extensions: [
                 editorSetup,
                 EditorView.updateListener.of((e) => {
-                    this.app.getCurrentTable().script.text = e.state.doc.toString();
+                    this.app.getCurrentTable().script.temporary_code = e.state.doc.toString();
                 })
             ],
             parent: undefined
@@ -36,7 +36,7 @@ export class TextInterface {
             extensions: [
                 editorSetup,
                 EditorView.updateListener.of((e) => {
-                    this.app.context.mainScript.text = e.state.doc.toString();
+                    this.app.context.mainScript.temporary_code = e.state.doc.toString();
                 })
             ],
             parent: undefined
@@ -51,7 +51,7 @@ export class TextInterface {
             changes: {
                 from: 0,
                 to: selectedEditor.state.doc.length,
-                insert: script.text
+                insert: script.committed_code
             }
         })
     }
