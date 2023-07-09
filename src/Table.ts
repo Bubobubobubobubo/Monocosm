@@ -8,16 +8,22 @@ export class Table {
     script: string
     theme: string
     pasteBuffer: PasteBuffer
+    variables: object
+    walkers: object
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
+            this.variables = data['variables'];
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
+            this.walkers = {};
         } else {
             this.cells = {};
+            this.walkers = {};
             this.script = '';
             this.theme = 'dark';
+            this.variables = {};
         }
         this.pasteBuffer = {};
     }

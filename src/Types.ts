@@ -3,6 +3,7 @@ import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
 
 export interface TableData {
+    variables: { [key: string]: number | string | boolean }
     cells: Cells
     script: string
     theme: string
