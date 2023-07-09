@@ -1,6 +1,7 @@
 import type { Application } from "./Application.js";
 import { Table } from "./Table.js";
 import type { Commands } from './Types.js';
+import * as Tone from 'tone'; 
 
 // Themes from the CSS
 const themes: string[] = [
@@ -40,6 +41,7 @@ export class Command {
             'theme': this.theme,
             'share': this.share,
             'apocalypse': this.apocalypse,
+            'start': this.start,
         }
     }
 
@@ -202,5 +204,10 @@ export class Command {
 
     bpm = (bpm: string[]):void => {
         this.app.clock.bpm = parseFloat(bpm[0]);
+    }
+
+    start = ():void => {
+        // Start the ToneJS engine
+        Tone.start();
     }
 }

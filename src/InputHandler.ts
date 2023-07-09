@@ -1,5 +1,7 @@
 import type { Application } from './Application.js';
 
+
+
 export class InputHandler {
     NormalKeyFunctions: Array<Function>;
     EditingKeyFunctions: Array<Function>;
@@ -60,10 +62,15 @@ export class InputHandler {
 
     tabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used to switch to script mode
-        if (event.key == 'Tab') {
-            console.log('Tab pressed');
+        if (event.key == 'Tab' && !this.keyPresses['Shift']) {
             event.preventDefault();
-            this.app.gridMode = !this.app.gridMode;
+            if (this.app.gridMode === 'grid') {
+                this.app.gridMode = 'local';
+            } else if (this.app.gridMode == 'global') {
+                this.app.gridMode = 'local'
+            } else {
+                this.app.gridMode = 'grid';
+            } 
             this.isCapturingInput = !this.isCapturingInput;
         }
     }
@@ -71,6 +78,15 @@ export class InputHandler {
     shiftTabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used for something else
         if (event.key == 'Tab' && this.keyPresses['Shift']) {
+
+            if (this.app.gridMode === 'grid') {
+                this.app.gridMode = 'global';
+            } else if (this.app.gridMode === 'local') {
+                this.app.gridMode = 'global'
+            } else {
+                this.app.gridMode = 'grid'
+            }
+            this.isCapturingInput = !this.isCapturingInput;
             event.preventDefault();
         }
     }
@@ -82,7 +98,7 @@ export class InputHandler {
         if (this.isCapturingInput) {
             keybindings.forEach(func => func(event));
         } else {
-            const authorizedFunctions = [this.tabKeyHandler,]
+            const authorizedFunctions = [this.tabKeyHandler, this.shiftTabKeyHandler]
             authorizedFunctions.forEach(func => func(event));
 
         }

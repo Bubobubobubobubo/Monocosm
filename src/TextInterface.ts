@@ -6,6 +6,7 @@ import { editorSetup } from './EditorSetup.js';
 export class TextInterface {
 
     editor: EditorView
+    globalEditor: EditorView
     editorElement: DocumentFragment | null = null
     context: Context
     characterWidth: number
@@ -29,14 +30,27 @@ export class TextInterface {
             ],
             parent: undefined
         })
+
+        // TODO: use a different style for the mainScript editor!
+        this.globalEditor = new EditorView({
+            extensions: [
+                editorSetup,
+                EditorView.updateListener.of((e) => {
+                    this.app.context.mainScript = e.state.doc.toString();
+                })
+            ],
+            parent: undefined
+        })
+
         this.scaleBackgroundGrid();
     }
 
-    loadScript = (script: string) => {
-        this.editor.dispatch({
+    loadScript = (script: string, editor: string = 'local') => {
+        const selectedEditor = editor == 'local' ? this.editor : this.globalEditor;
+        selectedEditor.dispatch({
             changes: {
                 from: 0,
-                to: this.editor.state.doc.length,
+                to: selectedEditor.state.doc.length,
                 insert: script
             }
         })
@@ -148,19 +162,23 @@ export class TextInterface {
         return grid;
     }
 
-    createEditor = (): DocumentFragment | null => {
+    createEditor = (type: string = 'local'): DocumentFragment | null => {
+
+        let selectedEditor = type === 'local' ? this.editor : this.globalEditor;
+
         this.app.input.isCapturingInput = false;
         let zone = document.getElementById('zone');
 
         // Check if the zone first element is an HTML span
         if (zone?.firstElementChild?.tagName === 'SPAN') {
             let editor = document.createDocumentFragment();
-            editor.appendChild(this.editor.dom);
-            // Focus on class cm-editor
+            editor.appendChild(selectedEditor.dom);
+
             const timer = setInterval(() => {
-                this.editor.focus();
-                if(this.editor.hasFocus) clearInterval(timer);
+                selectedEditor.focus();
+                if(selectedEditor.hasFocus) clearInterval(timer);
             }, 1);
+
             return editor;
         } else {
             return this.editorElement;

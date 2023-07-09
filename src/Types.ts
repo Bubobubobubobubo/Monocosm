@@ -26,6 +26,7 @@ export interface CursorData {
 }
 
 export interface Context {
+    mainScript: string;
     camera: Camera;
     cursor: Cursor;
     tables: Tables;
@@ -34,6 +35,7 @@ export interface Context {
 
 // Content saved to localstorage
 export interface SavedContext {
+    mainScript: string;
     cursor: CursorData;
     tables: object;
     current_table: string;

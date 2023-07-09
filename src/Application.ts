@@ -20,7 +20,7 @@ export class Application {
     last_grid: DocumentFragment | null;
     interface: TextInterface | null;
     running: boolean = false;
-    gridMode: boolean = true;
+    gridMode: 'grid' | 'local' | 'global' = 'grid';
     
     constructor(public output_type: OutputType) {
         this.audio_context = new AudioContext();
@@ -38,6 +38,7 @@ export class Application {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
+                'mainScript': '/* MAIN SCRIPT */',
                 'camera': new Camera(this,
                     this.interface.howManyCharactersFitWidth(),
                     this.interface.howManyCharactersFitHeight()
@@ -68,6 +69,7 @@ export class Application {
 
         // Loading the current script for universe
         this.interface?.loadScript(this.getCurrentTable().script);
+        this.interface?.loadScript(this.context.mainScript, 'global');
     }
 
     loadFromSavedContext = (saved_context: SavedContext) => {
@@ -80,14 +82,18 @@ export class Application {
 
         this.context.current_table = saved_context.current_table;
         this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
+        this.context.mainScript = saved_context.mainScript;
     }
 
     process = (): DocumentFragment | void | null => {
-        if (this.gridMode) {
+        if (this.gridMode == 'grid') {
             if (this.interface) return this.interface.createGrid();
             else throw new Error("Can't process without interface");
+        } else if (this.gridMode == 'local') {
+            if (this.interface) return this.interface.createEditor('local');
+            else throw new Error("Can't process without interface");
         } else {
-            if (this.interface) return this.interface.createEditor();
+            if (this.interface) return this.interface.createEditor('global');
             else throw new Error("Can't process without interface");
         } 
     }
@@ -100,7 +106,9 @@ export class Application {
         };
         let cursor_state = this.context.cursor.getCursorData();
         let current_table = this.context.current_table;
+        let mainScript = this.context.mainScript;
         return {
+            'mainScript': mainScript,
             'tables': tables_state,
             'cursor': cursor_state,
             'current_table': current_table,
