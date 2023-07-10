@@ -25,13 +25,14 @@ AudioContext.prototype['createClock'] = function (
 ) {
   let tick = 0; // counts callbacks
   let phase = 0; // next callback time
-  let precision = 10 ** 4; // used to round phase
+  let precision = 10 ** 2; // used to round phase
   let minLatency = 0.01;
   const setDuration = (setter: any) => (duration = setter(duration));
   overlap = overlap || interval / 2;
   const onTick = () => {
     const t = this.currentTime;
-    const lookahead = t + interval + overlap; // the time window for this tick
+    // const lookahead = t + interval + overlap; // the time window for this tick
+    const lookahead = t + interval; // the time window for this tick
     if (phase === 0) {
       phase = t + minLatency;
     }
