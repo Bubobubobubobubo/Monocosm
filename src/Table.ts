@@ -21,7 +21,7 @@ export class Table {
         } else {
             this.cells = {};
             this.walkers = {};
-            this.script = {'text': '', 'dirty': true};
+            this.script = {'committed_code': '', 'temporary_code': ''};
             this.theme = 'dark';
             this.variables = {};
         }
@@ -86,7 +86,6 @@ export class Table {
     }
 
     pasteBufferFromClipboard = (): PasteBuffer => {
-       
         // Get paste string from interface
         let pasteString = this.app.interface?.pasteFromClipboard;
 
@@ -103,6 +102,7 @@ export class Table {
         let pasteBuffer = {};
 
         // Split string into lines
+        pasteString = pasteString as string;
         let lines = pasteString?.split('\n');
         // Get largest line length
         let x_size = Math.max(...lines.map(line => line.length));
