@@ -21,30 +21,6 @@ export class UserAPI {
 
     constructor(app: Application) {
         this.app = app;
-        this.api = {
-            'bang': this.bang,
-            'teleport': this.move,
-            'tp': this.move,
-            'bigbang': this.bigbang,
-            'bpm': this.bpm,
-            'right': this.moveRight,
-            'left': this.moveLeft,
-            'up': this.moveUp,
-            'down': this.moveDown,
-            'midi': this.miditest,
-            'midioutput': this.midioutput,
-            'origin': this.origin,
-            'clear': this.clear,
-            'clear.script': this.clearScript,
-            'clear.mainscript': this.clearMainScript,
-            'clear.all': this.apocalypse,
-            'erase': this.erase,
-            'universe': this.universe,
-            'theme': this.theme,
-            'share': this.share,
-            'apocalypse': this.apocalypse,
-            'start': this.start,
-        };
     }
 
     bang = (universe: string) => {
@@ -57,6 +33,14 @@ export class UserAPI {
         this.app.context.cursor.x = x;
         this.app.context.cursor.y = y;
     }
+
+    teleport = (x: number, y: number):void => {
+        if (x === null || y === null) { return ; }
+        // Teleport the cursor to a given position
+        this.app.context.cursor.x = x;
+        this.app.context.cursor.y = y;
+    }
+
 
     origin = ():void => {
         // Get cursor back at origin
