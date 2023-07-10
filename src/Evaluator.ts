@@ -14,7 +14,7 @@ export const tryEvaluate = (application: Application, script: Script): void => {
 
     if (isValidCode) {
         script.committed_code = script.temporary_code; 
-    } 
+    }
 }
 
 export const evaluate = (application: Application, script: Script): void => {

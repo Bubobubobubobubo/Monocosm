@@ -32,13 +32,11 @@ export class UserAPI {
     }
 
     bang = (universe: string) => {
-        Tone.Transport.schedule(() => {
-            let table = this.app.getTable(universe);
-            if (table) {
-                table = table as Table;
-                evaluate(this.app, table.script as Script);
-            }
-        }, Tone.Transport.position + 0);
+        let table = this.app.getTable(universe);
+        if (table) {
+            table = table as Table;
+            evaluate(this.app, table.script as Script);
+        }
     }
     b = this.bang;
 
