@@ -7,11 +7,12 @@ import { TextInterface } from './TextInterface.js';
 import { Command } from './Command.js';
 import { MidiOut } from './IO/Midi.js';
 import { Context, SavedContext, OutputType } from './Types.js';
+import { UserAPI } from './UserAPI.js';
 
 export class Application {
 
-    audio_context: AudioContext;
     clock: Clock
+    userAPI: UserAPI;
     command: Command;
     midi: MidiOut;
     context!: Context;
@@ -23,11 +24,11 @@ export class Application {
     gridMode: 'grid' | 'local' | 'global' = 'grid';
     
     constructor(public output_type: OutputType) {
-        this.audio_context = new AudioContext();
         this.clock = new Clock(this);
-        this.midi = new MidiOut();
         this.input = new InputHandler(this);
+        this.userAPI = new UserAPI(this);
         this.command = new Command(this);
+        this.midi = new MidiOut();
         this.redraw = true;
         this.last_grid = null;
         this.interface = null;

@@ -56,6 +56,17 @@ export class TextInterface {
         })
     }
 
+    clearEditor = (editor: string = 'local') => {
+        const selectedEditor = editor == 'local' ? this.editor : this.globalEditor;
+        selectedEditor.dispatch({
+            changes: {
+                from: 0,
+                to: selectedEditor.state.doc.length,
+                insert: ''
+            }
+        })
+    }
+
     calculateCharacterWidth = () => {
         const testElement = document.createElement('span');
         testElement.innerText = ' ';

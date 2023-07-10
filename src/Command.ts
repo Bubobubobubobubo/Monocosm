@@ -138,11 +138,15 @@ export class Command {
     }
 
     clearScript = ():void => {
-        this.app.context.tables[this.app.context.current_table].script = '';
+        this.app.context.tables[this.app.context.current_table].script.committed_code = '';
+        this.app.context.tables[this.app.context.current_table].script.temporary_code = '';
+        this.app.interface?.clearEditor('local');
     }
 
     clearMainScript = ():void => {
-        this.app.context.mainScript = '';
+        this.app.context.mainScript.committed_code = '';
+        this.app.context.mainScript.temporary_code = '';
+        this.app.interface?.clearEditor('global');
     }
 
 
