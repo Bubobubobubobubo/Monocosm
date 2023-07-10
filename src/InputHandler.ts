@@ -172,7 +172,7 @@ export class InputHandler {
     }
 
     copyHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'c' && this.keyPresses['Control']) {
+        if (event.key == 'c' && (this.keyPresses['Control'] || this.keyPresses['Meta'])) {
             this.app.context.tables[this.app.context.current_table].copyUnderCursor();
         }
     }
