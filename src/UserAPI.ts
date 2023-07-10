@@ -1,4 +1,6 @@
 import { Application } from "./Application";
+import { Script } from "./Types";
+import { tryEvaluate } from "./Evaluator";
 import { Table } from "./Table";
 import * as Tone from 'tone';
 
@@ -17,14 +19,16 @@ const themes: string[] = [
 export class UserAPI {
 
     app: Application
-    api: object
 
     constructor(app: Application) {
         this.app = app;
     }
 
     bang = (universe: string) => {
-        console.log('bang')
+        let table = this.app.getTable(universe);
+        if (table) {
+            tryEvaluate(this.app, table.script as Script);
+        }
     }
 
     move = (x: number, y: number):void => {

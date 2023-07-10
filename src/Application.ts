@@ -131,6 +131,14 @@ export class Application {
         return this.context.tables[this.context.current_table];
     }
 
+    getTable = (name: string): Table | boolean  => {
+        if (name in this.context.tables) {
+            return this.context.tables[name];
+        } else {
+            return false;
+        }
+    }
+
     getVisibleZone = () => {
         return this.context.camera.getVisibleZone();
     }
