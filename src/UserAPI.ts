@@ -3,7 +3,6 @@ import { Script } from "./Types";
 import { tryEvaluate } from "./Evaluator";
 import { Table } from "./Table";
 import * as Tone from 'tone';
-import { testSynth } from './DSP';
 
 // Themes from the CSS
 const themes: string[] = [
@@ -191,12 +190,16 @@ export class UserAPI {
     bip = (note:string="C3", duration: string="16n"): void  => {
         console.log('beeping like crazy')
         Tone.Transport.schedule(function(time) {
-	        testSynth.triggerAttackRelease('8n', Tone.Transport.now() + 0.01);
+            const testSynth = new Tone.NoiseSynth().toDestination();
+	        testSynth.triggerAttackRelease('32n', Tone.Transport.now() + 0.5, 0.5);
         }, "8n");
     }
 
     sync = () => {
         this.app.clock.evaluations = 0;
+        for (const table in this.app.context.tables) {
+            this.app.context.tables[table].script.evaluations = 0; 
+        }
     }
 
     // Important getters!

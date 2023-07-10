@@ -10,7 +10,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
-    actionAreas: { [key: string]: ActionArea }
+    action_areas: { [key: string]: ActionArea }
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
@@ -18,7 +18,7 @@ export class Table {
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
-            this.actionAreas = {};
+            this.action_areas = {};
         } else {
             this.cells = {};
             this.action_areas = {};
@@ -32,14 +32,14 @@ export class Table {
     createActionArea = (x: number, y: number, x_size: number, y_size: number) => {
 
         const _generateId = () => {
-            let how_many = Object.keys(this.actionAreas).length;
+            let how_many = Object.keys(this.action_areas).length;
             return `${how_many}`;
         }
 
         // Check if action_ares already exists at this location
-        if (!this.actionAreas.hasOwnProperty(_generateId())) {
+        if (!this.action_areas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
-             this.actionAreas[_generateId()] = area;
+            this.action_areas[_generateId()] = area;
         }
     }
 
