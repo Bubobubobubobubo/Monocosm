@@ -10,8 +10,8 @@ export class ActionArea {
         parent: Table,
         public x: number=0, 
         public y: number=0,
-        public y_size: number=1,
         public x_size: number=1,
+        public y_size: number=1,
         public iterator: number=0,
         public children: Crawler[]=[],
     ) {
