@@ -210,7 +210,12 @@ export class TextInterface {
 
                 // Drawing zones
                 if(currentTable.actionAreaAt(vx, vy)) {
-                    grid.appendChild(this.createActionAreaCell(currentTable.getCell(vx,vy),x,y));
+                    let cell = currentTable.getCell(vx,vy)
+                    if (cell == "") {
+                        grid.appendChild(this.createActionAreaCell(" ",x,y));
+                    } else {
+                        grid.appendChild(this.createActionAreaCell(cell,x,y));
+                    }
                 }
 
             }
