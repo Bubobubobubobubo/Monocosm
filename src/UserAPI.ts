@@ -1,8 +1,10 @@
 import { Application } from "./Application";
 import { Script } from "./Types";
-import { tryEvaluate } from "./Evaluator";
+import { evaluate } from "./Evaluator";
 import { Table } from "./Table";
 import * as Tone from 'tone';
+
+const testSynth = new Tone.NoiseSynth().toDestination();
 
 // Themes from the CSS
 const themes: string[] = [
@@ -29,12 +31,15 @@ export class UserAPI {
     }
 
     bang = (universe: string) => {
-        let table = this.app.getTable(universe);
-        if (table) {
-            table = table as Table;
-            tryEvaluate(this.app, table.script as Script);
-        }
+        Tone.Transport.schedule(() => {
+            let table = this.app.getTable(universe);
+            if (table) {
+                table = table as Table;
+                evaluate(this.app, table.script as Script);
+            }
+        }, Tone.Transport.position + 0);
     }
+    b = this.bang;
 
     move = (x: number, y: number):void => {
         if (x === null || y === null) { return ; }
@@ -190,9 +195,8 @@ export class UserAPI {
     bip = (note:string="C3", duration: string="16n"): void  => {
         console.log('beeping like crazy')
         Tone.Transport.schedule(function(time) {
-            const testSynth = new Tone.NoiseSynth().toDestination();
 	        testSynth.triggerAttackRelease('32n', Tone.Transport.now() + 0.5, 0.5);
-        }, "8n");
+        });
     }
 
     sync = () => {
@@ -200,6 +204,16 @@ export class UserAPI {
         for (const table in this.app.context.tables) {
             this.app.context.tables[table].script.evaluations = 0; 
         }
+    }
+
+    every = (evaluations: number): boolean => {
+        return this.app.clock.evaluations % evaluations == 0;
+    }
+    e = this.every;
+
+
+    note = (note: number, velocity: number, channel: number):void => {
+        this.app.midi.note(note, velocity, channel)
     }
 
     // Important getters!
@@ -220,4 +234,6 @@ export class UserAPI {
     get y():number { return this.app.context.cursor.x; }
     get i():number { return this.app.clock.evaluations; }
     get _():number { return this.app.getCurrentTable().script.evaluations; }
+
+    log = console.log;
 }
