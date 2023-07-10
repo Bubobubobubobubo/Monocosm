@@ -1,4 +1,5 @@
 import type { Application } from './Application';
+import { evaluate } from './Evaluator';
 
 interface ClockMethods {
     setDuration: CallableFunction;
@@ -73,9 +74,9 @@ export class Clock {
         this.time = 0;
         this.tick = 0;
         const clock = ctx.createClock((time: number, duration: number, tick: number) => {
-            this.time = time;
-            this.tick = tick;
-            console.log(time, duration, tick);
+            this.time = time; this.tick = tick; this.duration = duration;
+            evaluate(this.app, this.app.context.mainScript);
+            // console.log(time, duration, tick);
             this.evaluations++;
         }, 0.1);
 

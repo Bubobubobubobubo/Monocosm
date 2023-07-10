@@ -169,7 +169,11 @@ export class UserAPI {
 
     start = ():void => {
         // Start the scheduling engine
-        this.app.audio_context.resume();
+        if (this.app.audio_context) {
+            this.app.audio_context.resume();
+        } else {
+            this.app.startTime()
+        }
     }
 
     pause = ():void => {
