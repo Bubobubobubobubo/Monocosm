@@ -1,13 +1,13 @@
 import type { Script } from './Types';
 import type { Application } from './Application';
 
-export const tryEvaluate = (application: Application, script: Script, ...args: object[]): void => {
+export const tryEvaluate = (application: Application, script: Script): void => {
     let isValidCode: boolean;
     try {
-        Function(`with (this) { ${script.committed_code} }`).call(application.userAPI, args)
+        Function(`with (this) {${script.temporary_code}}`).call(application.userAPI)
         isValidCode = true;
     } catch (error) {
-        Function(script.committed_code)()
+        Function(`with (this) {${script.committed_code}}`)()
         isValidCode = false;
     }
 
@@ -16,10 +16,10 @@ export const tryEvaluate = (application: Application, script: Script, ...args: o
     } 
 }
 
-export const evaluate = (application: Application, script: Script, ...args: object[]): void => {
-    Function(`with (this) { ${script.committed_code} }`).call(application.userAPI, args)
+export const evaluate = (application: Application, script: Script): void => {
+    Function(`with (this) {${script.committed_code}}`).call(application.userAPI)
 }
 
-export const evaluateCommand = (application: Application, command: string, ...args: object[]): void => {
-    Function(`with (this) { return ${command} }`).call(application.userAPI, args)
+export const evaluateCommand = (application: Application, command: string): void => {
+    Function(`with (this) {${command}}`).call(application.userAPI)
 }
