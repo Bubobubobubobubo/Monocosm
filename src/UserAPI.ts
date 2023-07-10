@@ -161,6 +161,7 @@ export class UserAPI {
         localStorage.removeItem('context');
         window.history.replaceState({}, '', window.location.href.split('?')[0]);
         this.app.init();
+        window.location.reload();
     }
 
     bpm = (bpm: string[]):void => {
