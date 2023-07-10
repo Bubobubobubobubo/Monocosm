@@ -36,7 +36,7 @@ export class Application {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
-                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: '', dirty: true},
+                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: ''},
                 'camera': new Camera(this,
                     this.interface.howManyCharactersFitWidth(),
                     this.interface.howManyCharactersFitHeight()
@@ -111,10 +111,6 @@ export class Application {
             'cursor': cursor_state,
             'current_table': current_table,
         }
-    }
-
-    startAudioContext = () => {
-        this.audio_context.resume();
     }
 
     // Get context from local storage and hash it to url parameter

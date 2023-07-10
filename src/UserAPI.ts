@@ -31,6 +31,7 @@ export class UserAPI {
     bang = (universe: string) => {
         let table = this.app.getTable(universe);
         if (table) {
+            table = table as Table;
             tryEvaluate(this.app, table.script as Script);
         }
     }
@@ -61,9 +62,9 @@ export class UserAPI {
     }
 
     // Private methods
-    private _isTheme = (theme_name: string):boolean => {
-        return themes.includes(theme_name)
-    }
+    // private _isTheme = (theme_name: string):boolean => {
+    //     return themes.includes(theme_name)
+    // }
 
     private _getUniverseTheme = (theme? :string):string => {
         // If part of the universe name is same as one of the themes, find first match

@@ -4,12 +4,10 @@ import { evaluate } from './Evaluator';
 
 export class Clock {
 
-    private clock: any
-
     constructor(public app: Application) {
         Tone.Transport.start();
         Tone.Transport.bpm.value = 120;
-        Tone.Transport.scheduleRepeat((time) => {
+        Tone.Transport.scheduleRepeat(() => { // Optional type argument
             evaluate(this.app, this.app.context.mainScript);
         }, "64n")
     }

@@ -1,5 +1,5 @@
 import type { Application } from './Application.js';
-import { evaluate, evaluateCommand, tryEvaluate } from './Evaluator.js';
+import { evaluateCommand, tryEvaluate } from './Evaluator.js';
 
 export class InputHandler {
     NormalKeyFunctions: Array<Function>;
