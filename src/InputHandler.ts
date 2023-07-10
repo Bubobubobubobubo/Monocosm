@@ -186,7 +186,7 @@ export class InputHandler {
     }
 
     pasteFromBeyondHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'b' && this.keyPresses['Control']) {
+        if (event.key == 'b' && (this.keyPresses['Control'] || this.keyPresses['Meta'])) {
             this.app.context.cursor.resetCursorSize();
             event.preventDefault();
             this.app.context.tables[this.app.context.current_table].pasteFromBeyond();
@@ -236,7 +236,7 @@ export class InputHandler {
     }
 
     charInputHandler = (event:KeyboardEvent):void => {
-        if (event.key.length == 1 && !this.keyPresses['Control']) {
+        if (event.key.length == 1 && (!this.keyPresses['Control'] || !this.keyPresses['Meta'])) {
             if (event.key.match(/^[\x21-\x7E]$/)) {
                 if (this.charInputFilter(event)) {
                     this.app.context.tables[this.app.context.current_table].addCell(
