@@ -145,6 +145,7 @@ export class TextInterface {
             this.pasteFromClipboard = e.clipboardData?.getData('text/plain');
             this.app.getCurrentTable().paste();
             e.preventDefault();
+            this.app.redraw = true;
         });
         return cell;
     }
