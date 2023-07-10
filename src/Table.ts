@@ -21,7 +21,7 @@ export class Table {
         } else {
             this.cells = {};
             this.walkers = {};
-            this.script = {'committed_code': '', 'temporary_code': ''}
+            this.script = {'text': '', 'dirty': true};
             this.theme = 'dark';
             this.variables = {};
         }
