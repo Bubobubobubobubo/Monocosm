@@ -166,8 +166,8 @@ export class Table {
     }
 
     removeZone = (x: number, y: number, x_size: number, y_size: number) => {
-        for (let i = 0; i < y_size ; i++) {
-            for (let j = 0; j < x_size ; j++) {
+        for (let i = 0; i < x_size ; i++) {
+            for (let j = 0; j < y_size ; j++) {
                 this.removeCell(x + i, y + j);
             }
         }

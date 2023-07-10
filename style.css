@@ -39,7 +39,7 @@
 .theme-bee {
     --primary: #101820;
     --secondary:#FEE715;
-    --tertiary: #f9c901;
+    --tertiary: #990011FF;
 }
 
 .theme-lavender {
@@ -69,7 +69,7 @@
 .theme-cherry {
     --primary: #990011FF;
     --secondary: #FCF6F5FF;
-    --tertiary: ##5E9900;
+    --tertiary: #5E9900;
 }
 
 .theme-blue {
@@ -157,7 +157,7 @@ span.action-area-cell {
     font-size: 20px;
     line-height: 1em;
     background-color: var(--tertiary);
-    color: var(--primary);
+    color: var(--secondary);
     white-space: pre;
     position: absolute;
 }
