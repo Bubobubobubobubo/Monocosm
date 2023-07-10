@@ -88,13 +88,12 @@ export class Table {
         editable?.setAttribute('contenteditable', 'true');
         document.body.appendChild(editable as HTMLElement);
         editable?.focus();
-        // Wait for user to paste into div and get event
+        // Wait for user to paste into cursor and get event
         let promtValue = await new Promise((resolve) => {
             editable?.addEventListener('paste', (e) => {
-                console.log("PASTE EVENT?")
                 e.preventDefault();
                 // Return pasted value
-                resolve(e.clipboardData.getData('text/plain'));
+                resolve(e.clipboardData?.getData('text/plain'));
             });
             // If any other event then paste or Ctrl+V, return empty string
             editable?.addEventListener('keydown', (e) => {
