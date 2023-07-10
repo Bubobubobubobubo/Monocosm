@@ -16,8 +16,9 @@ export class ActionArea {
         public children: Crawler[]=[],
     ) {
         this.parent = parent;
-        this.unique_id = (this.parent.action_areas.length + 1).toString();
+        this.unique_id = (Object.keys(this.parent).length+1).toString();
     }
+
 }
 
 
