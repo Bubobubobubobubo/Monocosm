@@ -114,7 +114,6 @@ export class InputHandler {
 
     submitCodeHandler = (event: KeyboardEvent):void => {
         if (event.key == 'Enter' && this.keyPresses['Control']) {
-            console.log('Submitting code...')
             let editor = document.getElementsByClassName('cm-editor')[0] as HTMLElement;
             if (editor) {
                 editor.style.animation  = "blinker 0.1s linear" ;

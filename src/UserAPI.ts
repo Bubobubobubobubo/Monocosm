@@ -24,6 +24,10 @@ export class UserAPI {
         this.app = app;
     }
 
+    log = (message: string):void => {
+        console.log(message);
+    }
+
     bang = (universe: string) => {
         let table = this.app.getTable(universe);
         if (table) {
