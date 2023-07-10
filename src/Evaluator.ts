@@ -4,8 +4,9 @@ import type { Application } from './Application';
 export const tryEvaluate = (application: Application, script: Script): void => {
     let isValidCode: boolean;
     try {
-        Function(`with (this) {${script.temporary_code}}`).call(application.userAPI)
+        Function(`with (this) {${script.temporary_code}};`).call(application.userAPI)
         isValidCode = true;
+        application.redraw = true; 
     } catch (error) {
         Function(`with (this) {${script.committed_code}}`)()
         isValidCode = false;

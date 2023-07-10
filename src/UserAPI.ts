@@ -167,11 +167,38 @@ export class UserAPI {
     }
 
     start = ():void => {
-        // Start the ToneJS engine
+        // Start the scheduling engine
         Tone.start();
+    }
+
+    pause = ():void => {
+        // Pause the scheduling engine
+        Tone.Transport.pause();
+    }
+
+    resume = ( ):void => {
+        // Resume the scheduling engine
+        Tone.Transport.start();
     }
 
     bigbang = ():void => {
         Tone.Transport.ticks = 0;
     }
+
+    // Important getters!
+
+    get tick():number {
+        return Tone.Transport.ticks;
+    }
+
+    get beat():number {
+        return parseInt(Tone.Transport.position.toString().split(':')[1]);
+    }
+
+    get bar():number {
+        return parseInt(Tone.Transport.position.toString().split(':')[0]);
+    }
+
+    get x():number { return this.app.context.cursor.x; }
+    get y():number { return this.app.context.cursor.x; }
 }
