@@ -23,9 +23,7 @@ export class UserAPI {
         this.app = app;
     }
 
-    log = (message: string):void => {
-        console.log(message);
-    }
+    log = console.log;
 
     bang = (universe: string) => {
         let table = this.app.getTable(universe);
@@ -191,21 +189,23 @@ export class UserAPI {
     }
 
     sync = () => {
-        this.app.clock.evaluations = 0;
+        if (this.app.clock) this.app.clock.evaluations = 0;
         for (const table in this.app.context.tables) {
             this.app.context.tables[table].script.evaluations = 0; 
         }
     }
 
     every = (evaluations: number): boolean => {
-        return this.app.clock.evaluations % evaluations == 0;
+        if (this.app.clock)
+            return this.app.clock.evaluations % evaluations == 0;
+        return false;
     }
     e = this.every;
-
 
     note = (note: number, velocity: number, channel: number):void => {
         this.app.midi.note(note, velocity, channel)
     }
+
 
     // Important getters!
 
@@ -223,8 +223,13 @@ export class UserAPI {
 
     get x():number { return this.app.context.cursor.x; }
     get y():number { return this.app.context.cursor.x; }
-    get i():number { return this.app.clock.evaluations; }
+    get i():number { 
+        if (this.app.clock) {
+            return this.app.clock.evaluations; 
+        } else {
+            return 0
+        }
+    }
     get _():number { return this.app.getCurrentTable().script.evaluations; }
 
-    log = console.log;
 }

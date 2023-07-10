@@ -1,5 +1,6 @@
 import type { Application } from './Application';
 import { evaluate } from './Evaluator';
+import { clearInterval, setInterval } from 'worker-timers';
 
 interface ClockMethods {
     setDuration: CallableFunction;
@@ -19,8 +20,8 @@ declare global {
 AudioContext.prototype['createClock'] = function (
   callback, // called slightly before each cycle
   duration, // duration of each cycle
-  interval = 0.1, // interval between callbacks
-  overlap = 0.1, // overlap between callbacks
+  interval = 0.2, // interval between callbacks
+  overlap = 0.2, // overlap between callbacks
 ) {
   let tick = 0; // counts callbacks
   let phase = 0; // next callback time
@@ -76,9 +77,9 @@ export class Clock {
         const clock = ctx.createClock((time: number, duration: number, tick: number) => {
             this.time = time; this.tick = tick; this.duration = duration;
             evaluate(this.app, this.app.context.mainScript);
-            // console.log(time, duration, tick);
             this.evaluations++;
-        }, 0.1);
+            // console.log(time, duration, tick);
+        }, 0.2);
 
         // Grab what's inside that clock
         this.setDuration = clock.setDuration;

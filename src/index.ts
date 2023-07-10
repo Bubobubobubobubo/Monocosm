@@ -50,7 +50,9 @@ function loop() {
         }
     }
     // The clock should always move
-    if (INIT) clock.textContent = application.clock!.toString();
+    if (application.clock !== null) {
+        clock.textContent = application.clock.toString();
+    }
     window.requestAnimationFrame(loop);
 }
 
