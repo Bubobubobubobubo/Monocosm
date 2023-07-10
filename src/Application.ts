@@ -10,8 +10,8 @@ import { UserAPI } from './UserAPI.js';
 
 export class Application {
 
-    now: number;
-    clock: Clock
+    audio_context: AudioContext | null = null;
+    clock: Clock | null = null;
     userAPI: UserAPI;
     midi: MidiOut;
     context!: Context;
@@ -23,8 +23,6 @@ export class Application {
     gridMode: 'grid' | 'local' | 'global' = 'grid';
     
     constructor(public output_type: OutputType) {
-        this.now = 0;
-        this.clock = new Clock(this);
         this.input = new InputHandler(this);
         this.userAPI = new UserAPI(this);
         this.midi = new MidiOut();
@@ -34,11 +32,16 @@ export class Application {
         this.init()
     }
 
+    startTime(): void {
+        this.audio_context = new AudioContext();
+        this.clock = new Clock(this, this.audio_context);
+    }
+
     init = () => {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
-                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: ''},
+                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: '', evaluations: 0},
                 'camera': new Camera(this,
                     this.interface.howManyCharactersFitWidth(),
                     this.interface.howManyCharactersFitHeight()

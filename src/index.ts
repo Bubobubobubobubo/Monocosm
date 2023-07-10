@@ -1,7 +1,6 @@
 import { Application } from './Application.js';
 import type { SavedContext } from './Types.js';
-import { evaluate } from './Evaluator.js';
-import * as Tone from 'tone';
+let INIT: boolean = false;
 
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
@@ -11,26 +10,16 @@ let zone: HTMLElement = document.getElementById("zone") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
 let action_area: HTMLElement = document.getElementById("actionarea") as HTMLElement;
 
-let testSynth = new Tone.Synth().toDestination();
-
-play_button.addEventListener("click", async () => {
+play_button.addEventListener("click", function(){
+    play_button.textContent = application.running ? "⏵" : "⏸" ;
     if (!application.running) {
-    // application.startAudioContext();
-    await Tone.start();
-    Tone.Transport.start();
-    Tone.Transport.bpm.value = 120;
-    Tone.Transport.scheduleRepeat((time) => {
-        application.now = Tone.now();
-        evaluate(application, application.context.mainScript);
-        application.clock.evaluations++;
-    }, "32n")
-
-    play_button.textContent = "⏸";
-    } else {
-    play_button.textContent = "⏵";
-    // application.audio_context.suspend();
+        if (!INIT) application.startTime();
+        application.audio_context!.resume();
     }
-    application.running= !application;
+    if (application.running) {
+        application.audio_context!.suspend();
+    }
+    application.running = !application.running;
 }); 
 
 window.onresize = () => {
@@ -61,7 +50,7 @@ function loop() {
         }
     }
     // The clock should always move
-    clock.textContent = application.clock.toString();
+    if (INIT) clock.textContent = application.clock!.toString();
     window.requestAnimationFrame(loop);
 }
 

@@ -2,10 +2,6 @@ import { Application } from "./Application";
 import { Script } from "./Types";
 import { evaluate } from "./Evaluator";
 import { Table } from "./Table";
-import * as Tone from 'tone';
-
-// const testSynth = new Tone.NoiseSynth().toDestination();
-const testSynth = new Tone.PluckSynth().toDestination();
 
 // Themes from the CSS
 const themes: string[] = [
@@ -169,30 +165,25 @@ export class UserAPI {
     }
 
     bpm = (bpm: string[]):void => {
-        Tone.Transport.bpm.value = parseFloat(bpm[0]);
     }
 
     start = ():void => {
         // Start the scheduling engine
-        Tone.start();
+        this.app.audio_context.resume();
     }
 
     pause = ():void => {
         // Pause the scheduling engine
-        Tone.Transport.pause();
     }
 
     resume = ( ):void => {
         // Resume the scheduling engine
-        Tone.Transport.start();
     }
 
     bigbang = ():void => {
-        Tone.Transport.ticks = 0;
     }
 
     bip = (): void  => {
-        testSynth.triggerAttackRelease('C4', '1n', this.app.now)
     }
 
     sync = () => {
@@ -215,15 +206,15 @@ export class UserAPI {
     // Important getters!
 
     get tick():number {
-        return Tone.Transport.ticks;
+        return 0
     }
 
     get beat():number {
-        return parseInt(Tone.Transport.position.toString().split(':')[1]);
+        return 0
     }
 
     get bar():number {
-        return parseInt(Tone.Transport.position.toString().split(':')[0]);
+        return 0
     }
 
     get x():number { return this.app.context.cursor.x; }
