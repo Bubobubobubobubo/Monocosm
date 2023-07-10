@@ -22,7 +22,7 @@ export class Table {
         } else {
             this.cells = {};
             this.action_areas = {};
-            this.script = {'committed_code': '', 'temporary_code': ''};
+            this.script = {'committed_code': '', 'temporary_code': '', evaluations: 0};
             this.theme = 'dark';
             this.variables = {};
         }

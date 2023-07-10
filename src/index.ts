@@ -32,6 +32,7 @@ window.onbeforeunload = function(): null {
     localStorage.setItem('context', JSON.stringify(saved_context));
     return null;
 }
+
 function loop() {
     if(application.redraw) {
         if (application.getCurrentTable().actionAreaAt(application.context.cursor.x, application.context.cursor.y)) {

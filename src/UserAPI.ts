@@ -188,11 +188,15 @@ export class UserAPI {
         Tone.Transport.ticks = 0;
     }
 
-    bip = (note:string="C5", duration: string="8n"): void  => {
+    bip = (note:string="C3", duration: string="16n"): void  => {
         console.log('beeping like crazy')
-        Tone.Transport.schedule((time) => {
-            testSynth.triggerAttackRelease(note, duration);
-        }, "0:0:0");
+        Tone.Transport.schedule(function(time) {
+	        testSynth.triggerAttackRelease('8n', Tone.Transport.now() + 0.01);
+        }, "8n");
+    }
+
+    sync = () => {
+        this.app.clock.evaluations = 0;
     }
 
     // Important getters!
@@ -211,4 +215,6 @@ export class UserAPI {
 
     get x():number { return this.app.context.cursor.x; }
     get y():number { return this.app.context.cursor.x; }
+    get i():number { return this.app.clock.evaluations; }
+    get _():number { return this.app.getCurrentTable().script.evaluations; }
 }

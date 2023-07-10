@@ -22,6 +22,7 @@ export interface Zone {
 export interface Script {
     'temporary_code': string;
     'committed_code': string;
+    evaluations: number;
 }
 
 export interface TableData {

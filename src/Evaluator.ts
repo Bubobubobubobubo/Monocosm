@@ -5,6 +5,7 @@ export const tryEvaluate = (application: Application, script: Script): void => {
     let isValidCode: boolean;
     try {
         Function(`with (this) {try{${script.temporary_code}} catch (e) {console.log(e)}};`).call(application.userAPI)
+        script.evaluations++;
         isValidCode = true;
         application.redraw = true; 
     } catch (error) {
@@ -19,6 +20,7 @@ export const tryEvaluate = (application: Application, script: Script): void => {
 
 export const evaluate = (application: Application, script: Script): void => {
     Function(`with (this) {try{${script.committed_code}} catch (e) {console.log(e)}};`).call(application.userAPI)
+    script.evaluations++;
 }
 
 export const evaluateCommand = (application: Application, command: string): void => {
