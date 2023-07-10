@@ -206,6 +206,8 @@ export class InputHandler {
 
     spaceKeyHandler = (event:KeyboardEvent):void => {
         if (event.key == ' ') {
+            this.app.context.tables[this.app.context.current_table].removeCell(
+                this.app.context.cursor.x, this.app.context.cursor.y);
             this.app.context.cursor.x += 1;
         }
     }

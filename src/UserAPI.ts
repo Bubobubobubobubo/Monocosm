@@ -3,6 +3,7 @@ import { Script } from "./Types";
 import { tryEvaluate } from "./Evaluator";
 import { Table } from "./Table";
 import * as Tone from 'tone';
+import { testSynth } from './DSP';
 
 // Themes from the CSS
 const themes: string[] = [
@@ -185,6 +186,13 @@ export class UserAPI {
 
     bigbang = ():void => {
         Tone.Transport.ticks = 0;
+    }
+
+    bip = (note:string="C5", duration: string="8n"): void  => {
+        console.log('beeping like crazy')
+        Tone.Transport.schedule((time) => {
+            testSynth.triggerAttackRelease(note, duration);
+        }, "0:0:0");
     }
 
     // Important getters!
