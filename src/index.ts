@@ -26,11 +26,10 @@ window.onresize = () => {
 }
 
 window.onbeforeunload = function(): null {
-    let saved_context: SavedContext = application.save();
-    localStorage.setItem('context', JSON.stringify(saved_context));
-    return null;
+ let saved_context: SavedContext = application.save();
+ localStorage.setItem('context', JSON.stringify(saved_context));
+ return null;
 }
-
 function loop() {
     if(application.redraw) {
         cursor.textContent = application.context.cursor.toString();
