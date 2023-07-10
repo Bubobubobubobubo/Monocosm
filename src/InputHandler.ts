@@ -31,7 +31,8 @@ export class InputHandler {
             this.spaceKeyHandler,
             this.backSpaceHandler, this.enterKeyHandler,
             // Copy and paste mechanics
-            this.copyHandler, this.pasteHandler,
+            this.copyHandler, this.pasteHandler, 
+            this.pasteFromBeyondHandler,
             this.escapeKeyHandler,
             // Switch to command mode
             this.commandModeHandler,
@@ -42,7 +43,7 @@ export class InputHandler {
             this.validateCommandHandler,
             this.commandModeHandler,
         ];
-        
+
         // Setting up event listeners on the window
         this.setupEventListeners();
     }
@@ -163,6 +164,14 @@ export class InputHandler {
         }
     }
 
+    pasteFromBeyondHandler = (event:KeyboardEvent):void => {
+        if (event.key == 'b' && this.keyPresses['Control']) {
+            this.app.context.cursor.resetCursorSize();
+            event.preventDefault();
+            this.app.context.tables[this.app.context.current_table].pasteFromBeyond();
+        }
+    }
+    
     editingModeKeysHandler = ():void => {
         if (this.app.output_type == 'text') {
             let prompt = document.getElementById('prompt') as HTMLInputElement;

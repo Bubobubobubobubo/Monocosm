@@ -1,8 +1,8 @@
-# Monocosm(e)
+# Monocosme
 
 ![frog](frog.jpeg)
 
-**Monocosm(e)** is a _TypeScript_ based algorithmic music sequencer. It offers an infinite 2D playground on which you can lay down ideas using ASCII symbols before turning them into music by scripting them. **Monocosm(e)** is not currently working. We are still in the alpha stage of implementation. You can test it by visiting [https://monocosm.raphaelforment.fr](https://scriptographe.raphaelforment.fr).
+**Monocosme** is a _TypeScript_ based live coding platform. It offers infinite amount of 2D universes on which you can lay down ideas using ASCII symbols before turning them into music by scripting them. **Monocosme** is work in progress. We are still in the alpha stage of implementation. You can test it by visiting [https://monocosme.raphaelforment.fr](https://monocosme.raphaelforment.fr).
 
 ## Design goals
 

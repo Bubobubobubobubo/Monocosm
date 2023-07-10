@@ -58,4 +58,9 @@ export class Cursor {
         this.y_size = data.y_size;
         this.x_size = data.x_size;
     }
+
+    setSize = (x_size: number, y_size: number) => {
+        this.x_size = x_size;
+        this.y_size = y_size;
+    }
 }

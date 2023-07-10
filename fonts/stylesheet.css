@@ -25,3 +25,21 @@
     font-display: swap;
 }
 
+@font-face {
+	font-family: "unifont";
+	src: url("unifont-12.0.01.woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+	font-family: "unifont-upper";
+	src: url("unifont_upper-12.0.01.woff2");
+	unicode-range: U+10000-10FFFF;
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+

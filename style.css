@@ -95,7 +95,7 @@ body {
     margin-bottom: 5pt;
     padding: 0;
     overflow: hidden;
-    font-family: "jgs7";
+    font-family: "jgs7", "unifont", "unifont-upper";
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
@@ -103,7 +103,13 @@ body {
 }
 
 span {
-    font-family: "jgs7";
+    font-family: "jgs7", "unifont", "unifont-upper";
+}
+
+span.paste-fallback:before {
+    content: 'Paste here!';
+    pointer-events: none;
+    display: block; /* For Firefox */
 }
 
 .selected {
@@ -134,6 +140,20 @@ span.inverted-cell {
     position: absolute;
 }
 
+span#cursor-cell {
+    font-size: 20px;
+    line-height: 1em;
+    background-color: var(--secondary);
+    color: var(--primary);
+    white-space: pre;
+    position: absolute;
+}
+
+/* For pasteFromBeyond */
+[contenteditable] {
+    outline: 1px solid var(--secondary);
+}
+
 div#interface {
     display: inline-flex;
     gap:1.5em;
@@ -159,7 +179,7 @@ div#cmd {
 
 input#prompt{
     font-size: 16px;
-    font-family: "jgs7";
+    font-family: "jgs7", "unifont", "unifont-upper";
     padding: 0;
     border: none;
     margin: 0;

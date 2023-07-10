@@ -121,6 +121,15 @@ export class TextInterface {
         return cell;
     }
 
+    createCursor = (x: number, y: number): HTMLElement => {
+        let cell = document.createElement('span');
+        cell.id = 'cursor-cell';
+        cell.innerText = ' ';
+        cell.style.top = (y * this.characterHeight) + 'px';
+        cell.style.left = (x * this.characterWidth) + 'px';
+        return cell;
+    }
+
     loadTheme = (theme: string) => {
         document.documentElement.className = "theme-"+theme;
     }
@@ -151,7 +160,7 @@ export class TextInterface {
                         grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y));
                     }
                 } else if(cursor.isUnder(vx,vy)) {
-                    grid.appendChild(this.createCell('█',x,y));
+                    grid.appendChild(this.createCursor(x,y));
                 }
             }
         }

@@ -81,6 +81,60 @@ export class Table {
         }
     }
 
+    pasteFromBeyond = async () => {
+        // Get cursor element with id 'cursor'
+        let editable = document.getElementById('cursor-cell');
+        // Set contenteditable to true
+        editable?.setAttribute('contenteditable', 'true');
+        document.body.appendChild(editable as HTMLElement);
+        editable?.focus();
+        // Wait for user to paste into div and get event
+        let promtValue = await new Promise((resolve) => {
+            editable?.addEventListener('paste', (e) => {
+                console.log("PASTE EVENT?")
+                e.preventDefault();
+                // Return pasted value
+                resolve(e.clipboardData.getData('text/plain'));
+            });
+            // If any other event then paste or Ctrl+V, return empty string
+            editable?.addEventListener('keydown', (e) => {
+                if (!e.ctrlKey) {
+                    resolve('');
+                }
+            });
+        });
+
+        // Remove editable from DOM
+        document.body.removeChild(editable as HTMLElement);
+
+        let pasteString = promtValue as string;
+
+        // If pasteString is empty, return
+        if (pasteString === '') return;
+
+        this.resetPasteBuffer();
+        // Split string into lines
+        let lines = pasteString.split('\n');
+        // Get largest line length
+        let x_size = Math.max(...lines.map(line => line.length));
+        let y_size = lines.length;
+        // Set cursor size to the size of the paste
+        this.app.context.cursor.setSize(x_size, y_size);
+        this.resetPasteBuffer();
+        for (let i = 0; i < y_size ; i++) {
+            for (let j = 0; j < x_size ; j++) {
+                // If lines[i][j] is undefined, empty string or space, don't add to paste buffer
+                if(lines[i][j]) {
+                    if (lines[i][j] !== undefined || lines[i][j] !== '' || lines[i][j] !== ' ') {
+                        let id = this.generateID(i, j);
+                        this.pasteBuffer[id] = lines[i][j];
+                    }
+                }
+            }
+        }
+        this.paste();
+    }
+
     removeZone = (x: number, y: number, x_size: number, y_size: number) => {
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
@@ -93,12 +147,28 @@ export class Table {
         let { x, y } = this.app.context.cursor;
         let { x_size , y_size } = this.app.context.cursor.size;
         this.resetPasteBuffer();
+        let string = '';
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 this.pasteBuffer[id] = this.getCell(x + j, y + i);
+                string += this.pasteBuffer[id]=='' ? ' ' : this.pasteBuffer[id];
             }
+            string += '\n';
         }
+        this.pasteToClipboard(string);
+    }
+
+    pasteBufferToString = () => {
+        let string = '';
+        for(let key in this.pasteBuffer) {
+            string += this.pasteBuffer[key]=='' ? ' ' : this.pasteBuffer[key];
+        }
+        return string;
+    }
+
+    pasteToClipboard = (pasteString: string) => {
+        navigator.clipboard.writeText(pasteString);
     }
 
 }
