@@ -69,6 +69,10 @@ export class Table {
     }
 
     paste = () => {
+
+        // Update pasteBuffer
+        this.pasteBuffer = this.pasteBufferFromClipboard();
+
         let { x, y } = this.app.context.cursor;
         let { x_size , y_size } = this.app.context.cursor.size;
         for (let i = 0; i < y_size ; i++) {
@@ -81,39 +85,25 @@ export class Table {
         }
     }
 
-    pasteFromBeyond = async () => {
-        // Get cursor element with id 'cursor'
-        let editable = document.getElementById('cursor-cell');
-        // Set contenteditable to true
-        editable?.setAttribute('contenteditable', 'true');
-        document.body.appendChild(editable as HTMLElement);
-        editable?.focus();
-        // Wait for user to paste into cursor and get event
-        let promtValue = await new Promise((resolve) => {
-            editable?.addEventListener('paste', (e) => {
-                e.preventDefault();
-                // Return pasted value
-                resolve(e.clipboardData?.getData('text/plain'));
-            });
-            // If any other event then paste or Ctrl+V, return empty string
-            editable?.addEventListener('keydown', (e) => {
-                if (!e.ctrlKey) {
-                    resolve('');
-                }
-            });
-        });
+    pasteBufferFromClipboard = (): PasteBuffer => {
+       
+        // Get paste string from interface
+        let pasteString = this.app.interface?.pasteFromClipboard;
 
-        // Remove editable from DOM
-        document.body.removeChild(editable as HTMLElement);
+        // If pasteString is empty, return original paste buffer
+        if (pasteString === undefined || pasteString === '')  
+        { 
+            return this.pasteBuffer;
+        }
+        else {
+            pasteString = this.app.interface?.pasteFromClipboard;
+        }
 
-        let pasteString = promtValue as string;
+        // Create new buffer
+        let pasteBuffer = {};
 
-        // If pasteString is empty, return
-        if (pasteString === '') return;
-
-        this.resetPasteBuffer();
         // Split string into lines
-        let lines = pasteString.split('\n');
+        let lines = pasteString?.split('\n');
         // Get largest line length
         let x_size = Math.max(...lines.map(line => line.length));
         let y_size = lines.length;
@@ -126,12 +116,12 @@ export class Table {
                 if(lines[i][j]) {
                     if (lines[i][j] !== undefined || lines[i][j] !== '' || lines[i][j] !== ' ') {
                         let id = this.generateID(i, j);
-                        this.pasteBuffer[id] = lines[i][j];
+                        pasteBuffer[id] = lines[i][j];
                     }
                 }
             }
         }
-        this.paste();
+        return pasteBuffer;
     }
 
     removeZone = (x: number, y: number, x_size: number, y_size: number) => {
@@ -145,15 +135,14 @@ export class Table {
     copyUnderCursor = () => {
         let { x, y } = this.app.context.cursor;
         let { x_size , y_size } = this.app.context.cursor.size;
-        this.resetPasteBuffer();
         let string = '';
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
-                let id = this.generateID(i, j);
-                this.pasteBuffer[id] = this.getCell(x + j, y + i);
-                string += this.pasteBuffer[id]=='' ? ' ' : this.pasteBuffer[id];
+                let cellString = this.getCell(x + j, y + i);
+                string += cellString=='' ? ' ' : cellString;
             }
-            string += '\n';
+
+            if (i < y_size - 1) string += '\n';
         }
         this.pasteToClipboard(string);
     }
@@ -168,6 +157,7 @@ export class Table {
 
     pasteToClipboard = (pasteString: string) => {
         navigator.clipboard.writeText(pasteString);
+        this.app.interface?.setPasteFromBrowser(pasteString);
     }
 
 }

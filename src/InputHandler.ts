@@ -30,8 +30,7 @@ export class InputHandler {
             this.spaceKeyHandler,
             this.backSpaceHandler, this.enterKeyHandler,
             // Copy and paste mechanics
-            this.copyHandler, this.pasteHandler, 
-            this.pasteFromBeyondHandler,
+            this.copyHandler, this.pasteHandler,
             this.escapeKeyHandler,
             // Switch to command mode
             this.commandModeHandler,
@@ -185,14 +184,6 @@ export class InputHandler {
         }
     }
 
-    pasteFromBeyondHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'b' && this.keyPresses['Control']) {
-            this.app.context.cursor.resetCursorSize();
-            event.preventDefault();
-            this.app.context.tables[this.app.context.current_table].pasteFromBeyond();
-        }
-    }
-    
     editingModeKeysHandler = ():void => {
         if (this.app.output_type == 'text') {
             let prompt = document.getElementById('prompt') as HTMLInputElement;

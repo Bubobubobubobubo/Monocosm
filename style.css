@@ -161,6 +161,7 @@ span#cursor-cell {
     color: var(--primary);
     white-space: pre;
     position: absolute;
+    caret-color: transparent;
 }
 
 /* For pasteFromBeyond */

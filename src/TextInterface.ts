@@ -13,6 +13,7 @@ export class TextInterface {
     characterHeight: number
     charactersForWidth: number
     charactersForHeight: number
+    pasteFromClipboard: string | undefined = undefined
 
     constructor(public app: Application) {
         this.context = this.app.context;
@@ -123,11 +124,31 @@ export class TextInterface {
 
     createCursor = (x: number, y: number): HTMLElement => {
         let cell = document.createElement('span');
+        cell.contentEditable = 'true';
         cell.id = 'cursor-cell';
         cell.innerText = ' ';
         cell.style.top = (y * this.characterHeight) + 'px';
         cell.style.left = (x * this.characterWidth) + 'px';
+        // Add a listener for pasting
+        cell.addEventListener('paste', (e) => {
+            this.pasteFromClipboard = e.clipboardData?.getData('text/plain');
+            this.app.getCurrentTable().paste();
+            e.preventDefault();
+        });
         return cell;
+    }
+
+    focusCursor = () => {
+        const cursor = document.getElementById('cursor-cell');
+        cursor?.focus();
+    }
+
+    clearPasteFromBrowser = () => {
+        this.pasteFromClipboard = undefined;
+    }
+
+    setPasteFromBrowser = (text: string) => {
+        this.pasteFromClipboard = text;
     }
 
     loadTheme = (theme: string) => {

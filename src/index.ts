@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 let application: Application = new Application('text');
 let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
-let play_button: HTMLElement = document.getElementById("play") as HTMLElement; 
+let play_button: HTMLElement = document.getElementById("play") as HTMLElement;
 let zone: HTMLElement = document.getElementById("zone") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
 
@@ -35,7 +35,11 @@ function loop() {
         cursor.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
         const newContent = application.process();
-        if (newContent) zone.replaceChildren(newContent);
+        if (newContent) {
+            zone.replaceChildren(newContent);
+            // Focus cursor if in grid mode to enable paste
+            if(application.gridMode == 'grid') application.interface?.focusCursor();
+        }
     }
     // The clock should always move
     clock.textContent = application.clock.toString();
