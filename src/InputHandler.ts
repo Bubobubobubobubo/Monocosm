@@ -178,16 +178,8 @@ export class InputHandler {
     }
 
     pasteHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'v' && this.keyPresses['Control']) {
+        if (event.key == 'v' && (this.keyPresses['Control'] || this.keyPresses['Meta'])) {
             this.app.context.tables[this.app.context.current_table].paste();
-        }
-    }
-
-    pasteFromBeyondHandler = (event:KeyboardEvent):void => {
-        if (event.key == 'b' && (this.keyPresses['Control'] || this.keyPresses['Meta'])) {
-            this.app.context.cursor.resetCursorSize();
-            event.preventDefault();
-            this.app.context.tables[this.app.context.current_table].pasteFromBeyond();
         }
     }
     
