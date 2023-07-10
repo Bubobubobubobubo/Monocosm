@@ -35,6 +35,8 @@ export class InputHandler {
             // Switch to command mode
             this.commandModeHandler,
             this.charInputHandler, 
+            // Creating and managing zones
+            this.createZoneHandler,
         ];
         this.EditingKeyFunctions = [
             this.editingModeKeysHandler,
@@ -87,6 +89,17 @@ export class InputHandler {
             }
             this.isCapturingInput = !this.isCapturingInput;
             event.preventDefault();
+        }
+    }
+
+    createZoneHandler = (event: KeyboardEvent): void => {
+        if ((event.key == 'z' || event.key == "Z") && this.keyPresses['Control']) {
+            this.app.getCurrentTable().createActionArea(
+                this.app.context.cursor.x,
+                this.app.context.cursor.y,
+                this.app.context.cursor.x_size,
+                this.app.context.cursor.y_size,
+        );
         }
     }
 

@@ -1,5 +1,6 @@
 import type { Application } from "./Application";
 import type { Script, TableData, PasteBuffer, Cells } from "./Types";
+import { ActionArea } from "./Crawler";
 
 
 export class Table {
@@ -9,7 +10,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
-    walkers: object
+    action_areas: { [key: string]: ActionArea }
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
@@ -17,15 +18,28 @@ export class Table {
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
-            this.walkers = {};
+            this.action_areas = {};
         } else {
             this.cells = {};
-            this.walkers = {};
+            this.action_areas = {};
             this.script = {'committed_code': '', 'temporary_code': ''};
             this.theme = 'dark';
             this.variables = {};
         }
         this.pasteBuffer = {};
+    }
+
+    createActionArea = (x: number, y: number, x_size: number, y_size: number) => {
+
+        function _generateId(x: number, y: number, x_size: number, y_size: number) {
+            return `${x},${y},${x_size},${y_size}`;
+        }
+
+        // Check if action_ares already exists at this location
+        if (!this.action_areas.hasOwnProperty(_generateId(x,y,x_size,y_size))) {
+            let area = new ActionArea(this, x, y, x_size, y_size);
+            this.action_areas[_generateId(x,y,x_size,y_size)] = area;
+        }
     }
 
     resetPasteBuffer = () => this.pasteBuffer = {}

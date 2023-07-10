@@ -2,6 +2,23 @@ import type { Camera } from './Camera.js';
 import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
 
+export interface Crawler {
+    parent: Zone;
+    x: number;
+    y: number;
+}
+
+export interface Zone {
+    parent: Table;
+    x: number;
+    y: number;
+    y_zize: number;
+    x_size: number;
+    iterator: number;
+    unique_id: string;
+    children: Crawler[]
+}
+
 export interface Script {
     'temporary_code': string;
     'committed_code': string;
