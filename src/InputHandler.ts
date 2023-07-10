@@ -1,5 +1,5 @@
 import type { Application } from './Application.js';
-import { tryEvaluate } from './Evaluator.js';
+import { evaluateCommand, tryEvaluate } from './Evaluator.js';
 
 export class InputHandler {
     NormalKeyFunctions: Array<Function>;
@@ -113,7 +113,6 @@ export class InputHandler {
 
     submitCodeHandler = (event: KeyboardEvent):void => {
         if (event.key == 'Enter' && this.keyPresses['Control']) {
-            console.log('Submitting code...')
             let editor = document.getElementsByClassName('cm-editor')[0] as HTMLElement;
             if (editor) {
                 editor.style.animation  = "blinker 0.1s linear" ;
@@ -152,7 +151,7 @@ export class InputHandler {
             }
 
             // Actual logic
-            this.app.command.parse(this.current_command);
+            evaluateCommand(this.app, this.current_command);
             this.command_history.push(this.current_command);
             this.textEditingMode = !this.textEditingMode;
             this.current_command = '';
@@ -184,6 +183,14 @@ export class InputHandler {
         }
     }
 
+    pasteFromBeyondHandler = (event:KeyboardEvent):void => {
+        if (event.key == 'b' && (this.keyPresses['Control'] || this.keyPresses['Meta'])) {
+            this.app.context.cursor.resetCursorSize();
+            event.preventDefault();
+            this.app.context.tables[this.app.context.current_table].pasteFromBeyond();
+        }
+    }
+    
     editingModeKeysHandler = ():void => {
         if (this.app.output_type == 'text') {
             let prompt = document.getElementById('prompt') as HTMLInputElement;
@@ -227,7 +234,7 @@ export class InputHandler {
     }
 
     charInputHandler = (event:KeyboardEvent):void => {
-        if (event.key.length == 1 && !this.keyPresses['Control']) {
+        if (event.key.length == 1 && (!this.keyPresses['Control'] || !this.keyPresses['Meta'])) {
             if (event.key.match(/^[\x21-\x7E]$/)) {
                 if (this.charInputFilter(event)) {
                     this.app.context.tables[this.app.context.current_table].addCell(

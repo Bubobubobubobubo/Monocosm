@@ -4,15 +4,14 @@ import { Cursor } from './Cursor.js';
 import { Table } from './Table.js';
 import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
-import { Command } from './Command.js';
 import { MidiOut } from './IO/Midi.js';
 import { Context, SavedContext, OutputType } from './Types.js';
+import { UserAPI } from './UserAPI.js';
 
 export class Application {
 
-    audio_context: AudioContext;
     clock: Clock
-    command: Command;
+    userAPI: UserAPI;
     midi: MidiOut;
     context!: Context;
     input: InputHandler;
@@ -23,11 +22,10 @@ export class Application {
     gridMode: 'grid' | 'local' | 'global' = 'grid';
     
     constructor(public output_type: OutputType) {
-        this.audio_context = new AudioContext();
         this.clock = new Clock(this);
-        this.midi = new MidiOut();
         this.input = new InputHandler(this);
-        this.command = new Command(this);
+        this.userAPI = new UserAPI(this);
+        this.midi = new MidiOut();
         this.redraw = true;
         this.last_grid = null;
         this.interface = null;
@@ -38,7 +36,7 @@ export class Application {
         if (this.output_type == 'text') {
             this.interface = new TextInterface(this);
             this.context = {
-                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: '', dirty: true},
+                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: ''},
                 'camera': new Camera(this,
                     this.interface.howManyCharactersFitWidth(),
                     this.interface.howManyCharactersFitHeight()
@@ -115,10 +113,6 @@ export class Application {
         }
     }
 
-    startAudioContext = () => {
-        this.audio_context.resume();
-    }
-
     // Get context from local storage and hash it to url parameter
     getHash = (): string => {
         return btoa(JSON.stringify(this.save()));
@@ -131,6 +125,14 @@ export class Application {
 
     getCurrentTable = () => {
         return this.context.tables[this.context.current_table];
+    }
+
+    getTable = (name: string): Table | boolean  => {
+        if (name in this.context.tables) {
+            return this.context.tables[name];
+        } else {
+            return false;
+        }
     }
 
     getVisibleZone = () => {
