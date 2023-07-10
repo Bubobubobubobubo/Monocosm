@@ -31,14 +31,15 @@ export class Table {
 
     createActionArea = (x: number, y: number, x_size: number, y_size: number) => {
 
-        function _generateId(x: number, y: number, x_size: number, y_size: number) {
-            return `${x},${y},${x_size},${y_size}`;
+        const _generateId = () => {
+            let how_many = Object.keys(this.action_areas).length;
+            return `${how_many}`;
         }
 
         // Check if action_ares already exists at this location
-        if (!this.action_areas.hasOwnProperty(_generateId(x,y,x_size,y_size))) {
+        if (!this.action_areas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
-            this.action_areas[_generateId(x,y,x_size,y_size)] = area;
+            this.action_areas[_generateId()] = area;
         }
     }
 
@@ -76,6 +77,17 @@ export class Table {
         }
         return false;
     }
+
+    nameOfAreaAt = (x: number, y: number): string => {
+        for (let key in this.action_areas) {
+            let area = this.action_areas[key];
+            if (this.coordinateInZone(x, y, area.x, area.y, area.x_size, area.y_size)) {
+                return key;
+            }
+        }
+        return "None"
+    }
+
 
     coordinateInZone = (x1: number, y1: number, x2: number, y2: number, x2_size: number, y2_size: number): boolean => {
         return x1 >= x2 && x1 <= x2 + x2_size && y1 >= y2 && y1 <= y2 + y2_size
