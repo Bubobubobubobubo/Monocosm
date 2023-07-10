@@ -10,7 +10,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
-    action_areas: { [key: string]: ActionArea }
+    actionAreas: { [key: string]: ActionArea }
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
@@ -18,10 +18,10 @@ export class Table {
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
-            this.action_areas = {};
+            this.actionAreas = {};
         } else {
             this.cells = {};
-            this.action_areas = {};
+            this.actionAreas = {};
             this.script = {'committed_code': '', 'temporary_code': ''};
             this.theme = 'dark';
             this.variables = {};
@@ -32,14 +32,14 @@ export class Table {
     createActionArea = (x: number, y: number, x_size: number, y_size: number) => {
 
         const _generateId = () => {
-            let how_many = Object.keys(this.action_areas).length;
+            let how_many = Object.keys(this.actionAreas).length;
             return `${how_many}`;
         }
 
         // Check if action_ares already exists at this location
-        if (!this.action_areas.hasOwnProperty(_generateId())) {
+        if (!this.actionAreas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
-            this.action_areas[_generateId()] = area;
+             this.actionAreas[_generateId()] = area;
         }
     }
 
@@ -69,8 +69,8 @@ export class Table {
 
     actionAreaAt = (x: number, y: number): boolean => {
         // Iterate over all action areas to check if one exists at this location
-        for (let key in this.action_areas) {
-            let area = this.action_areas[key];
+        for (let key in this.actionAreas) {
+            let area = this.actionAreas[key];
             if (this.coordinateInZone(x, y, area.x, area.y, area.x_size, area.y_size)) {
                 return true;
             }
@@ -79,8 +79,8 @@ export class Table {
     }
 
     nameOfAreaAt = (x: number, y: number): string => {
-        for (let key in this.action_areas) {
-            let area = this.action_areas[key];
+        for (let key in this.actionAreas) {
+            let area = this.actionAreas[key];
             if (this.coordinateInZone(x, y, area.x, area.y, area.x_size, area.y_size)) {
                 return key;
             }
@@ -90,7 +90,7 @@ export class Table {
 
 
     coordinateInZone = (x1: number, y1: number, x2: number, y2: number, x2_size: number, y2_size: number): boolean => {
-        return x1 >= x2 && x1 <= x2 + x2_size && y1 >= y2 && y1 <= y2 + y2_size
+        return (x1 >= x2 && x1 < x2 + x2_size && y1 >= y2 && y1 < y2 + y2_size);
     }
 
     getCell = (x: number, y: number) => {
