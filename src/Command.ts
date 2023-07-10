@@ -206,7 +206,7 @@ export class Command {
     }
 
     bpm = (bpm: string[]):void => {
-        this.app.clock.bpm = parseFloat(bpm[0]);
+        Tone.Transport.bpm.value = parseFloat(bpm[0]);
     }
 
     start = ():void => {
@@ -215,6 +215,6 @@ export class Command {
     }
 
     bigbang = ():void => {
-        this.app.clock.tick = 0;
+        Tone.Transport.ticks = 0;
     }
 }

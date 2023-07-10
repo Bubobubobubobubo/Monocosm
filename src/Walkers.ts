@@ -1,5 +1,4 @@
 interface Walker {
-    
     readonly x: number;
     readonly y: number;
     readonly x_size?: number;

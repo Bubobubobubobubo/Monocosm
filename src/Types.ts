@@ -5,7 +5,6 @@ import type { Table } from './Table.js';
 export interface Script {
     'temporary_code': string;
     'committed_code': string;
-
     'dirty': boolean;
 }
 

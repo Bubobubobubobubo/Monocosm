@@ -14,15 +14,6 @@ export class Clock {
         }, "64n")
     }
 
-    // Setters and getters
-    set setBpm(bpm: number) {
-        this.bpm = bpm;
-    }
-
-    get getBpm(): number {
-        return this.clock.bpm;
-    }
-
     // Public methods
     public toString(): string {
         return `BPM: ${Tone.Transport.bpm.value} | ${Tone.Transport.position}`
