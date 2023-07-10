@@ -4,7 +4,6 @@ import { Cursor } from './Cursor.js';
 import { Table } from './Table.js';
 import { InputHandler } from './InputHandler.js';
 import { TextInterface } from './TextInterface.js';
-import { Command } from './Command.js';
 import { MidiOut } from './IO/Midi.js';
 import { Context, SavedContext, OutputType } from './Types.js';
 import { UserAPI } from './UserAPI.js';
@@ -13,7 +12,6 @@ export class Application {
 
     clock: Clock
     userAPI: UserAPI;
-    command: Command;
     midi: MidiOut;
     context!: Context;
     input: InputHandler;
@@ -27,7 +25,6 @@ export class Application {
         this.clock = new Clock(this);
         this.input = new InputHandler(this);
         this.userAPI = new UserAPI(this);
-        this.command = new Command(this);
         this.midi = new MidiOut();
         this.redraw = true;
         this.last_grid = null;

@@ -1,5 +1,5 @@
 import type { Application } from './Application.js';
-import { tryEvaluate } from './Evaluator.js';
+import { evaluate, evaluateCommand, tryEvaluate } from './Evaluator.js';
 
 export class InputHandler {
     NormalKeyFunctions: Array<Function>;
@@ -153,7 +153,7 @@ export class InputHandler {
             }
 
             // Actual logic
-            this.app.command.parse(this.current_command);
+            evaluateCommand(this.app, this.current_command);
             this.command_history.push(this.current_command);
             this.textEditingMode = !this.textEditingMode;
             this.current_command = '';
