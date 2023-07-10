@@ -10,6 +10,7 @@ import { UserAPI } from './UserAPI.js';
 
 export class Application {
 
+    now: number;
     clock: Clock
     userAPI: UserAPI;
     midi: MidiOut;
@@ -22,6 +23,7 @@ export class Application {
     gridMode: 'grid' | 'local' | 'global' = 'grid';
     
     constructor(public output_type: OutputType) {
+        this.now = 0;
         this.clock = new Clock(this);
         this.input = new InputHandler(this);
         this.userAPI = new UserAPI(this);

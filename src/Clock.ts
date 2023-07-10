@@ -10,7 +10,8 @@ export class Clock {
         this.evaluations = 0;
         Tone.Transport.start();
         Tone.Transport.bpm.value = 120;
-        Tone.Transport.scheduleRepeat(() => {
+        Tone.Transport.scheduleRepeat((time) => {
+            this.app.now = Tone.now();
             evaluate(this.app, this.app.context.mainScript);
             this.evaluations++;
         }, "32n")

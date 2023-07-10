@@ -4,7 +4,8 @@ import { evaluate } from "./Evaluator";
 import { Table } from "./Table";
 import * as Tone from 'tone';
 
-const testSynth = new Tone.NoiseSynth().toDestination();
+// const testSynth = new Tone.NoiseSynth().toDestination();
+const testSynth = new Tone.PluckSynth().toDestination();
 
 // Themes from the CSS
 const themes: string[] = [
@@ -192,11 +193,8 @@ export class UserAPI {
         Tone.Transport.ticks = 0;
     }
 
-    bip = (note:string="C3", duration: string="16n"): void  => {
-        console.log('beeping like crazy')
-        Tone.Transport.schedule(function(time) {
-	        testSynth.triggerAttackRelease('32n', Tone.Transport.now() + 0.5, 0.5);
-        });
+    bip = (): void  => {
+        testSynth.triggerAttackRelease('C4', '1n', this.app.now)
     }
 
     sync = () => {

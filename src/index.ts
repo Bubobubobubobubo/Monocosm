@@ -52,9 +52,7 @@ function loop() {
     }
     // The clock should always move
     clock.textContent = application.clock.toString();
-
     window.requestAnimationFrame(loop);
-
 }
 
 // First frame
