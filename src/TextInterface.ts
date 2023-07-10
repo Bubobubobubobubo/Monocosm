@@ -217,7 +217,6 @@ export class TextInterface {
                         grid.appendChild(this.createActionAreaCell(cell,x,y));
                     }
                 }
-
             }
         }
         document.body.style.backgroundPositionX = -cursor.x*this.characterWidth + "px";

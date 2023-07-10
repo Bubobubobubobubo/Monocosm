@@ -8,6 +8,8 @@ let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
 let play_button: HTMLElement = document.getElementById("play") as HTMLElement;
 let zone: HTMLElement = document.getElementById("zone") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
+let action_area: HTMLElement = document.getElementById("actionarea") as HTMLElement;
+
 
 play_button.addEventListener("click", async () => {
     if (!application.running) {
@@ -32,6 +34,12 @@ window.onbeforeunload = function(): null {
 }
 function loop() {
     if(application.redraw) {
+        if (application.getCurrentTable().actionAreaAt(application.context.cursor.x, application.context.cursor.y)) {
+            action_area.textContent = application.getCurrentTable().nameOfAreaAt(
+                application.context.cursor.x, application.context.cursor.y);
+        } else {
+            action_area.textContent = "None"
+        }
         cursor.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
         const newContent = application.process();
