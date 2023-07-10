@@ -66,6 +66,21 @@ export class Table {
 
     existsAt = (x: number, y: number) => this.exists(this.generateID(x, y))
 
+    actionAreaAt = (x: number, y: number): boolean => {
+        // Iterate over all action areas to check if one exists at this location
+        for (let key in this.action_areas) {
+            let area = this.action_areas[key];
+            if (this.coordinateInZone(x, y, area.x, area.y, area.x_size, area.y_size)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    coordinateInZone = (x1: number, y1: number, x2: number, y2: number, x2_size: number, y2_size: number): boolean => {
+        return x1 >= x2 && x1 <= x2 + x2_size && y1 >= y2 && y1 <= y2 + y2_size
+    }
+
     getCell = (x: number, y: number) => {
         let id = this.generateID(x, y);
         if (!this.exists(id)) {

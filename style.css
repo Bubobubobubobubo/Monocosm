@@ -11,7 +11,6 @@
 
 }
 
-
 .theme-white {
     --primary:  white;
     --secondary: black;
@@ -153,6 +152,16 @@ span.inverted-cell {
     white-space: pre;
     position: absolute;
 }
+
+span.action-area-cell {
+    font-size: 20px;
+    line-height: 1em;
+    background-color: var(--tertiary);
+    color: var(--primary);
+    white-space: pre;
+    position: absolute;
+}
+
 
 span#cursor-cell {
     font-size: 20px;

@@ -133,6 +133,18 @@ export class TextInterface {
         return cell;
     }
 
+    createActionAreaCell = (char: string, x: number, y: number): HTMLElement => {
+        let cell = document.createElement('span');
+        cell.className = 'action-area-cell';
+        cell.innerText = char;
+        // TODO: Test translate instead of absolute positioning
+        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
+        cell.style.top = (y * this.characterHeight) + 'px';
+        cell.style.left = (x * this.characterWidth) + 'px';
+        return cell;
+    }
+
+
     createCursor = (x: number, y: number): HTMLElement => {
         let cell = document.createElement('span');
         cell.contentEditable = 'true';
@@ -195,6 +207,12 @@ export class TextInterface {
                 } else if(cursor.isUnder(vx,vy)) {
                     grid.appendChild(this.createCursor(x,y));
                 }
+
+                // Drawing zones
+                if(currentTable.actionAreaAt(vx, vy)) {
+                    grid.appendChild(this.createActionAreaCell(currentTable.getCell(vx,vy),x,y));
+                }
+
             }
         }
         document.body.style.backgroundPositionX = -cursor.x*this.characterWidth + "px";
