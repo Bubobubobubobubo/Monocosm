@@ -178,6 +178,14 @@ export class TextInterface {
     loadTheme = (theme: string) => {
         document.documentElement.className = "theme-"+theme;
     }
+    
+    loadUniverse = (name: string) => {
+        if (name in this.app.context.tables) { 
+            this.app.context.current_table = name;
+            this.app.interface?.loadTheme(this.app.context.tables[name].theme);
+            this.app.interface?.loadScript(this.app.context.tables[name].script)
+        }
+    }
 
     setTheme = (theme: string) => {
         this.app.context.tables[this.app.context.current_table].theme = theme;

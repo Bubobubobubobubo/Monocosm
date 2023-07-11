@@ -4,7 +4,6 @@ import { ActionArea } from "./Crawler";
 
 
 export class Table {
-
     cells: Cells
     script: Script
     theme: string

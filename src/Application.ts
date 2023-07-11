@@ -54,15 +54,19 @@ export class Application {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('context')) {
                 // Try to parse the hash using parseHash
-                const url_context = this.parseHash(urlParams.get('context') as string);
-                this.loadFromSavedContext(url_context);
+                this.loadContextFromUrl(urlParams);
             } else if (localStorage.getItem('context') !== null) {
-                // Resume from localStorage data
+                 // Resume from localStorage data
                 const saved_context: SavedContext = JSON.parse(
                     localStorage.getItem('context') as string
                 );
                 this.loadFromSavedContext(saved_context);
             }
+
+            if(urlParams.has('universe')) {
+                this.loadUniverseFromUrl(urlParams);
+            }
+
         } else {
             throw new Error('Output type not supported');
         }
@@ -72,8 +76,31 @@ export class Application {
         this.interface?.loadScript(this.context.mainScript, 'global');
     }
 
+    loadUniverseFromUrl = (urlParams: URLSearchParams) => {
+        let universeHash = urlParams.get('universe') as string;
+        // Split to name and content. Name is separated with "-"
+        let [universeName, universeContent] = universeHash.split('-');
+
+        // Decode the content
+        let table = this.parseHash(universeContent);
+        this.context.tables[universeName] = new Table(this, table);
+        this.context.current_table = universeName;
+        this.interface?.loadTheme(this.getCurrentTable().theme);
+        this.emptyUrl();
+    }
+
+    loadContextFromUrl = (urlParams: URLSearchParams) => {
+        const url_context = this.parseHash(urlParams.get('context') as string);
+        this.loadFromSavedContext(url_context);
+        this.emptyUrl();
+    }
+
+    emptyUrl = () => {
+        window.history.replaceState({}, document.title, "/");
+    }
+
     loadFromSavedContext = (saved_context: SavedContext) => {
-        this.context.cursor.createFromStoredContext(saved_context.cursor);
+         this.context.cursor.createFromStoredContext(saved_context.cursor);
 
         // Load tables from saved context
         for (const [key, value] of Object.entries(saved_context.tables)) {
@@ -120,6 +147,13 @@ export class Application {
         return btoa(JSON.stringify(this.save()));
     }
 
+    // Get current table as hash
+    getTableHash = (): string => {
+        // Get Object.entries from table
+        const tableEntries = this.getCurrentTable().data;
+        return btoa(JSON.stringify(tableEntries));
+    }
+
     // Parse context from hashed string
     parseHash = (hash: string) => {
         return JSON.parse(atob(hash));
@@ -129,6 +163,22 @@ export class Application {
         return this.context.tables[this.context.current_table];
     }
 
+    getCurrentUniverseName = () => {
+        return this.context.current_table;
+    }
+
+    getUniverseIndex = () => {
+        // Calculate index for the current universe from the table list
+        let table_list = Object.keys(this.context.tables);
+        return table_list.indexOf(this.context.current_table);
+    }
+
+    getTableWithIndex = (index: number) => {
+        // Calculate index for the current universe from the table list
+        let table_list = Object.keys(this.context.tables);
+        return table_list[index - 1];
+    }
+    
     getTable = (name: string): Table | boolean  => {
         if (name in this.context.tables) {
             return this.context.tables[name];

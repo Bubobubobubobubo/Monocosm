@@ -72,12 +72,20 @@ export class UserAPI {
     //     return themes.includes(theme_name)
     // }
 
-    private _getUniverseTheme = (theme? :string):string => {
+    private _getUniverseTheme = (name: string, theme: string): string => {
         // If part of the universe name is same as one of the themes, find first match
-        if (theme) {
+        if(themes && themes.includes(theme)) {
             return theme;
+        } else if(themes.includes(name)) {
+            return name;
         } else {
-            return themes[Math.floor(Math.random() * themes.length)];
+            // Find first partial match from themes array
+            const partialName = themes.find((t) => name.includes(t));
+            if (partialName) {
+                return partialName;
+            } else {
+                return themes[Math.floor(Math.random() * themes.length)];
+            }
         }
     }
 
@@ -89,7 +97,9 @@ export class UserAPI {
         } else {
             this.app.context.tables[name] = new Table(this.app);
             this.app.context.current_table = name;
-            this.app.interface?.loadTheme(this._getUniverseTheme(theme));
+            const themeName = this._getUniverseTheme(name, theme);
+            this.app.context.tables[name].theme = themeName;
+            this.app.interface?.loadTheme(themeName);
             this.app.interface?.loadScript(this.app.context.tables[name].script)
         }
     }
@@ -154,11 +164,21 @@ export class UserAPI {
         );
     }
 
-    // Share context to url paramater
-    share = ():void => {
+    // Dump context to url paramater
+    dump = ():void => {
         const hash_context = this.app.getHash();
         const url = new URL(window.location.href);
         url.searchParams.set('context', hash_context);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    // Share current universe
+    share = ():void => {
+        // Get current table
+        const hashed_table = this.app.getTableHash();
+        const url = new URL(window.location.href);
+        console.log(hashed_table);
+        url.searchParams.set('universe', this.app.getCurrentUniverseName()+"-"+hashed_table);
         window.history.replaceState({}, '', url.toString());
     }
 

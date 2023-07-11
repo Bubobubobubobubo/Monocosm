@@ -37,6 +37,8 @@ export class InputHandler {
             this.charInputHandler, 
             // Creating and managing zones
             this.createZoneHandler,
+            // Scroll tables with page up and page down
+            this.pageDownHandler, this.pageUpHandler,
         ];
         this.EditingKeyFunctions = [
             this.editingModeKeysHandler,
@@ -296,4 +298,40 @@ export class InputHandler {
             this.app.context.cursor.x += 1;
         }
     }
+
+    pageUpHandler = (event:KeyboardEvent):void => {
+        if (event.key == 'PageUp') {
+            console.log("pageUpHandler");
+            // Jump to next universe
+            const tables = this.app.context.tables;
+            // Find index of current table
+            const universeIndex = this.app.getUniverseIndex();
+            // Enumerate tables object keys
+            const tableKeys = Object.keys(tables);
+             // Get next table key, wrap to 0 if at end
+            const nextTableKey = tableKeys[universeIndex + 1] ? universeIndex+1 : 0;
+            // Get next universe name
+            const universeName = tableKeys[nextTableKey];
+            // Load next universe
+            this.app.interface?.loadUniverse(universeName);
+        }
+    }
+
+    pageDownHandler = (event:KeyboardEvent):void => {
+        if (event.key == 'PageDown') {
+            // Jump to previous universe
+            const tables = this.app.context.tables;
+            // Find index of current table
+            const universeIndex = this.app.getUniverseIndex();
+            // Enumerate tables object keys
+            const tableKeys = Object.keys(tables);
+            // Get previous table key, wrap to end if at 0
+            const previousTableKey = tableKeys[universeIndex - 1] ? universeIndex-1 : tableKeys.length-1;
+            // Get previous universe name
+            const universeName = tableKeys[previousTableKey];
+            // Load previous universe
+            this.app.interface?.loadUniverse(universeName);
+        }
+    }
+
 }
