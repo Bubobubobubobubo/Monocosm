@@ -35,6 +35,7 @@
     "@errozero/beatstepper": "^1.0.7",
     "codemirror": "^6.0.1",
     "tone": "^14.7.77",
+    "worker-timers": "^7.0.73",
     "zyklus": "^0.1.4"
   }
 }

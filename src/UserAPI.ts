@@ -2,10 +2,6 @@ import { Application } from "./Application";
 import { Script } from "./Types";
 import { evaluate } from "./Evaluator";
 import { Table } from "./Table";
-import * as Tone from 'tone';
-
-// const testSynth = new Tone.NoiseSynth().toDestination();
-const testSynth = new Tone.PluckSynth().toDestination();
 
 // Themes from the CSS
 const themes: string[] = [
@@ -27,18 +23,14 @@ export class UserAPI {
         this.app = app;
     }
 
-    log = (message: string):void => {
-        console.log(message);
-    }
+    log = console.log;
 
     bang = (universe: string) => {
-        Tone.Transport.schedule(() => {
-            let table = this.app.getTable(universe);
-            if (table) {
-                table = table as Table;
-                evaluate(this.app, table.script as Script);
-            }
-        }, Tone.Transport.position + 0);
+        let table = this.app.getTable(universe);
+        if (table) {
+            table = table as Table;
+            evaluate(this.app, table.script as Script);
+        }
     }
     b = this.bang;
 
@@ -191,67 +183,73 @@ export class UserAPI {
     }
 
     bpm = (bpm: string[]):void => {
-        Tone.Transport.bpm.value = parseFloat(bpm[0]);
     }
 
     start = ():void => {
         // Start the scheduling engine
-        Tone.start();
+        if (this.app.audio_context) {
+            this.app.audio_context.resume();
+        } else {
+            this.app.startTime()
+        }
     }
 
     pause = ():void => {
         // Pause the scheduling engine
-        Tone.Transport.pause();
     }
 
     resume = ( ):void => {
         // Resume the scheduling engine
-        Tone.Transport.start();
     }
 
     bigbang = ():void => {
-        Tone.Transport.ticks = 0;
     }
 
     bip = (): void  => {
-        testSynth.triggerAttackRelease('C4', '1n', this.app.now)
     }
 
     sync = () => {
-        this.app.clock.evaluations = 0;
+        if (this.app.clock) this.app.clock.evaluations = 0;
         for (const table in this.app.context.tables) {
             this.app.context.tables[table].script.evaluations = 0; 
         }
     }
 
     every = (evaluations: number): boolean => {
-        return this.app.clock.evaluations % evaluations == 0;
+        if (this.app.clock)
+            return this.app.clock.evaluations % evaluations == 0;
+        return false;
     }
     e = this.every;
-
 
     note = (note: number, velocity: number, channel: number):void => {
         this.app.midi.note(note, velocity, channel)
     }
 
+
     // Important getters!
 
     get tick():number {
-        return Tone.Transport.ticks;
+        return 0
     }
 
     get beat():number {
-        return parseInt(Tone.Transport.position.toString().split(':')[1]);
+        return 0
     }
 
     get bar():number {
-        return parseInt(Tone.Transport.position.toString().split(':')[0]);
+        return 0
     }
 
     get x():number { return this.app.context.cursor.x; }
     get y():number { return this.app.context.cursor.x; }
-    get i():number { return this.app.clock.evaluations; }
+    get i():number { 
+        if (this.app.clock) {
+            return this.app.clock.evaluations; 
+        } else {
+            return 0
+        }
+    }
     get _():number { return this.app.getCurrentTable().script.evaluations; }
 
-    log = console.log;
 }
