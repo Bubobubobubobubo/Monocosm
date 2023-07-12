@@ -17,18 +17,21 @@ export class Application {
     context!: Context;
     input: InputHandler;
     redraw: boolean;
+    replaceGrid: boolean;
     last_grid: DocumentFragment | null;
-    interface: TextInterface | null;
+    interface: TextInterface;
     running: boolean = false;
     gridMode: 'grid' | 'local' | 'global' = 'grid';
+    zone: HTMLElement = document.getElementById("zone") as HTMLElement;
     
     constructor(public output_type: OutputType) {
         this.input = new InputHandler(this);
         this.userAPI = new UserAPI(this);
         this.midi = new MidiOut();
         this.redraw = true;
+        this.replaceGrid = true;
         this.last_grid = null;
-        this.interface = null;
+        this.interface = undefined as unknown as TextInterface;
         this.init()
     }
 
@@ -116,10 +119,11 @@ export class Application {
     }
 
     process = (): DocumentFragment | void | null => {
-        if (this.gridMode == 'grid') {
-            if (this.interface) return this.interface.createGrid();
+       /* if (this.gridMode == 'grid') {
+            if (this.interface) return this.interface.createWholeGrid();
             else throw new Error("Can't process without interface");
-        } else if (this.gridMode == 'local') {
+        } else */ 
+        if (this.gridMode == 'local') {
             if (this.interface) return this.interface.createEditor('local');
             else throw new Error("Can't process without interface");
         } else {

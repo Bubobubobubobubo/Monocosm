@@ -115,10 +115,10 @@ export class TextInterface {
         let cell = document.createElement('span');
         cell.className = 'cell';
         cell.innerText = char;
-        // TODO: Test translate instead of absolute positioning
-        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
-        cell.style.top = (y * this.characterHeight) + 'px';
-        cell.style.left = (x * this.characterWidth) + 'px';
+        cell.id = x + "," + y;
+        const offset_x = x * this.characterWidth + this.charactersForWidth/2 * this.characterWidth;
+        const offset_y = y * this.characterHeight + this.charactersForHeight/2 * this.characterHeight;
+        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
         return cell;
     }
 
@@ -126,10 +126,9 @@ export class TextInterface {
         let cell = document.createElement('span');
         cell.className = 'inverted-cell';
         cell.innerText = char;
-        // TODO: Test translate instead of absolute positioning
-        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
-        cell.style.top = (y * this.characterHeight) + 'px';
-        cell.style.left = (x * this.characterWidth) + 'px';
+        const offset_x = x * this.characterWidth + this.charactersForWidth/2 * this.characterWidth;
+        const offset_y = y * this.characterHeight + this.charactersForHeight/2 * this.characterHeight;
+        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
         return cell;
     }
 
@@ -137,29 +136,45 @@ export class TextInterface {
         let cell = document.createElement('span');
         cell.className = 'action-area-cell';
         cell.innerText = char;
-        // TODO: Test translate instead of absolute positioning
-        // cell.style.transform = 'translate(' + (x * this.characterWidth) + 'px,' + (y * this.characterHeight) + 'px)';
-        cell.style.top = (y * this.characterHeight) + 'px';
-        cell.style.left = (x * this.characterWidth) + 'px';
+        const offset_x = x * this.characterWidth + this.charactersForWidth/2 * this.characterWidth;
+        const offset_y = y * this.characterHeight + this.charactersForHeight/2 * this.characterHeight;
+        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
         return cell;
     }
 
-
-    createCursor = (x: number, y: number): HTMLElement => {
-        let cell = document.createElement('span');
+    createCursor = (): HTMLElement => {
+        let cell = document.createElement('div');
         cell.contentEditable = 'true';
         cell.id = 'cursor-cell';
         cell.innerText = ' ';
-        cell.style.top = (y * this.characterHeight) + 'px';
-        cell.style.left = (x * this.characterWidth) + 'px';
+        //const x = this.app.context.cursor.getX();
+        //const y = this.app.context.cursor.getY();
+        //const offset_x = x  + this.charactersForWidth/2 * this.characterWidth;
+        //const offset_y = y  + this.charactersForHeight/2 * this.characterHeight;
+
+        // transform always center of the screen calc(50vh) and calc(50vw)
+        cell.style.transform = 'translate(calc(50vw - ' + this.characterWidth/6 + 'px), calc(50vh - ' + this.characterHeight/6 + 'px))';
+
         // Add a listener for pasting
         cell.addEventListener('paste', (e) => {
             this.pasteFromClipboard = e.clipboardData?.getData('text/plain');
             this.app.getCurrentTable().paste();
             e.preventDefault();
-            this.app.redraw = true;
+            //this.app.redraw = true;
         });
         return cell;
+    }
+
+    appendCell = (content: string, x: number, y: number): void => {
+        let cell = this.createCell(content, x, y);
+        // If span with the same id exists replace it else append it
+        let existingCell = document.getElementById(cell.id);
+        if (existingCell) {
+            existingCell.replaceWith(cell);
+        }
+        else {
+            this.app.zone.appendChild(cell);
+        }
     }
 
     focusCursor = () => {
@@ -192,6 +207,42 @@ export class TextInterface {
         this.app.interface?.loadTheme(theme);
     }
 
+    createWholeGrid = (): DocumentFragment => {
+        // Get all cells
+        const currentTable = this.app.getCurrentTable();
+        let grid = document.createDocumentFragment();
+        const cells = currentTable.cells;
+
+        // Loop all items in object
+        for (let key in cells) {
+            const coord = key.split(',');
+            let cell = this.createCell(cells[key], parseInt(coord[0]), parseInt(coord[1]));
+            // TODO: UNDER SELECTION?
+            // TODO: ACTION AREA?
+            grid.appendChild(cell);
+        }
+
+        this.app.replaceGrid = false
+        return grid;
+
+    }
+
+    appendCursor = () => {
+        document.appendChild(this.createCursor());
+    }
+
+    moveGrid = () => {
+        const cursor = this.app.getCursor();
+        // Offset cursor x and y with window.innerWidth and window.innerHeight
+
+        const x = -cursor.getX() * this.characterWidth;
+        const y = -cursor.getY() * this.characterHeight;
+
+        this.app.zone.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+        document.body.style.backgroundPositionX = x + "px";
+        document.body.style.backgroundPositionY = y + "px";
+    }
+
     createGrid = (): DocumentFragment | null => {
         if (!this.app.redraw) { return this.app.last_grid; }
         const currentTable = this.app.getCurrentTable();
@@ -212,9 +263,9 @@ export class TextInterface {
                     } else {
                         grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y));
                     }
-                } else if(cursor.isUnder(vx,vy)) {
+                } /* else if(cursor.isUnder(vx,vy)) {
                     grid.appendChild(this.createCursor(x,y));
-                }
+                } */
 
                 // Drawing zones
                 if(currentTable.actionAreaAt(vx, vy)) {
@@ -227,8 +278,12 @@ export class TextInterface {
                 }
             }
         }
-        document.body.style.backgroundPositionX = -cursor.x*this.characterWidth + "px";
-        document.body.style.backgroundPositionY = -cursor.y*this.characterHeight + "px";
+
+        // Add the cursor
+        grid.appendChild(this.createCursor());
+
+        document.body.style.backgroundPositionX = -cursor.getX()*this.characterWidth + "px";
+        document.body.style.backgroundPositionY = -cursor.getY()*this.characterHeight + "px";
         this.app.last_grid = grid;
         this.app.redraw = false;
         return grid;
@@ -239,10 +294,9 @@ export class TextInterface {
         let selectedEditor = type === 'local' ? this.editor : this.globalEditor;
 
         this.app.input.isCapturingInput = false;
-        let zone = document.getElementById('zone');
 
         // Check if the zone first element is an HTML span
-        if (zone?.firstElementChild?.tagName === 'SPAN') {
+        if (this.app.zone.firstElementChild?.tagName === 'SPAN') {
             let editor = document.createDocumentFragment();
             editor.appendChild(selectedEditor.dom);
 

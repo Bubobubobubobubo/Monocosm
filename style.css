@@ -103,9 +103,7 @@
 }
 
 body {
-    margin: 5pt;
-    margin-right: 5pt;
-    margin-bottom: 5pt;
+    margin: 0;
     padding: 0;
     overflow: hidden;
     font-family: "jgs7", "unifont", "unifont-upper";
@@ -113,6 +111,12 @@ body {
     letter-spacing: normal;
     background-color: var(--primary);
     background-image: radial-gradient(var(--secondary) 1px, transparent 0);
+}
+
+code {
+    margin: 0;
+    padding: 0;
+    position: absolute;
 }
 
 span {
@@ -163,7 +167,9 @@ span.action-area-cell {
 }
 
 
-span#cursor-cell {
+div#cursor-cell {
+    margin: 0;
+    padding: 0;
     font-size: 20px;
     line-height: 1em;
     background-color: var(--secondary);

@@ -9,7 +9,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
-    action_areas: { [key: string]: ActionArea }
+    actionAreas: { [key: string]: ActionArea }
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
@@ -17,10 +17,10 @@ export class Table {
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
-            this.action_areas = {};
+            this.actionAreas = {};
         } else {
             this.cells = {};
-            this.action_areas = {};
+            this.actionAreas = {};
             this.script = {'committed_code': '', 'temporary_code': '', evaluations: 0};
             this.theme = 'dark';
             this.variables = {};
@@ -31,14 +31,14 @@ export class Table {
     createActionArea = (x: number, y: number, x_size: number, y_size: number) => {
 
         const _generateId = () => {
-            let how_many = Object.keys(this.action_areas).length;
+            let how_many = Object.keys(this.actionAreas).length;
             return `${how_many}`;
         }
 
         // Check if action_ares already exists at this location
-        if (!this.action_areas.hasOwnProperty(_generateId())) {
+        if (!this.actionAreas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
-            this.action_areas[_generateId()] = area;
+            this.actionAreas[_generateId()] = area;
         }
     }
 
@@ -53,14 +53,20 @@ export class Table {
         }
     }
 
-    addCell = (x: number, y: number, char: string) => {
+    addCell = (x: number, y: number, char: string): string => {
         let id = this.generateID(x, y)
         this.cells[id] = char;
+        return id;
     }
 
     clear = () => this.cells = {}
 
     generateID = (x: number, y: number) => `${x},${y}`
+
+    idToCoordinates = (id: string) => {
+        let [x, y] = id.split(',');
+        return { x: parseInt(x), y: parseInt(y) };
+    }
 
     exists = (id: string) => this.cells.hasOwnProperty(id)
 
@@ -101,6 +107,14 @@ export class Table {
         }
     }
 
+    getCellWithId = (id: string) => {
+        if(!this.cells[id]) {
+            return '';
+        } else {
+            return this.cells[id];
+        }
+    }
+
     removeCell = (x: number, y: number) => {
         let id = this.generateID(x, y);
         if (this.exists(id)) {
@@ -112,14 +126,19 @@ export class Table {
 
         // Update pasteBuffer
         this.pasteBuffer = this.pasteBufferFromClipboard();
+        let x = this.app.context.cursor.getX();
+        let y = this.app.context.cursor.getY();
+        let x_size = this.app.context.cursor.getXSize();
+        let y_size = this.app.context.cursor.getYSize();
 
-        let { x, y } = this.app.context.cursor;
-        let { x_size , y_size } = this.app.context.cursor.size;
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {
                 let id = this.generateID(i, j);
                 if (this.pasteBuffer.hasOwnProperty(id) && this.pasteBuffer[id] !== '') {
-                    this.addCell(x + j, y + i, this.pasteBuffer[id]);
+                    const px = x + j
+                    const py = y + i
+                    const cellId = this.addCell(px, py, this.pasteBuffer[id]);
+                    this.app.interface.appendCell(this.pasteBuffer[id], px, py, cellId);
                 }
             }
         }
@@ -173,8 +192,10 @@ export class Table {
     }
 
     copyUnderCursor = () => {
-        let { x, y } = this.app.context.cursor;
-        let { x_size , y_size } = this.app.context.cursor.size;
+        let x = this.app.context.cursor.getX();
+        let y = this.app.context.cursor.getY();
+        let x_size = this.app.context.cursor.getXSize();
+        let y_size = this.app.context.cursor.getYSize();
         let string = '';
         for (let i = 0; i < y_size ; i++) {
             for (let j = 0; j < x_size ; j++) {

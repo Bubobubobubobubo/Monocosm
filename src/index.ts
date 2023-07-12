@@ -3,12 +3,12 @@ import type { SavedContext } from './Types.js';
 let INIT: boolean = false;
 
 let application: Application = new Application('text');
-let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
+let cursorLocation: HTMLElement = document.getElementById("cursor-location") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
 let play_button: HTMLElement = document.getElementById("play") as HTMLElement;
-let zone: HTMLElement = document.getElementById("zone") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
 let action_area: HTMLElement = document.getElementById("actionarea") as HTMLElement;
+let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
 
 play_button.addEventListener("click", function(){
     play_button.textContent = application.running ? "⏵" : "⏸" ;
@@ -34,21 +34,28 @@ window.onbeforeunload = function(): null {
 
 function loop() {
     if(application.redraw) {
-        if (application.getCurrentTable().actionAreaAt(application.context.cursor.x, application.context.cursor.y)) {
+        if (application.getCurrentTable().actionAreaAt(application.context.cursor.getX(), application.context.cursor.getY())) {
             action_area.textContent = application.getCurrentTable().nameOfAreaAt(
-                application.context.cursor.x, application.context.cursor.y);
+                application.context.cursor.getX(), application.context.cursor.getY());
         } else {
             action_area.textContent = "None"
         }
-        cursor.textContent = application.context.cursor.toString();
+        cursorLocation.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
-        const newContent = application.process();
-        if (newContent) {
-            zone.replaceChildren(newContent);
+        //const newContent = application.process();
+        //if (newContent) {
+            //application.zone.replaceChildren(newContent);
             // Focus cursor if in grid mode to enable paste
-            if(application.gridMode == 'grid') application.interface?.focusCursor();
-        }
+        //    if(application.gridMode == 'grid') application.interface?.focusCursor();
+        //}
+       
     }
+    
+    if(application.replaceGrid) {
+        application.zone.replaceChildren(application.interface!.createWholeGrid());
+        application.interface.moveGrid();
+    }
+
     // The clock should always move
     if (application.clock !== null) {
         clock.textContent = application.clock.toString();
@@ -56,5 +63,11 @@ function loop() {
     window.requestAnimationFrame(loop);
 }
 
+function init() {       
+    cursor.replaceWith(application.interface!.createCursor());
+}
+
+init();
+
 // First frame
-loop()
+loop();

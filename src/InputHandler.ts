@@ -97,10 +97,10 @@ export class InputHandler {
     createZoneHandler = (event: KeyboardEvent): void => {
         if ((event.key == 'z' || event.key == "Z") && this.keyPresses['Control']) {
             this.app.getCurrentTable().createActionArea(
-                this.app.context.cursor.x,
-                this.app.context.cursor.y,
-                this.app.context.cursor.x_size,
-                this.app.context.cursor.y_size,
+                this.app.context.cursor.getX(),
+                this.app.context.cursor.getY(),
+                this.app.context.cursor.getXSize(),
+                this.app.context.cursor.getYSize(),
         );
         }
     }
@@ -209,30 +209,31 @@ export class InputHandler {
     spaceKeyHandler = (event:KeyboardEvent):void => {
         if (event.key == ' ') {
             this.app.context.tables[this.app.context.current_table].removeCell(
-                this.app.context.cursor.x, this.app.context.cursor.y);
-            this.app.context.cursor.x += 1;
+                this.app.context.cursor.getX(), this.app.context.cursor.getY());
+                this.app.context.cursor.incrementX();
         }
     }
 
     enterKeyHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
-            this.app.context.cursor.y += 1;
-            this.app.context.cursor.x -= 1;
+            // cursor.getY() += 1; cursor.getX() -= 1;
+            this.app.context.cursor.incrementXY(-1, 1);
+
         }
     }
 
     backSpaceHandler = (event:KeyboardEvent):void => {
         if (event.key === "Backspace") {
-            if (this.app.context.cursor.x_size == 1 && this.app.context.cursor.y_size == 1) {
+            if (this.app.context.cursor.getXSize() == 1 && this.app.context.cursor.getYSize() == 1) {
                 this.app.context.tables[this.app.context.current_table].removeCell(
-                    this.app.context.cursor.x, this.app.context.cursor.y);
-                this.app.context.cursor.x -= 1;
+                    this.app.context.cursor.getX(), this.app.context.cursor.getY());
+                this.app.context.cursor.incrementX(-1);
             } else {
                 this.app.context.tables[this.app.context.current_table].removeZone(
-                    this.app.context.cursor.x, this.app.context.cursor.y,
-                    this.app.context.cursor.x_size, this.app.context.cursor.y_size
+                    this.app.context.cursor.getX(), this.app.context.cursor.getY(),
+                    this.app.context.cursor.getXSize(), this.app.context.cursor.getYSize()
                 )
-                this.app.context.cursor.x -= 1;
+                this.app.context.cursor.incrementX(-1);
             }
         }
     }
@@ -247,9 +248,10 @@ export class InputHandler {
              if (event.key.match(/^[\x21-\x7E]$/)) {
                 if (this.charInputFilter(event)) {
                     this.app.context.tables[this.app.context.current_table].addCell(
-                        this.app.context.cursor.x, this.app.context.cursor.y, event.key
+                        this.app.context.cursor.getX(), this.app.context.cursor.getY(), event.key
                     );
-                    this.app.context.cursor.x += 1;
+                    this.app.interface.appendCell(event.key, this.app.context.cursor.getX(), this.app.context.cursor.getY());
+                    this.app.context.cursor.incrementX();
                 }
             }
         }
@@ -257,51 +259,50 @@ export class InputHandler {
 
     keyDownHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowDown' && this.keyPresses['Shift']) {
-            this.app.context.cursor.y += 5;
+            this.app.context.cursor.incrementY(5);
         } else if (event.key == 'ArrowDown' && this.keyPresses['Control']) {
-            this.app.context.cursor.y_size += 1;
+            this.app.context.cursor.incrementYSize();
         } else if (event.key == 'ArrowDown') {
-            this.app.context.cursor.y += 1;
+            this.app.context.cursor.incrementY();
         }
     }
     
     keyUpHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowUp' && this.keyPresses['Shift']) {
-            this.app.context.cursor.y -= 5;
+            this.app.context.cursor.incrementY(-5);
         } else if (event.key == 'ArrowUp' && this.keyPresses['Control']) {
-            if (this.app.context.cursor.y_size > 1) {
-                this.app.context.cursor.y_size -= 1;
+            if (this.app.context.cursor.getYSize() > 1) {
+                this.app.context.cursor.incrementY(-1);
             }
         } else if (event.key == 'ArrowUp') {
-            this.app.context.cursor.y -= 1;
+            this.app.context.cursor.incrementY(-1);
         }
     }
 
     keyLeftHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowLeft' && this.keyPresses['Shift']) {
-            this.app.context.cursor.x -= 5;
+            this.app.context.cursor.incrementX(-5);
         } else if (event.key == 'ArrowLeft' && this.keyPresses['Control']) {
-            if (this.app.context.cursor.x_size > 1) {
-                this.app.context.cursor.x_size -= 1;
+            if (this.app.context.cursor.getXSize() > 1) {
+                this.app.context.cursor.incerementXSize(-1);
             }
         } else if (event.key == 'ArrowLeft') {
-            this.app.context.cursor.x -= 1;
+            this.app.context.cursor.incrementX(-1);
         }
     }
 
     keyRightHandler = (event:KeyboardEvent):void => {
         if (event.key == 'ArrowRight' && this.keyPresses['Shift']) {
-            this.app.context.cursor.x += 5;
+            this.app.context.cursor.incrementX(5);
         } else if (event.key == 'ArrowRight' && this.keyPresses['Control']) {
-            this.app.context.cursor.x_size += 1;
+            this.app.context.cursor.incerementXSize();
         } else if (event.key == 'ArrowRight') {
-            this.app.context.cursor.x += 1;
+            this.app.context.cursor.incrementX();
         }
     }
 
     pageUpHandler = (event:KeyboardEvent):void => {
         if (event.key == 'PageUp') {
-            console.log("pageUpHandler");
             // Jump to next universe
             const tables = this.app.context.tables;
             // Find index of current table
@@ -313,7 +314,7 @@ export class InputHandler {
             // Get next universe name
             const universeName = tableKeys[nextTableKey];
             // Load next universe
-            this.app.interface?.loadUniverse(universeName);
+            this.app.interface.loadUniverse(universeName);
         }
     }
 
@@ -330,7 +331,7 @@ export class InputHandler {
             // Get previous universe name
             const universeName = tableKeys[previousTableKey];
             // Load previous universe
-            this.app.interface?.loadUniverse(universeName);
+            this.app.interface.loadUniverse(universeName);
         }
     }
 
