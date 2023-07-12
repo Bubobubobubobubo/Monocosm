@@ -5,13 +5,12 @@ let INIT: boolean = false;
 let application: Application = new Application('text');
 let cursorLocation: HTMLElement = document.getElementById("cursor-location") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
-let play_button: HTMLElement = document.getElementById("play") as HTMLElement;
+let playButton: HTMLElement = document.getElementById("play") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
-let action_area: HTMLElement = document.getElementById("actionarea") as HTMLElement;
-let cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
+let actionArea: HTMLElement = document.getElementById("actionarea") as HTMLElement;
 
-play_button.addEventListener("click", function(){
-    play_button.textContent = application.running ? "⏵" : "⏸" ;
+playButton.addEventListener("click", function(){
+    playButton.textContent = application.running ? "⏵" : "⏸" ;
     if (!application.running) {
         if (!INIT) application.startTime();
         application.audio_context!.resume();
@@ -35,10 +34,10 @@ window.onbeforeunload = function(): null {
 function loop() {
     if(application.redraw) {
         if (application.getCurrentTable().actionAreaAt(application.context.cursor.getX(), application.context.cursor.getY())) {
-            action_area.textContent = application.getCurrentTable().nameOfAreaAt(
+            actionArea.textContent = application.getCurrentTable().nameOfAreaAt(
                 application.context.cursor.getX(), application.context.cursor.getY());
         } else {
-            action_area.textContent = "None"
+            actionArea.textContent = "None"
         }
         cursorLocation.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
@@ -52,7 +51,7 @@ function loop() {
     }
     
     if(application.replaceGrid) {
-        application.zone.replaceChildren(application.interface!.createWholeGrid());
+        application.grid.replaceChildren(application.interface!.createWholeGrid());
         application.interface.moveGrid();
     }
 
@@ -64,7 +63,7 @@ function loop() {
 }
 
 function init() {       
-    cursor.replaceWith(application.interface!.createCursor());
+    application.cursor.replaceWith(application.interface!.createCursor());
 }
 
 init();

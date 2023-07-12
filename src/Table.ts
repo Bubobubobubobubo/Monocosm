@@ -137,8 +137,8 @@ export class Table {
                 if (this.pasteBuffer.hasOwnProperty(id) && this.pasteBuffer[id] !== '') {
                     const px = x + j
                     const py = y + i
-                    const cellId = this.addCell(px, py, this.pasteBuffer[id]);
-                    this.app.interface.appendCell(this.pasteBuffer[id], px, py, cellId);
+                    this.addCell(px, py, this.pasteBuffer[id]);
+                    this.app.interface.appendCell(this.pasteBuffer[id], px, py);
                 }
             }
         }

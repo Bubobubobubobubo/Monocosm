@@ -110,13 +110,34 @@ body {
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
+    background-size: 50px 100px;
     background-image: radial-gradient(var(--secondary) 1px, transparent 0);
 }
 
-code {
+div#zone {
     margin: 0;
     padding: 0;
     position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+div#grid {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+div#cursor {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1em;
+    background-color: var(--secondary);
+    color: var(--primary);
+    white-space: pre;
+    position: absolute;
+    caret-color: transparent;
 }
 
 span {
@@ -164,19 +185,6 @@ span.action-area-cell {
     color: var(--secondary);
     white-space: pre;
     position: absolute;
-}
-
-
-div#cursor-cell {
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    line-height: 1em;
-    background-color: var(--secondary);
-    color: var(--primary);
-    white-space: pre;
-    position: absolute;
-    caret-color: transparent;
 }
 
 /* For pasteFromBeyond */

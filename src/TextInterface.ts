@@ -145,15 +145,15 @@ export class TextInterface {
     createCursor = (): HTMLElement => {
         let cell = document.createElement('div');
         cell.contentEditable = 'true';
-        cell.id = 'cursor-cell';
+        cell.id = 'cursor';
         cell.innerText = ' ';
-        //const x = this.app.context.cursor.getX();
-        //const y = this.app.context.cursor.getY();
-        //const offset_x = x  + this.charactersForWidth/2 * this.characterWidth;
-        //const offset_y = y  + this.charactersForHeight/2 * this.characterHeight;
 
         // transform always center of the screen calc(50vh) and calc(50vw)
-        cell.style.transform = 'translate(calc(50vw - ' + this.characterWidth/6 + 'px), calc(50vh - ' + this.characterHeight/6 + 'px))';
+        // cell.style.transform = 'translate(calc(50vw - ' + this.characterWidth/6 + 'px), calc(50vh - ' + this.characterHeight/6 + 'px))';
+
+        const offset_x = this.charactersForWidth/2 * this.characterWidth;
+        const offset_y = this.charactersForHeight/2 * this.characterHeight;
+        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
 
         // Add a listener for pasting
         cell.addEventListener('paste', (e) => {
@@ -173,12 +173,12 @@ export class TextInterface {
             existingCell.replaceWith(cell);
         }
         else {
-            this.app.zone.appendChild(cell);
+            this.app.grid.appendChild(cell);
         }
     }
 
     focusCursor = () => {
-        const cursor = document.getElementById('cursor-cell');
+        const cursor = document.getElementById('cursor');
         cursor?.focus();
     }
 
@@ -227,10 +227,6 @@ export class TextInterface {
 
     }
 
-    appendCursor = () => {
-        document.appendChild(this.createCursor());
-    }
-
     moveGrid = () => {
         const cursor = this.app.getCursor();
         // Offset cursor x and y with window.innerWidth and window.innerHeight
@@ -238,11 +234,12 @@ export class TextInterface {
         const x = -cursor.getX() * this.characterWidth;
         const y = -cursor.getY() * this.characterHeight;
 
-        this.app.zone.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+        this.app.grid.style.transform = 'translate(' + x + 'px,' + y + 'px)';
         document.body.style.backgroundPositionX = x + "px";
         document.body.style.backgroundPositionY = y + "px";
     }
 
+    // TODO: Remove this (Not in use)
     createGrid = (): DocumentFragment | null => {
         if (!this.app.redraw) { return this.app.last_grid; }
         const currentTable = this.app.getCurrentTable();
@@ -296,7 +293,7 @@ export class TextInterface {
         this.app.input.isCapturingInput = false;
 
         // Check if the zone first element is an HTML span
-        if (this.app.zone.firstElementChild?.tagName === 'SPAN') {
+        if (this.app.grid.firstElementChild?.tagName === 'SPAN') {
             let editor = document.createDocumentFragment();
             editor.appendChild(selectedEditor.dom);
 
