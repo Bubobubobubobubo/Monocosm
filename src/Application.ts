@@ -22,8 +22,8 @@ export class Application {
     interface: TextInterface;
     running: boolean = false;
     gridMode: 'grid' | 'local' | 'global' = 'grid';
-    cursor: HTMLElement = document.getElementById("cursor") as HTMLElement;
-    grid: HTMLElement = document.getElementById("grid") as HTMLElement;
+    cursorElement: HTMLElement = document.getElementById("cursor") as HTMLElement;
+    gridElement: HTMLElement = document.getElementById("grid") as HTMLElement;
     
     constructor(public output_type: OutputType) {
         this.input = new InputHandler(this);

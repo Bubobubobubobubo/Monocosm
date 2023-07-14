@@ -3,7 +3,7 @@ import type { SavedContext } from './Types.js';
 let INIT: boolean = false;
 
 let application: Application = new Application('text');
-let cursorLocation: HTMLElement = document.getElementById("cursor-location") as HTMLElement;
+let coordinates: HTMLElement = document.getElementById("coordinates") as HTMLElement;
 let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
 let playButton: HTMLElement = document.getElementById("play") as HTMLElement;
 let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
@@ -39,7 +39,7 @@ function loop() {
         } else {
             actionArea.textContent = "None"
         }
-        cursorLocation.textContent = application.context.cursor.toString();
+        coordinates.textContent = application.context.cursor.toString();
         universe.textContent = `${application.context.current_table}`;
         //const newContent = application.process();
         //if (newContent) {
@@ -51,8 +51,10 @@ function loop() {
     }
     
     if(application.replaceGrid) {
-        application.grid.replaceChildren(application.interface!.createWholeGrid());
-        application.interface.moveGrid();
+        console.log("Creating grid?")
+        application.gridElement.replaceChildren(application.interface!.createWholeGrid());
+        application.interface.updateCursorSize();
+        application.interface.moveGrid(undefined, undefined);
     }
 
     // The clock should always move
@@ -63,7 +65,7 @@ function loop() {
 }
 
 function init() {       
-    application.cursor.replaceWith(application.interface!.createCursor());
+    application.cursorElement.replaceWith(application.interface!.createCursor());
 }
 
 init();

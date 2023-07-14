@@ -131,8 +131,8 @@ div#grid {
 div#cursor {
     margin: 0;
     padding: 0;
-    font-size: 20px;
-    line-height: 1em;
+   /* font-size: 20px;
+    line-height: 1em;*/
     background-color: var(--secondary);
     color: var(--primary);
     white-space: pre;

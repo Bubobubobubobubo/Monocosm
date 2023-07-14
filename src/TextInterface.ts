@@ -98,6 +98,7 @@ export class TextInterface {
     }
 
     scaleBackgroundGrid = (): void => {
+        // TODO: Fix background grid position
         document.body.style.backgroundSize = this.characterWidth*5 + 'px' + ' ' + this.characterHeight*5 + 'px';
     }
 
@@ -143,17 +144,17 @@ export class TextInterface {
     }
 
     createCursor = (): HTMLElement => {
-        let cell = document.createElement('div');
-        cell.contentEditable = 'true';
-        cell.id = 'cursor';
-        cell.innerText = ' ';
-
-        // transform always center of the screen calc(50vh) and calc(50vw)
+        let cell = this.app.cursorElement;
+        
+        // TODO: ALternative way to center?
         // cell.style.transform = 'translate(calc(50vw - ' + this.characterWidth/6 + 'px), calc(50vh - ' + this.characterHeight/6 + 'px))';
 
         const offset_x = this.charactersForWidth/2 * this.characterWidth;
         const offset_y = this.charactersForHeight/2 * this.characterHeight;
         cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+
+        cell.style.width = this.characterWidth + 'px';
+        cell.style.height = this.characterHeight + 'px';
 
         // Add a listener for pasting
         cell.addEventListener('paste', (e) => {
@@ -173,7 +174,7 @@ export class TextInterface {
             existingCell.replaceWith(cell);
         }
         else {
-            this.app.grid.appendChild(cell);
+            this.app.gridElement.appendChild(cell);
         }
     }
 
@@ -227,16 +228,80 @@ export class TextInterface {
 
     }
 
-    moveGrid = () => {
+    moveGrid = (oldX: number|undefined, oldY: number|undefined) => {
         const cursor = this.app.getCursor();
         // Offset cursor x and y with window.innerWidth and window.innerHeight
+        const x = cursor.getX();
+        const y = cursor.getY();
+        const xp = -x * this.characterWidth;
+        const yp = -y * this.characterHeight;
 
-        const x = -cursor.getX() * this.characterWidth;
-        const y = -cursor.getY() * this.characterHeight;
+        // Move grid
+        this.app.gridElement.style.transform = 'translate(' + xp + 'px,' + yp + 'px)';
 
-        this.app.grid.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-        document.body.style.backgroundPositionX = x + "px";
-        document.body.style.backgroundPositionY = y + "px";
+        // Move background
+        document.body.style.backgroundPositionX = xp + "px";
+        document.body.style.backgroundPositionY = yp + "px";
+
+        this.normalizeCells(oldX, oldY);
+        this.invertCellsUnderCursor();
+    }
+
+    setCursorXSize  = (xSize: number) => {
+        this.app.cursorElement.style.width = xSize * this.characterWidth + "px";
+        this.invertCellsUnderCursor();
+        this.normalizeCells(undefined,undefined)
+    }
+
+    setCursorYSize = (ySize: number) => {
+        this.app.cursorElement.style.height = ySize * this.characterHeight + "px";
+        this.invertCellsUnderCursor();
+        this.normalizeCells(undefined,undefined)
+    }
+
+    setCursorSize = (xSize: number, ySize: number) => {
+        this.app.cursorElement.style.width = xSize * this.characterWidth + "px";
+        this.app.cursorElement.style.height = ySize * this.characterHeight + "px";
+        this.invertCellsUnderCursor();
+        this.normalizeCells(undefined,undefined)
+    }
+
+    updateCursorSize = () => {
+        const cursor = this.app.getCursor();
+        this.app.cursorElement.style.width = cursor.getXSize() * this.characterWidth + "px";
+        this.app.cursorElement.style.height = cursor.getYSize() * this.characterHeight + "px";
+    }
+
+    invertCellsUnderCursor = () => {
+        const cursor = this.app.getCursor();
+        const from_x = cursor.getX();
+        const from_y = cursor.getY();
+        const to_x = from_x + cursor.getXSize() - 1;
+        const to_y = from_y + cursor.getYSize() - 1;
+        for(let y=from_y; y <= to_y; y++) {
+            for(let x=from_x; x <= to_x; x++) {
+                let cell = document.getElementById(x+","+y);
+                if(cell) {
+                    cell.className = "inverted-cell";
+                }
+            }
+        }
+    }
+
+    normalizeCells = (from_x: number|undefined, from_y: number|undefined) => {
+        const cursor = this.app.getCursor();
+        if(from_x==undefined) { from_x = cursor.getX() }
+        if(from_y==undefined) { from_y = cursor.getY() }
+        const to_x = from_x + cursor.getXSize();
+        const to_y = from_y + cursor.getYSize();
+        for(let y=from_y; y <= to_y; y++) {
+            for(let x=from_x; x <= to_x; x++) {
+                let cell = document.getElementById(x+","+y);
+                if(cell && !cursor.isUnder(x,y)) {
+                    cell.className = "cell";
+                }
+            }
+        }
     }
 
     // TODO: Remove this (Not in use)
@@ -293,7 +358,7 @@ export class TextInterface {
         this.app.input.isCapturingInput = false;
 
         // Check if the zone first element is an HTML span
-        if (this.app.grid.firstElementChild?.tagName === 'SPAN') {
+        if (this.app.gridElement.firstElementChild?.tagName === 'SPAN') {
             let editor = document.createDocumentFragment();
             editor.appendChild(selectedEditor.dom);
 

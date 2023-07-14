@@ -10,7 +10,7 @@
   <body>
     <div id="interface">
         <button id="play">⏵</button>
-        <p id="cursor-location">Cursor: 0, 0</p>
+        <p id="coordinates">Cursor: 0, 0</p>
         <p id="universe">Universe: default</p>
         <p id="actionarea">Area</p>
         <p id="clock"></p>
@@ -19,7 +19,7 @@
         <input type="text" autocomplete="off" class="unselected" id="prompt" disabled></p>
     </div>
     <div id="zone">
-      <div id="cursor"></div>
+      <div id="cursor" contenteditable="true"></div>
       <div id="grid"></div>
     </div>
     <script type="module" src="/src/index.ts"></script>

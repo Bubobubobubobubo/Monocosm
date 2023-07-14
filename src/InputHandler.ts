@@ -272,7 +272,7 @@ export class InputHandler {
             this.app.context.cursor.incrementY(-5);
         } else if (event.key == 'ArrowUp' && this.keyPresses['Control']) {
             if (this.app.context.cursor.getYSize() > 1) {
-                this.app.context.cursor.incrementY(-1);
+                this.app.context.cursor.incrementYSize(-1);
             }
         } else if (event.key == 'ArrowUp') {
             this.app.context.cursor.incrementY(-1);

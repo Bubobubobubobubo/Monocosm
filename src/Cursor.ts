@@ -24,60 +24,69 @@ export class Cursor {
     }
 
     incrementY = (amount: number = 1) => {
+        const old = this.y;
         this.y += amount;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(undefined, old);
     }
 
     incrementX = (amount: number = 1) => {
+        const old = this.x;
         this.x += amount;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(old, undefined);
     }
 
     incrementXY = (x_amount: number = 1, y_amount: number = 1) => {
+        const oldX = this.x;
+        const oldY = this.y;
         this.x += x_amount;
         this.y += y_amount;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(oldX, oldY);
     }
 
     incrementYSize = (amount: number = 1) => {
         this.y_size += amount;
-        this.app.interface.moveGrid();
+        this.app.interface.setCursorYSize(this.y_size);
     }
 
     incerementXSize = (amount: number = 1) => {
         this.x_size += amount;
-        this.app.interface.moveGrid();
+        this.app.interface.setCursorXSize(this.x_size);
     }
 
     setY = (y: number) => {
+        const old = this.y;
         this.y = y;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(undefined, old);
     }
 
     setX = (x: number) => {
+        const old = this.x;
         this.x = x;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(old, undefined);
     }
 
     setXY = (x: number, y: number) => {
+        const oldX = this.x;
+        const oldY = this.y;
         this.x = x;
         this.y = y;
-        this.app.interface.moveGrid();
+        this.app.interface.moveGrid(oldX, oldY);
     }
 
     setXSize = (x_size: number) => {
         this.x_size = x_size;
-        this.app.interface.moveGrid();
+        this.app.interface.setCursorXSize(this.x_size);
     }
 
     setYSize = (y_size: number) => {
         this.y_size = y_size;
-        this.app.interface.moveGrid();
+        this.app.interface.setCursorYSize(this.y_size);
     }
 
     setSize = (x_size: number, y_size: number) => {
         this.x_size = x_size;
         this.y_size = y_size;
+        this.app.interface.setCursorSize(this.x_size, this.y_size);
     }
 
     getX = (): number => {
