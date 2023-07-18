@@ -7,6 +7,7 @@ import { TextInterface } from './TextInterface.js';
 import { MidiOut } from './IO/Midi.js';
 import { Context, SavedContext, OutputType } from './Types.js';
 import { UserAPI } from './UserAPI.js';
+import { ActionArea } from './Crawler.js';
 
 export class Application {
 

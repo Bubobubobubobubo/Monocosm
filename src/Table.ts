@@ -1,5 +1,5 @@
 import type { Application } from "./Application";
-import type { Script, TableData, PasteBuffer, Cells } from "./Types";
+import type { Script, TableData, PasteBuffer, Cells, ActionAreas } from "./Types";
 import { ActionArea } from "./Crawler";
 
 
@@ -9,7 +9,7 @@ export class Table {
     theme: string
     pasteBuffer: PasteBuffer
     variables: object
-    actionAreas: { [key: string]: ActionArea }
+    actionAreas: ActionAreas
 
     constructor(public app: Application, data?: TableData) {
         if (data !== undefined) {
@@ -17,7 +17,7 @@ export class Table {
             this.cells = data['cells'];
             this.script = data['script'];
             this.theme = data['theme'];
-            this.actionAreas = {};
+            this.actionAreas = data['actionAreas'] || {};
         } else {
             this.cells = {};
             this.actionAreas = {};
@@ -39,7 +39,9 @@ export class Table {
         if (!this.actionAreas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
             this.actionAreas[_generateId()] = area;
-        }
+            this.app.interface.createActionArea(area);
+         }
+
     }
 
     resetPasteBuffer = () => this.pasteBuffer = {}
@@ -49,7 +51,8 @@ export class Table {
             'cells': this.cells,
             'paste_buffer': this.pasteBuffer,
             'script': this.script,
-            'theme': this.theme
+            'theme': this.theme,
+            'actionAreas': this.actionAreas
         }
     }
 
@@ -120,10 +123,10 @@ export class Table {
         if (this.exists(id)) {
             delete this.cells[id];
         }
+        this.app.interface.removeCellFromGrid(id);
     }
 
     paste = () => {
-
         // Update pasteBuffer
         this.pasteBuffer = this.pasteBufferFromClipboard();
         let x = this.app.context.cursor.getX();
@@ -138,7 +141,7 @@ export class Table {
                     const px = x + j
                     const py = y + i
                     this.addCell(px, py, this.pasteBuffer[id]);
-                    this.app.interface.appendCell(this.pasteBuffer[id], px, py);
+                    this.app.interface.appendCell(this.pasteBuffer[id], px, py, "inverted-cell");
                 }
             }
         }
@@ -173,7 +176,7 @@ export class Table {
             for (let j = 0; j < x_size ; j++) {
                 // If lines[i][j] is undefined, empty string or space, don't add to paste buffer
                 if(lines[i][j]) {
-                    if (lines[i][j] !== undefined || lines[i][j] !== '' || lines[i][j] !== ' ') {
+                    if (lines[i][j] !== undefined && lines[i][j] !== '' && lines[i][j] !== ' ') {
                         let id = this.generateID(i, j);
                         pasteBuffer[id] = lines[i][j];
                     }

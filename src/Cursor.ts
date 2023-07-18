@@ -46,11 +46,13 @@ export class Cursor {
     incrementYSize = (amount: number = 1) => {
         this.y_size += amount;
         this.app.interface.setCursorYSize(this.y_size);
+        this.app.interface.moveGrid();
     }
 
     incerementXSize = (amount: number = 1) => {
         this.x_size += amount;
         this.app.interface.setCursorXSize(this.x_size);
+        this.app.interface.moveGrid();
     }
 
     setY = (y: number) => {
@@ -73,20 +75,28 @@ export class Cursor {
         this.app.interface.moveGrid(oldX, oldY);
     }
 
+    forceXY = (x: number, y: number) => {
+        this.x = x;
+        this.y = y;
+    }
+
     setXSize = (x_size: number) => {
         this.x_size = x_size;
         this.app.interface.setCursorXSize(this.x_size);
+        this.app.interface.moveGrid();
     }
 
     setYSize = (y_size: number) => {
         this.y_size = y_size;
         this.app.interface.setCursorYSize(this.y_size);
+        this.app.interface.moveGrid();
     }
 
     setSize = (x_size: number, y_size: number) => {
         this.x_size = x_size;
         this.y_size = y_size;
         this.app.interface.setCursorSize(this.x_size, this.y_size);
+        this.app.interface.moveGrid();
     }
 
     getX = (): number => {
@@ -119,8 +129,12 @@ export class Cursor {
     }
 
     resetCursorSize = (): void => {
+        const old_x_size = this.x_size;
+        const old_y_size = this.y_size;
         this.y_size = 1;
         this.x_size = 1;
+        this.app.interface.moveGrid(this.x, this.y, old_x_size, old_y_size);
+        this.app.interface.setCursorSize(1, 1);
     }
 
     toString = (): string => {

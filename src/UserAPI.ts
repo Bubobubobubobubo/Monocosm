@@ -46,7 +46,6 @@ export class UserAPI {
         this.app.context.cursor.setXY(x, y);
     }
 
-
     origin = ():void => {
         // Get cursor back at origin
         this.app.context.cursor.setXY(0, 0);

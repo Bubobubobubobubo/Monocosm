@@ -101,7 +101,7 @@ export class InputHandler {
                 this.app.context.cursor.getY(),
                 this.app.context.cursor.getXSize(),
                 this.app.context.cursor.getYSize(),
-        );
+            );
         }
     }
 

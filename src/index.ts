@@ -51,7 +51,6 @@ function loop() {
     }
     
     if(application.replaceGrid) {
-        console.log("Creating grid?")
         application.gridElement.replaceChildren(application.interface!.createWholeGrid());
         application.interface.updateCursorSize();
         application.interface.moveGrid(undefined, undefined);
@@ -65,7 +64,9 @@ function loop() {
 }
 
 function init() {       
-    application.cursorElement.replaceWith(application.interface!.createCursor());
+   // application.interface.createEditor('local');
+   // application.interface.createEditor('global');
+    application.interface.createCursor();
 }
 
 init();
