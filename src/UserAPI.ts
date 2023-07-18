@@ -93,6 +93,7 @@ export class UserAPI {
             this.app.interface?.loadTheme(themeName);
             this.app.interface?.loadScript(this.app.context.tables[name].script)
         }
+        this.app.replaceGrid = true;
     }
 
     clear = ():void => {

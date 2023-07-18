@@ -47,10 +47,9 @@ function loop() {
             // Focus cursor if in grid mode to enable paste
         //    if(application.gridMode == 'grid') application.interface?.focusCursor();
         //}
-       
     }
     
-    if(application.replaceGrid) {
+    if (application.replaceGrid) {
         application.gridElement.replaceChildren(application.interface!.createWholeGrid());
         application.interface.updateCursorSize();
         application.interface.moveGrid(undefined, undefined);
