@@ -69,10 +69,23 @@ export class InputHandler {
             event.preventDefault();
             if (this.app.gridMode === 'grid') {
                 this.app.gridMode = 'local';
+                let editor = document.getElementById('local');
+                if(editor) editor.style.visibility = 'visible'
+                this.app.interface.localEditor.focus();
             } else if (this.app.gridMode == 'global') {
                 this.app.gridMode = 'local'
+
+                let globalEditor = document.getElementById('global');
+                if(globalEditor) globalEditor.style.visibility = 'hidden'
+
+                let localEditor = document.getElementById('local');
+                if(localEditor) localEditor.style.visibility = 'visible'
+
+                this.app.interface.localEditor.focus();
             } else {
                 this.app.gridMode = 'grid';
+                let localEditor = document.getElementById('local');
+                if(localEditor) localEditor.style.visibility = 'hidden'
             } 
             this.isCapturingInput = !this.isCapturingInput;
         }
@@ -81,12 +94,23 @@ export class InputHandler {
     shiftTabKeyHandler = (event: KeyboardEvent): void => {
         // This key will be used for something else
         if (event.key == 'Tab' && this.keyPresses['Shift']) {
-
+            let globalEditor = document.getElementById('global');
             if (this.app.gridMode === 'grid') {
                 this.app.gridMode = 'global';
+                if(globalEditor) globalEditor.style.visibility = 'visible'
+                this.app.interface.globalEditor.focus();
             } else if (this.app.gridMode === 'local') {
                 this.app.gridMode = 'global'
+
+                let localEditor = document.getElementById('local');
+                if(localEditor) localEditor.style.visibility = 'hidden'
+
+                let globalEditor = document.getElementById('global');
+                if(globalEditor) globalEditor.style.visibility = 'visible'
+                this.app.interface.globalEditor.focus();
             } else {
+                let globalEditor = document.getElementById('global');
+                if(globalEditor) globalEditor.style.visibility = 'hidden'
                 this.app.gridMode = 'grid'
             }
             this.isCapturingInput = !this.isCapturingInput;

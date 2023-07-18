@@ -6,9 +6,8 @@ import { ActionArea } from './Crawler.js';
 
 export class TextInterface {
 
-    editor: EditorView
+    localEditor: EditorView
     globalEditor: EditorView
-    editorElement: DocumentFragment | null = null
     context: Context
     characterWidth: number
     characterHeight: number
@@ -23,7 +22,7 @@ export class TextInterface {
         this.characterHeight = characterHeightAndWidth[1];
         this.charactersForWidth = this.howManyCharactersFitWidth();
         this.charactersForHeight = this.howManyCharactersFitHeight();
-        this.editor = new EditorView({
+        this.localEditor = new EditorView({
             extensions: [
                 editorSetup,
                 EditorView.updateListener.of((e) => {
@@ -48,7 +47,7 @@ export class TextInterface {
     }
 
     loadScript = (script: Script, editor: string = 'local') => {
-        const selectedEditor = editor == 'local' ? this.editor : this.globalEditor;
+        const selectedEditor = editor == 'local' ? this.localEditor : this.globalEditor;
         selectedEditor.dispatch({
             changes: {
                 from: 0,
@@ -59,7 +58,7 @@ export class TextInterface {
     }
 
     clearEditor = (editor: string = 'local') => {
-        const selectedEditor = editor == 'local' ? this.editor : this.globalEditor;
+        const selectedEditor = editor == 'local' ? this.localEditor : this.globalEditor;
         selectedEditor.dispatch({
             changes: {
                 from: 0,
@@ -416,10 +415,7 @@ export class TextInterface {
 
     createEditor = (type: string = 'local'): void => {
 
-        let selectedEditor = type === 'local' ? this.editor : this.globalEditor;
-
-        this.app.input.isCapturingInput = false;
-
+        let selectedEditor = type === 'local' ? this.localEditor : this.globalEditor;
         let editor = document.getElementById(type);
         if (editor) {
             editor.appendChild(selectedEditor.dom);

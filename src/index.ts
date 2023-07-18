@@ -64,8 +64,8 @@ function loop() {
 }
 
 function init() {       
-   // application.interface.createEditor('local');
-   // application.interface.createEditor('global');
+    application.interface.createEditor('local');
+    application.interface.createEditor('global');
     application.interface.createCursor();
 }
 
