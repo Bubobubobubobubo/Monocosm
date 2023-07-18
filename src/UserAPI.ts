@@ -99,6 +99,7 @@ export class UserAPI {
     clear = ():void => {
         // Clear the grid
         this.app.context.tables[this.app.context.current_table].clear();
+        this.app.replaceGrid = true;
     }
 
     clearLocalScript = ():void => {
