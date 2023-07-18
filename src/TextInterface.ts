@@ -366,53 +366,6 @@ export class TextInterface {
         }
     }
 
-    // TODO: Remove this (Not in use)
-    createGrid = (): DocumentFragment | null => {
-        if (!this.app.redraw) { return this.app.last_grid; }
-        const currentTable = this.app.getCurrentTable();
-        const cursor = this.app.getCursor();
-        const visible_zone = this.app.getVisibleZone();
-        let grid = document.createDocumentFragment();
-        for (let y = 0; y < this.charactersForHeight; y++) {
-            for (let x = 0; x < this.charactersForWidth; x++) {
-
-                // Calculate offsets for coordinates
-                let vx = x + visible_zone.from_x;
-                let vy = y + visible_zone.from_y;
-
-                if(currentTable.existsAt(vx,vy)) {
-                    // If the cursor is on the cell, draw it in reverse
-                    if (cursor.isUnder(vx,vy)) {
-                        grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y, "inverted-cell"));
-                    } else {
-                        grid.appendChild(this.createCell(currentTable.getCell(vx,vy),x,y));
-                    }
-                } /* else if(cursor.isUnder(vx,vy)) {
-                    grid.appendChild(this.createCursor(x,y));
-                } */
-
-                // Drawing zones
-                if(currentTable.actionAreaAt(vx, vy)) {
-                    let cell = currentTable.getCell(vx,vy)
-                    if (cell == "") {
-                        grid.appendChild(this.createActionAreaCell(" ",x,y));
-                    } else {
-                        grid.appendChild(this.createActionAreaCell(cell,x,y));
-                    }
-                }
-            }
-        }
-
-        // Add the cursor
-        grid.appendChild(this.createCursor());
-
-        document.body.style.backgroundPositionX = -cursor.getX()*this.characterWidth + "px";
-        document.body.style.backgroundPositionY = -cursor.getY()*this.characterHeight + "px";
-        this.app.last_grid = grid;
-        this.app.redraw = false;
-        return grid;
-    }
-
     createEditor = (type: string = 'local'): void => {
 
         let selectedEditor = type === 'local' ? this.localEditor : this.globalEditor;
