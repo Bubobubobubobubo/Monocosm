@@ -12,10 +12,14 @@ interface ClockMethods {
 
 declare global {
     interface AudioContext {
-        createClock(callback: CallableFunction, duration: number, interval?: number, overlap?: number): ClockMethods;
+        createClock(
+          callback: CallableFunction, 
+          duration: number, 
+          interval?: number, 
+          overlap?: number
+        ): ClockMethods;
     }
 }
-
 
 AudioContext.prototype['createClock'] = function (
   callback, // called slightly before each cycle
@@ -31,6 +35,7 @@ AudioContext.prototype['createClock'] = function (
   overlap = overlap || interval / 2;
   const onTick = () => {
     const t = this.currentTime;
+    // TODO: why do I need to do that? Is it something that I inherited from Tidal?
     // const lookahead = t + interval + overlap; // the time window for this tick
     const lookahead = t + interval; // the time window for this tick
     if (phase === 0) {
@@ -79,7 +84,6 @@ export class Clock {
             this.time = time; this.tick = tick; this.duration = duration;
             evaluate(this.app, this.app.context.mainScript);
             this.evaluations++;
-            // console.log(time, duration, tick);
         }, 0.2);
 
         // Grab what's inside that clock

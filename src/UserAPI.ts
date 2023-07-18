@@ -29,7 +29,10 @@ export class UserAPI {
         let table = this.app.getTable(universe);
         if (table) {
             table = table as Table;
-            evaluate(this.app, table.script as Script);
+            evaluate(
+                this.app, 
+                table.script as Script
+            );
         }
     }
     b = this.bang;
@@ -175,17 +178,11 @@ export class UserAPI {
     }
 
     pause = ():void => {
-        // Pause the scheduling engine
+        this.app.clock?.pause()
     }
 
-    resume = ( ):void => {
-        // Resume the scheduling engine
-    }
-
-    bigbang = ():void => {
-    }
-
-    bip = (): void  => {
+    resume = ():void => {
+        this.app.clock?.start()
     }
 
     sync = () => {
@@ -206,8 +203,9 @@ export class UserAPI {
         this.app.midi.note(note, velocity, channel)
     }
 
-
-    // Important getters!
+    // ============================================================ 
+    // Getters section
+    // ============================================================ 
 
     get tick():number {
         return 0
