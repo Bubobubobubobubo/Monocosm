@@ -145,6 +145,7 @@ export class Table {
                 }
             }
         }
+        this.app.replaceGrid = true;
     }
 
     pasteBufferFromClipboard = (): PasteBuffer => {
@@ -183,6 +184,7 @@ export class Table {
                 }
             }
         }
+        this.app.replaceGrid = true;
         return pasteBuffer;
     }
 
