@@ -103,6 +103,7 @@
 }
 
 body {
+    will-change: auto;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -117,6 +118,7 @@ body {
 }
 
 div#zone {
+    will-change: auto;
     margin: 0;
     padding: 0;
     position: fixed;
@@ -127,6 +129,7 @@ div#zone {
 }
 
 div#grid {
+    will-change: auto;
     margin: 0;
     padding: 0;
     position: fixed;
@@ -137,6 +140,7 @@ div#grid {
 }
 
 div#cursor {
+    will-change: auto;
     margin: 0;
     padding: 0;
     background-color: var(--secondary);
@@ -147,16 +151,19 @@ div#cursor {
 }
 
 span {
+    will-change: auto;
     font-family: "jgs7", "unifont", "unifont-upper";
 }
 
 span.paste-fallback:before {
+    will-change: auto;
     content: 'Paste here!';
     pointer-events: none;
     display: block; /* For Firefox */
 }
 
 .selected {
+    will-change: auto;
     color: var(--primary);
     background: var(--secondary);
     position: relative;
@@ -171,6 +178,7 @@ span.paste-fallback:before {
 }
 
 span.cell {
+    will-change: auto;
     font-size: 20px;
     line-height: 1em;
     display: block;
@@ -181,6 +189,7 @@ span.cell {
 }
 
 span.inverted-cell {
+    will-change: auto;
     font-size: 20px;
     line-height: 1em;
     background-color: var(--secondary);
@@ -190,6 +199,7 @@ span.inverted-cell {
 }
 
 span.action-area-cell {
+    will-change: auto;
     font-size: 20px;
     line-height: 1em;
     outline: 0.05em dashed var(--tertiary);

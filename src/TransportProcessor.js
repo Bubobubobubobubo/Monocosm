@@ -3,7 +3,7 @@ class TransportProcessor extends AudioWorkletProcessor {
         super(options);
         this.port.addEventListener("message", this.handleMessage);
         this.port.start();
-        this.interval = 1;
+        this.interval = 0.25;
         this.origin = currentTime;
         this.next = this.origin + this.interval;
     }
