@@ -1,6 +1,7 @@
 import type { Camera } from './Camera.js';
 import type { Cursor } from './Cursor.js';
 import type { Table } from './Table.js';
+import { ActionArea } from "./Crawler";
 
 export interface Crawler {
     parent: Zone;
@@ -12,7 +13,7 @@ export interface Zone {
     parent: Table;
     x: number;
     y: number;
-    y_zize: number;
+    y_size: number;
     x_size: number;
     iterator: number;
     unique_id: string;
@@ -30,11 +31,12 @@ export interface TableData {
     cells: Cells
     script: Script 
     theme: string
+    actionAreas: ActionAreas
 }
 
 export interface PasteBuffer { [key: string]: string }
 export interface Cells { [key: string]: string }
-
+export interface ActionAreas { [key: string]: Zone }
 
 export interface Commands {
     [key: string]: Function;

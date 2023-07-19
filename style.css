@@ -75,7 +75,7 @@
 .theme-blue {
     --primary: #0000AA;
     --secondary: #0088FF;
-    --tertiary: "yellow";
+    --tertiary: #FDD20EFF;
 }
 
 .theme-hurt {
@@ -103,16 +103,47 @@
 }
 
 body {
-    margin: 5pt;
-    margin-right: 5pt;
-    margin-bottom: 5pt;
+    margin: 0;
     padding: 0;
     overflow: hidden;
     font-family: "jgs7", "unifont", "unifont-upper";
     font-size: 16px;
     letter-spacing: normal;
     background-color: var(--primary);
-    background-image: radial-gradient(var(--secondary) 1px, transparent 0);
+    background-size: 50px 100px;
+    background-image: radial-gradient(circle, var(--secondary) 1px, transparent 0px);
+    width: 100%;
+    height: 100%;
+}
+
+div#zone {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+div#grid {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+div#cursor {
+    margin: 0;
+    padding: 0;
+    background-color: var(--secondary);
+    color: transparent;
+    white-space: pre;
+    position: absolute;
+    caret-color: transparent;
 }
 
 span {
@@ -128,6 +159,10 @@ span.paste-fallback:before {
 .selected {
     color: var(--primary);
     background: var(--secondary);
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 .unselected {
@@ -138,6 +173,7 @@ span.paste-fallback:before {
 span.cell {
     font-size: 20px;
     line-height: 1em;
+    display: block;
     color: var(--secondary);
     background-color: var(--primary);
     white-space: pre;
@@ -156,21 +192,11 @@ span.inverted-cell {
 span.action-area-cell {
     font-size: 20px;
     line-height: 1em;
-    background-color: var(--tertiary);
+    outline: 0.05em dashed var(--tertiary);
+    outline-offset: -.5px;
     color: var(--secondary);
     white-space: pre;
     position: absolute;
-}
-
-
-span#cursor-cell {
-    font-size: 20px;
-    line-height: 1em;
-    background-color: var(--secondary);
-    color: var(--primary);
-    white-space: pre;
-    position: absolute;
-    caret-color: transparent;
 }
 
 /* For pasteFromBeyond */

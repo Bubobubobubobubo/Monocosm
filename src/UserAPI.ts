@@ -29,7 +29,10 @@ export class UserAPI {
         let table = this.app.getTable(universe);
         if (table) {
             table = table as Table;
-            evaluate(this.app, table.script as Script);
+            evaluate(
+                this.app, 
+                table.script as Script
+            );
         }
     }
     b = this.bang;
@@ -37,22 +40,18 @@ export class UserAPI {
     move = (x: number, y: number):void => {
         if (x === null || y === null) { return ; }
         // Teleport the cursor to a given position
-        this.app.context.cursor.x = x;
-        this.app.context.cursor.y = y;
+        this.app.context.cursor.setXY(x, y);
     }
 
     teleport = (x: number, y: number):void => {
         if (x === null || y === null) { return ; }
         // Teleport the cursor to a given position
-        this.app.context.cursor.x = x;
-        this.app.context.cursor.y = y;
+        this.app.context.cursor.setXY(x, y);
     }
-
 
     origin = ():void => {
         // Get cursor back at origin
-        this.app.context.cursor.y = 0;
-        this.app.context.cursor.x = 0;
+        this.app.context.cursor.setXY(0, 0);
     }
 
     theme = (theme_name: string):void => {
@@ -94,11 +93,13 @@ export class UserAPI {
             this.app.interface?.loadTheme(themeName);
             this.app.interface?.loadScript(this.app.context.tables[name].script)
         }
+        this.app.replaceGrid = true;
     }
 
     clear = ():void => {
         // Clear the grid
         this.app.context.tables[this.app.context.current_table].clear();
+        this.app.replaceGrid = true;
     }
 
     clearLocalScript = ():void => {
@@ -113,40 +114,24 @@ export class UserAPI {
         this.app.interface?.clearEditor('global');
     }
 
-    right = (amount: number):void => {
+    right = (amount: number = 1):void => {
         // Move the cursor right
-        if (amount) {
-            this.app.context.cursor.x += amount;
-        } else {
-            this.app.context.cursor.x += 1;
-        }
+            this.app.context.cursor.incrementX(amount);
     }
 
-    up = (amount: number):void => {
+    up = (amount: number = 1):void => {
         // Move the cursor up
-        if (amount) {
-            this.app.context.cursor.y -= amount;
-        } else {
-            this.app.context.cursor.y -= 1;
-        } 
+        this.app.context.cursor.incrementY(-amount);
     }
 
-    left = (amount: number):void => {
+    left = (amount: number = 1):void => {
         // Move the cursor left
-        if (amount) {
-            this.app.context.cursor.x -= amount;
-        } else {
-            this.app.context.cursor.x -= 1;
-        }
+        this.app.context.cursor.incrementX(-amount);
     }
 
-    down = (amount: number):void => {
+    down = (amount: number = 1):void => {
         // Move the cursor down
-        if (amount) {
-            this.app.context.cursor.y += amount;
-        } else {
-            this.app.context.cursor.y += 1;
-        }
+        this.app.context.cursor.incrementY(amount);
     }
 
     // Erase from x, y to x, y
@@ -195,17 +180,11 @@ export class UserAPI {
     }
 
     pause = ():void => {
-        // Pause the scheduling engine
+        this.app.clock?.pause()
     }
 
-    resume = ( ):void => {
-        // Resume the scheduling engine
-    }
-
-    bigbang = ():void => {
-    }
-
-    bip = (): void  => {
+    resume = ():void => {
+        this.app.clock?.start()
     }
 
     sync = () => {
@@ -226,8 +205,9 @@ export class UserAPI {
         this.app.midi.note(note, velocity, channel)
     }
 
-
-    // Important getters!
+    // ============================================================ 
+    // Getters section
+    // ============================================================ 
 
     get tick():number {
         return 0
@@ -241,8 +221,9 @@ export class UserAPI {
         return 0
     }
 
-    get x():number { return this.app.context.cursor.x; }
-    get y():number { return this.app.context.cursor.x; }
+    get x():number { return this.app.context.cursor.getX(); }
+    get y():number { return this.app.context.cursor.getY(); }
+
     get i():number { 
         if (this.app.clock) {
             return this.app.clock.evaluations; 

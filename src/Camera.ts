@@ -19,8 +19,8 @@ export class Camera {
     }
 
     getVisibleZone = (): VisibleZone => {
-        let x = this.app.context.cursor.x;
-        let y = this.app.context.cursor.y; 
+        let x = this.app.context.cursor.getX();
+        let y = this.app.context.cursor.getY(); 
         return {
             'from_x': x - Math.floor(this.x / 2), 'to_x': x + Math.floor(this.x / 2),
             'from_y': y - Math.floor(this.y / 2), 'to_y': y + Math.floor(this.y / 2),
