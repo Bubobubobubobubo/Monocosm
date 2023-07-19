@@ -40,6 +40,7 @@ export class Application {
     startTime(): void {
         this.audio_context = new AudioContext();
         this.clock = new Clock(this, this.audio_context);
+        this.clock.start();
     }
 
     init = () => {
