@@ -12,7 +12,7 @@ export class Clock {
         this.evaluations = 0;
         // Resolve the promise here
         ctx.audioWorklet.addModule('src/TransportProcessor.js').then((e) => {
-            this.transportNode = new TransportNode(ctx);
+            this.transportNode = new TransportNode(ctx, {}, this.app);
             this.transportNode.connect(ctx.destination);
             return e
         })
