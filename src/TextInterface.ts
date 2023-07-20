@@ -17,6 +17,7 @@ export class TextInterface {
 
     constructor(public app: Application) {
         this.context = this.app.context;
+
         const characterHeightAndWidth = this.calculateCharacterWidth();
         this.characterWidth = characterHeightAndWidth[0];
         this.characterHeight = characterHeightAndWidth[1];
@@ -68,7 +69,7 @@ export class TextInterface {
         })
     }
 
-    calculateCharacterWidth = () => {
+    calculateCharacterWidth = (() => {
         const testElement = document.createElement('span');
         testElement.innerText = ' ';
         testElement.className = 'cell';
@@ -79,20 +80,18 @@ export class TextInterface {
         const characterWidth = testElement.offsetWidth;
         const characterHeight = testElement.offsetHeight;
         document.body.removeChild(testElement);
-        return [characterWidth, characterHeight]
-    }
+        return () => [characterWidth, characterHeight];
+    })();
 
     resizeGrid = (): void => {
-        const characterHeightAndWidth = this.calculateCharacterWidth();
-        const charWidth = characterHeightAndWidth[0];
-        const charHeight = characterHeightAndWidth[1];
-        this.characterWidth = charWidth;
-        this.characterHeight = charHeight;
-        const charsForWidth = Math.floor(window.innerWidth/charWidth);
-        const charsForHeight = Math.floor(window.innerHeight/charHeight);
-        this.charactersForHeight = charsForHeight;
-        this.charactersForWidth = charsForWidth;
-        this.app.context.camera.resize(charsForWidth, charsForHeight);
+        [this.characterWidth, this.characterHeight] = this.calculateCharacterWidth();
+        [this.charactersForWidth, this.charactersForHeight] = [this.characterWidth, this.characterHeight].map((size) => {
+            return Math.floor(window.innerWidth / size);
+        });
+        this.app.context.camera.resize(
+            this.charactersForWidth,
+            this.charactersForHeight
+        );
         this.app.redraw = true;
         this.scaleBackgroundGrid();
         this.reTransformGrid();
@@ -102,34 +101,27 @@ export class TextInterface {
         document.body.style.backgroundSize = Math.floor(this.characterWidth*5) + 'px' + ' ' + Math.floor(this.characterHeight*5) + 'px';
     }
 
-    howManyCharactersFitWidth = (): number => {
-        const viewportWidth = window.innerWidth;
-        return Math.floor(viewportWidth / this.characterWidth);
-    }
-
-    howManyCharactersFitHeight = (): number => {
-        const viewportHeight = window.innerHeight;
-        return Math.floor(viewportHeight / this.characterHeight);
-    }
+    howManyCharactersFitWidth = (): number => Math.floor(window.innerWidth / this.characterWidth);
+    howManyCharactersFitHeight = (): number =>  Math.floor(window.innerHeight / this.characterHeight);
 
     createCell = (char: string, x: number, y: number, className: string = 'cell'): HTMLElement => {
-        let cell = document.createElement('span');
-        cell.className = className;
-        cell.innerText = char;
-        cell.id = x + "," + y;
         const offset_x = x * this.characterWidth + Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = y * this.characterHeight + Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        const cell = document.createElement('span');
+        cell.className = className;
+        cell.innerText = char;
+        cell.id = `${x},${y}`;
+        cell.style.transform = `translate(${offset_x}px, ${offset_y}px)`;
         return cell;
     }
 
     createActionAreaCell = (char: string, x: number, y: number): HTMLElement => {
-        let cell = document.createElement('span');
-        cell.className = 'action-area-cell';
-        cell.innerText = char;
         const offset_x = x * this.characterWidth + Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = y * this.characterHeight + Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        const cell = document.createElement('span');
+        cell.className = 'action-area-cell';
+        cell.innerText = char;
+        cell.style.transform = `translate(${offset_x}px, ${offset_y}px)`;
         return cell;
     }
 
@@ -137,7 +129,7 @@ export class TextInterface {
         let cell = this.app.cursorElement;
         const offset_x = Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = `translate(${offset_x}px, ${offset_y}px)`;
 
         cell.style.width = this.characterWidth + 'px';
         cell.style.height = this.characterHeight + 'px';
@@ -330,7 +322,12 @@ export class TextInterface {
         return grid;
     }
 
-    moveGrid = (oldX: number|undefined = undefined, oldY: number|undefined = undefined, oldXSize: number|undefined = undefined, oldYSize: number|undefined = undefined) => {
+    moveGrid = (
+        oldX: number|undefined = undefined, 
+        oldY: number|undefined = undefined, 
+        oldXSize: number|undefined = undefined, 
+        oldYSize: number|undefined = undefined
+    ) => {
         const cursor = this.app.getCursor();
         // Offset cursor x and y with window.innerWidth and window.innerHeight
         const x = cursor.getX();
@@ -339,17 +336,17 @@ export class TextInterface {
         const yp = -y * this.characterHeight - (cursor.getYSize()*this.characterHeight)/2
 
         // Move grid
-        this.app.gridElement.style.transform = 'translate(' + xp + 'px,' + yp + 'px)';
+        this.app.gridElement.style.transform = `translate(${xp}px, ${yp}px)`;
 
         // Move background
-        document.body.style.backgroundPositionX = xp + "px";
-        document.body.style.backgroundPositionY = yp + "px";
+        document.body.style.backgroundPositionX = `${xp}px`;
+        document.body.style.backgroundPositionY = `${yp}px`;
 
         this.offsetCursor();
 
         this.normalizeCells(oldX, oldY, oldXSize, oldYSize);
         this.invertCellsUnderCursor();
-        
+    
         this.app.updateCursorCoordinates(x, y);
         this.app.updateActionArea(x, y);
     }
@@ -361,7 +358,7 @@ export class TextInterface {
         const y = Math.floor(this.charactersForHeight/2);
         const offset_x = x * this.characterWidth-(cursor.getXSize()*this.characterWidth)/2;
         const offset_y = y * this.characterHeight-(cursor.getYSize()*this.characterHeight)/2;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = `translate(${offset_x}px, ${offset_y}px)`;
     }
 
     removeCellFromGrid = (id: string) => {

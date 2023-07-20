@@ -32,9 +32,6 @@ window.onbeforeunload = function(): null {
 }
 
 function loop() {
-    /* if(application.redraw) {
-       REMOVED
-    } */
     
     if (application.replaceGrid) {
         application.gridElement.replaceChildren(application.interface!.createWholeGrid());
@@ -42,7 +39,6 @@ function loop() {
         application.interface.moveGrid(undefined, undefined);
     }
 
-    // The clock should always move
     if (application.clock !== null) {
         application.updateTick(application.clock.toString());
     }
