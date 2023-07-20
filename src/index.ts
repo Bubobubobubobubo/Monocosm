@@ -31,22 +31,21 @@ window.onbeforeunload = function(): null {
     return null;
 }
 
+
 function loop() {
-    /* if(application.redraw) {
-       REMOVED
-    } */
-    
     if (application.replaceGrid) {
         application.gridElement.replaceChildren(application.interface!.createWholeGrid());
         application.interface.updateCursorSize();
         application.interface.moveGrid(undefined, undefined);
     }
 
-    // The clock should always move
     if (application.clock !== null) {
         application.updateTick(application.clock.toString());
     }
-    window.requestAnimationFrame(loop);
+
+    setTimeout(() => {
+        window.requestAnimationFrame(loop);
+    }, 1000 / 30);
 }
 
 function init() {       
