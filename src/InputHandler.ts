@@ -134,15 +134,22 @@ export class InputHandler {
         this.keyPresses[event.key] = true;
         let keybindings = this.textEditingMode ? this.EditingKeyFunctions : this.NormalKeyFunctions;
         if (this.isCapturingInput) {
-            keybindings.forEach(func => func(event));
+          keybindings.forEach(func => {
+            window.requestAnimationFrame(() => {
+                func(event)
+            })
+          });
         } else {
-            const authorizedFunctions = [
-                this.tabKeyHandler, 
-                this.shiftTabKeyHandler, 
-                this.submitCodeHandler
-            ];
-            authorizedFunctions.forEach(func => func(event));
-
+          const authorizedFunctions = [
+            this.tabKeyHandler, 
+            this.shiftTabKeyHandler, 
+            this.submitCodeHandler
+          ];
+          authorizedFunctions.forEach(func => {
+            window.requestAnimationFrame(() => {
+              func(event);
+            });
+          });
         }
     }
 
