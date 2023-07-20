@@ -32,22 +32,9 @@ window.onbeforeunload = function(): null {
 }
 
 function loop() {
-    if(application.redraw) {
-        if (application.getCurrentTable().actionAreaAt(application.context.cursor.getX(), application.context.cursor.getY())) {
-            actionArea.textContent = application.getCurrentTable().nameOfAreaAt(
-                application.context.cursor.getX(), application.context.cursor.getY());
-        } else {
-            actionArea.textContent = "None"
-        }
-        coordinates.textContent = application.context.cursor.toString();
-        universe.textContent = `${application.context.current_table}`;
-        //const newContent = application.process();
-        //if (newContent) {
-            //application.zone.replaceChildren(newContent);
-            // Focus cursor if in grid mode to enable paste
-        //    if(application.gridMode == 'grid') application.interface?.focusCursor();
-        //}
-    }
+    /* if(application.redraw) {
+       REMOVED
+    } */
     
     if (application.replaceGrid) {
         application.gridElement.replaceChildren(application.interface!.createWholeGrid());
@@ -57,7 +44,7 @@ function loop() {
 
     // The clock should always move
     if (application.clock !== null) {
-        clock.textContent = application.clock.toString();
+        application.updateTick(application.clock.toString());
     }
     window.requestAnimationFrame(loop);
 }

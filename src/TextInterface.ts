@@ -212,7 +212,7 @@ export class TextInterface {
         this.app.cursorElement.style.height = cursor.getYSize() * this.characterHeight + "px";
     }
 
-    createActionArea = (area: ActionArea) => {
+    drawActionArea = (area: ActionArea) => {
         const from_x = area.x;
         const from_y = area.y;
         const to_x = from_x + area.x_size-1;
@@ -298,6 +298,8 @@ export class TextInterface {
             this.app.interface?.loadTheme(this.app.context.tables[name].theme);
             this.app.interface?.loadScript(this.app.context.tables[name].script)
             this.app.replaceGrid = true;
+            console.log("Setting name? ", name)
+            document.documentElement.style.setProperty("--universe-name", `'${name}'`);
         }
     }
 
@@ -321,7 +323,7 @@ export class TextInterface {
         }
 
         for (let area in actionAreas) {
-            this.createActionArea(actionAreas[area]);
+            this.drawActionArea(actionAreas[area]);
         }
 
         this.app.replaceGrid = false
@@ -347,6 +349,9 @@ export class TextInterface {
 
         this.normalizeCells(oldX, oldY, oldXSize, oldYSize);
         this.invertCellsUnderCursor();
+        
+        this.app.updateCursorCoordinates(x, y);
+        this.app.updateActionArea(x, y);
     }
 
     offsetCursor = () => {

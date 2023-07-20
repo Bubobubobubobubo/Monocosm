@@ -11,6 +11,13 @@
 
 }
 
+:root {
+    --universe-name: 'default';
+    --cursor-coordinates: '(0, 0)';
+    --action-area: 'None';
+    --clock-tick: '0';
+}
+
 .theme-white {
     --primary:  white;
     --secondary: black;
@@ -26,7 +33,7 @@
 .theme-black {
     --primary: black;
     --secondary: white;
-    -tertiary: #FF6666;
+    --tertiary: #FF6666;
 }
 
 
@@ -218,9 +225,26 @@ div#interface p:before {
     content: "⬢ ";
 }
 
-
 div#interface p {
-    padding: 0; margin: 0;
+    padding: 0; 
+    margin: 0;
+    display: inline-block;
+}
+
+p#universe::after {
+    content: var(--universe-name);
+}
+
+p#coordinates::after {
+    content: var(--cursor-coordinates);
+}
+
+p#actionarea::after {
+    content: var(--action-area);
+}
+
+p#clock::after {
+    content: var(--clock-tick);
 }
 
 div#cmd {

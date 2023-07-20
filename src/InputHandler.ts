@@ -120,7 +120,7 @@ export class InputHandler {
 
     createZoneHandler = (event: KeyboardEvent): void => {
         if ((event.key == 'z' || event.key == "Z") && this.keyPresses['Control']) {
-            this.app.getCurrentTable().createActionArea(
+             this.app.getCurrentTable().createActionArea(
                 this.app.context.cursor.getX(),
                 this.app.context.cursor.getY(),
                 this.app.context.cursor.getXSize(),

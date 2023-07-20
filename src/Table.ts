@@ -39,9 +39,9 @@ export class Table {
         if (!this.actionAreas.hasOwnProperty(_generateId())) {
             let area = new ActionArea(this, x, y, x_size, y_size);
             this.actionAreas[_generateId()] = area;
-            this.app.interface.createActionArea(area);
+            this.app.interface.drawActionArea(area);
          }
-
+         this.app.updateActionArea(x,y);
     }
 
     resetPasteBuffer = () => this.pasteBuffer = {}

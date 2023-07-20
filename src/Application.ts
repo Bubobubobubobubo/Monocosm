@@ -94,6 +94,7 @@ export class Application {
         this.context.tables[universeName] = new Table(this, table);
         this.context.current_table = universeName;
         this.interface?.loadTheme(this.getCurrentTable().theme);
+        this.initInterfaceMenuBar();
         this.emptyUrl();
     }
 
@@ -118,6 +119,34 @@ export class Application {
         this.context.current_table = saved_context.current_table;
         this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
         this.context.mainScript = saved_context.mainScript;
+        this.initInterfaceMenuBar();
+    }
+
+    initInterfaceMenuBar = (): void => {
+        const x = this.context.cursor.getX();
+        const y = this.context.cursor.getY();
+        this.updateUniverseName(this.context.current_table);
+        this.updateCursorCoordinates(x, y);
+        this.updateActionArea(x, y);
+    }
+
+    updateUniverseName = (name: string): void => {
+        document.documentElement.style.setProperty("--universe-name", `'${name}'`);
+    }
+
+    updateCursorCoordinates = (x: number, y: number): void => {
+        document.documentElement.style.setProperty("--cursor-coordinates", `'(${x},${y})'`);
+    }
+
+    updateActionArea = (x: number, y: number): void => {
+        const currentTable = this.getCurrentTable();
+        if (currentTable.actionAreaAt(x, y)) {
+            document.documentElement.style.setProperty("--action-area", `'${currentTable.nameOfAreaAt(x, y)}'`);
+        }
+    }
+
+    updateTick = (tick: string): void => {
+        document.documentElement.style.setProperty("--clock-tick", `'${tick}'`);
     }
 
     process = (): DocumentFragment | void | null => {
