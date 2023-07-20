@@ -119,7 +119,7 @@ export class TextInterface {
         cell.id = x + "," + y;
         const offset_x = x * this.characterWidth + Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = y * this.characterHeight + Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
         return cell;
     }
 
@@ -129,7 +129,7 @@ export class TextInterface {
         cell.innerText = char;
         const offset_x = x * this.characterWidth + Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = y * this.characterHeight + Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
         return cell;
     }
 
@@ -137,7 +137,7 @@ export class TextInterface {
         let cell = this.app.cursorElement;
         const offset_x = Math.floor(this.charactersForWidth/2) * this.characterWidth;
         const offset_y = Math.floor(this.charactersForHeight/2) * this.characterHeight;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
 
         cell.style.width = this.characterWidth + 'px';
         cell.style.height = this.characterHeight + 'px';
@@ -174,7 +174,7 @@ export class TextInterface {
         const offset_x = x * this.characterWidth;
         const offset_y = y * this.characterHeight;
         cursor.setXY(x,y);
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
     }
 
     updateCellPositions = () => {
@@ -183,7 +183,7 @@ export class TextInterface {
             let [x, y] = elem.id.split(",");
             const offset_x = parseInt(x) * this.characterWidth + Math.floor(this.charactersForWidth/2) * this.characterWidth;
             const offset_y = parseInt(y) * this.characterHeight + Math.floor(this.charactersForHeight/2) * this.characterHeight;
-            elem.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+            elem.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
         }
     }
 
@@ -339,7 +339,7 @@ export class TextInterface {
         const yp = -y * this.characterHeight - (cursor.getYSize()*this.characterHeight)/2
 
         // Move grid
-        this.app.gridElement.style.transform = 'translate(' + xp + 'px,' + yp + 'px)';
+        this.app.gridElement.style.transform = 'translate3d(' + xp + 'px,' + yp + 'px, 0px)';
 
         // Move background
         document.body.style.backgroundPositionX = xp + "px";
@@ -361,7 +361,7 @@ export class TextInterface {
         const y = Math.floor(this.charactersForHeight/2);
         const offset_x = x * this.characterWidth-(cursor.getXSize()*this.characterWidth)/2;
         const offset_y = y * this.characterHeight-(cursor.getYSize()*this.characterHeight)/2;
-        cell.style.transform = 'translate(' + offset_x + 'px,' + offset_y + 'px)';
+        cell.style.transform = 'translate3d(' + offset_x + 'px,' + offset_y + 'px, 0px)';
     }
 
     removeCellFromGrid = (id: string) => {
