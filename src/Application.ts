@@ -25,6 +25,10 @@ export class Application {
     gridMode: 'grid' | 'local' | 'global' = 'grid';
     cursorElement: HTMLElement = document.getElementById("cursor") as HTMLElement;
     gridElement: HTMLElement = document.getElementById("grid") as HTMLElement;
+    universeNameElement: HTMLElement = document.getElementById("universe") as HTMLElement;
+    coordinatesElement: HTMLElement = document.getElementById("coordinates") as HTMLElement;
+    actionAreaElement: HTMLElement = document.getElementById("actionarea") as HTMLElement;
+    clockElement: HTMLElement = document.getElementById("clock") as HTMLElement;
     
     constructor(public output_type: OutputType) {
         this.input = new InputHandler(this);
@@ -131,24 +135,25 @@ export class Application {
     }
 
     updateUniverseName = (name: string): void => {
-        document.documentElement.style.setProperty("--universe-name", `'${name}'`);
+        this.universeNameElement.textContent = name;
     }
 
     updateCursorCoordinates = (x: number, y: number): void => {
-        document.documentElement.style.setProperty("--cursor-coordinates", `'(${x},${y})'`);
+        this.coordinatesElement.textContent = `(${x},${y})`;
     }
 
     updateActionArea = (x: number, y: number): void => {
         const currentTable = this.getCurrentTable();
         if (currentTable.actionAreaAt(x, y)) {
-            document.documentElement.style.setProperty("--action-area", `'${currentTable.nameOfAreaAt(x, y)}'`);
+            this.actionAreaElement.textContent = currentTable.nameOfAreaAt(x, y);
         }
     }
 
     updateTick = (tick: string): void => {
-        document.documentElement.style.setProperty("--clock-tick", `'${tick}'`);
+        this.actionAreaElement.textContent = tick;
     }
 
+    // TODO: Remove?
     process = (): DocumentFragment | void | null => {
        /* if (this.gridMode == 'grid') {
             if (this.interface) return this.interface.createWholeGrid();
