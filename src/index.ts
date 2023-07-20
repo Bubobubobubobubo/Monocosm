@@ -3,11 +3,7 @@ import type { SavedContext } from './Types.js';
 let INIT: boolean = false;
 
 let application: Application = new Application('text');
-let coordinates: HTMLElement = document.getElementById("coordinates") as HTMLElement;
-let universe: HTMLElement = document.getElementById("universe") as HTMLElement;
 let playButton: HTMLElement = document.getElementById("play") as HTMLElement;
-let clock: HTMLElement = document.getElementById("clock") as HTMLElement;
-let actionArea: HTMLElement = document.getElementById("actionarea") as HTMLElement;
 
 playButton.addEventListener("click", function(){
     playButton.textContent = application.running ? "⏵" : "⏸" ;
