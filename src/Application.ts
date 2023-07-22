@@ -2,12 +2,10 @@ import { Clock } from './Clock.js';
 import { Camera } from './Camera.js';
 import { Cursor } from './Cursor.js';
 import { Table } from './Table.js';
-import { InputHandler } from './InputHandler.js';
-import { TextInterface } from './TextInterface.js';
 import { MidiOut } from './IO/Midi.js';
-import { Context, SavedContext, OutputType } from './Types.js';
+import { Context, SavedContext } from './Types.js';
 import { UserAPI } from './UserAPI.js';
-import { ActionArea } from './Crawler.js';
+import { TerminalInterface } from './TerminalInterface';
 
 export class Application {
 
@@ -16,71 +14,60 @@ export class Application {
     userAPI: UserAPI;
     midi: MidiOut;
     context!: Context;
-    input: InputHandler;
-    redraw: boolean;
-    replaceGrid: boolean;
-    last_grid: DocumentFragment | null;
-    interface: TextInterface;
+    interface: TerminalInterface | undefined;
     running: boolean = false;
     gridMode: 'grid' | 'local' | 'global' = 'grid';
-    cursorElement: HTMLElement = document.getElementById("cursor") as HTMLElement;
-    gridElement: HTMLElement = document.getElementById("grid") as HTMLElement;
-    universeNameElement: HTMLElement = document.getElementById("universe") as HTMLElement;
-    coordinatesElement: HTMLElement = document.getElementById("coordinates") as HTMLElement;
-    actionAreaElement: HTMLElement = document.getElementById("actionarea") as HTMLElement;
-    clockElement: HTMLElement = document.getElementById("clock") as HTMLElement;
     
-    constructor(public output_type: OutputType) {
-        this.input = new InputHandler(this);
+    constructor() {
+        console.log('Constructing application')
         this.userAPI = new UserAPI(this);
         this.midi = new MidiOut();
-        this.redraw = true;
-        this.replaceGrid = true;
-        this.last_grid = null;
-        this.interface = undefined as unknown as TextInterface;
         this.init()
     }
 
     startTime(): void {
         this.audio_context = new AudioContext();
-        this.clock = new Clock(this, this.audio_context);
+        this.clock = new Clock(
+            this, this.audio_context
+        );
     }
 
     init = () => {
-        if (this.output_type == 'text') {
-            this.interface = new TextInterface(this);
-            this.context = {
-                'mainScript': {committed_code: '/* MAIN SCRIPT */', temporary_code: '', evaluations: 0},
-                'camera': new Camera(this,
-                    this.interface.howManyCharactersFitWidth(),
-                    this.interface.howManyCharactersFitHeight()
-                ),
-                'cursor': new Cursor(this, 0, 0, 1, 1),
-                'tables': {
-                    'default': new Table(this),
-                },
-                'current_table': 'default',
-            }
+        console.log('Initializing application')
+        this.interface = new TerminalInterface(
+            this, 
+            document.getElementById('world') as HTMLCanvasElement
+        );
+        this.context = {
+            'mainScript': {
+                committed_code: '/* MAIN SCRIPT */', temporary_code: '', evaluations: 0
+            },
+            'camera': new Camera(this,
+                this.interface.terminal.height,
+                this.interface.terminal.width,
+            ),
+            'cursor': new Cursor(this, 0, 0, 1, 1),
+            'tables': {
+                'default': new Table(this),
+            },
+            'current_table': 'default',
+        }
 
-            // Resume from ?context parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('context')) {
-                // Try to parse the hash using parseHash
-                this.loadContextFromUrl(urlParams);
-            } else if (localStorage.getItem('context') !== null) {
-                 // Resume from localStorage data
-                const saved_context: SavedContext = JSON.parse(
-                    localStorage.getItem('context') as string
-                );
-                this.loadFromSavedContext(saved_context);
-            }
+        // Resume from context parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('context')) {
+            // Try to parse the hash using parseHash
+            this.loadContextFromUrl(urlParams);
+        } else if (localStorage.getItem('context') !== null) {
+            // Resume from localStorage data
+            const saved_context: SavedContext = JSON.parse(
+                localStorage.getItem('context') as string
+            );
+            this.loadFromSavedContext(saved_context);
+        }
 
-            if(urlParams.has('universe')) {
-                this.loadUniverseFromUrl(urlParams);
-            }
-
-        } else {
-            throw new Error('Output type not supported');
+        if(urlParams.has('universe')) {
+            this.loadUniverseFromUrl(urlParams);
         }
 
         // Loading the current script for universe
@@ -97,8 +84,6 @@ export class Application {
         let table = this.parseHash(universeContent);
         this.context.tables[universeName] = new Table(this, table);
         this.context.current_table = universeName;
-        this.interface?.loadTheme(this.getCurrentTable().theme);
-        this.initInterfaceMenuBar();
         this.emptyUrl();
     }
 
@@ -121,51 +106,7 @@ export class Application {
         }
 
         this.context.current_table = saved_context.current_table;
-        this.interface?.loadTheme(this.context.tables[this.context.current_table].theme);
         this.context.mainScript = saved_context.mainScript;
-        this.initInterfaceMenuBar();
-    }
-
-    initInterfaceMenuBar = (): void => {
-        const x = this.context.cursor.getX();
-        const y = this.context.cursor.getY();
-        this.updateUniverseName(this.context.current_table);
-        this.updateCursorCoordinates(x, y);
-        this.updateActionArea(x, y);
-    }
-
-    updateUniverseName = (name: string): void => {
-        this.universeNameElement.textContent = name;
-    }
-
-    updateCursorCoordinates = (x: number, y: number): void => {
-        this.coordinatesElement.textContent = `(${x},${y})`;
-    }
-
-    updateActionArea = (x: number, y: number): void => {
-        const currentTable = this.getCurrentTable();
-        if (currentTable.actionAreaAt(x, y)) {
-            this.actionAreaElement.textContent = currentTable.nameOfAreaAt(x, y);
-        }
-    }
-
-    updateTick = (tick: string): void => {
-        this.actionAreaElement.textContent = tick;
-    }
-
-    // TODO: Remove?
-    process = (): DocumentFragment | void | null => {
-       /* if (this.gridMode == 'grid') {
-            if (this.interface) return this.interface.createWholeGrid();
-            else throw new Error("Can't process without interface");
-        } else */ 
-        if (this.gridMode == 'local') {
-            if (this.interface) return this.interface.createEditor('local');
-            else throw new Error("Can't process without interface");
-        } else {
-            if (this.interface) return this.interface.createEditor('global');
-            else throw new Error("Can't process without interface");
-        } 
     }
 
     // Preparing SavedContext for localstorage

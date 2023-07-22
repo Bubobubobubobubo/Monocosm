@@ -8,24 +8,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="interface">
-        <button id="play">⏵</button>
-        <p id="coordinates">(0, 0)</p>
-        <p id="universe">default</p>
-        <p id="actionarea">None</p>
-        <p id="clock">0</p>
-    </div>
-    <div id="cmd">
-        <input type="text" autocomplete="off" class="unselected" id="prompt" disabled></p>
-    </div>
-    <div id="zone">
-      <div id="cursor" contenteditable="true"></div>
-      <div id="grid"></div>
-    </div>
-    <div id="editors">
-      <div id="local"></div>
-      <div id="global"></div>
-    </div>
+    <canvas id="world"></canvas>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

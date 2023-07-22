@@ -26,13 +26,11 @@ export class Cursor {
     incrementY = (amount: number = 1) => {
         const old = this.y;
         this.y += amount;
-        this.app.interface.moveGrid(undefined, old);
     }
 
     incrementX = (amount: number = 1) => {
         const old = this.x;
         this.x += amount;
-        this.app.interface.moveGrid(old, undefined);
     }
 
     incrementXY = (x_amount: number = 1, y_amount: number = 1) => {

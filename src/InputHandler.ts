@@ -187,7 +187,6 @@ export class InputHandler {
 
     validateCommandHandler = (event:KeyboardEvent):void => {
         if (event.key == 'Enter') {
-
             // Fetching the prompt element (HTMLInput or whatever)
             if (this.app.output_type == 'text') {
                 let prompt = document.getElementById('prompt') as HTMLInputElement;

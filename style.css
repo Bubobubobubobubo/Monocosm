@@ -1,252 +1,27 @@
-@keyframes blinker {
-    25% {
-        opacity: 0;
-    }
-    75% {
-        opacity: 0.75;
-    }
-    100% {
-        opacity: 1;
-    }
-
+* {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
 }
-
-.theme-white {
-    --primary:  white;
-    --secondary: black;
-    --tertiary: #FF6666;
+   
+canvas {
+  image-rendering: pixelated;
+  width: 1280; height: 768;
 }
+ 
 
-.theme-dark {
-    --primary: black;
-    --secondary: white;
-    --tertiary: #FF6666;
-}
-
-.theme-black {
-    --primary: black;
-    --secondary: white;
-    --tertiary: #FF6666;
-}
-
-
-.theme-royal {
-    --primary: #00539C;
-    --secondary: #EEA47F;
-    --tertiary: #009c49;
-}
-
-.theme-bee {
-    --primary: #101820;
-    --secondary:#FEE715;
-    --tertiary: #990011FF;
-}
-
-.theme-lavender {
-    --primary: #7689de;
-    --secondary: #a9dce3;
-    --teriary: #DECB76;
-}
-
-.theme-jungle {
-    --primary: #008970;
-    --secondary: #99eedf;
-    --tertiary: #890019;
-}
-
-.theme-forest {
-    --primary: #2C5F2D;
-    --secondary: #97BC62FF;
-    --tertiary: #5F2D2C;
-}
-
-.theme-sky {
-    --primary: #89ABE3FF;
-    --secondary: #FCF6F5FF;
-    --tertiary: #E3C189;
-}
-
-.theme-cherry {
-    --primary: #990011FF;
-    --secondary: #FCF6F5FF;
-    --tertiary: #5E9900;
-}
-
-.theme-blue {
-    --primary: #0000AA;
-    --secondary: #0088FF;
-    --tertiary: #FDD20EFF;
-}
-
-.theme-hurt {
-    --primary: #F93822FF;
-    --secondary: #FDD20EFF;
-    --tertiary: #22E3F9;
-}
-
-.theme-sugar {
-    --primary: #F1F4FFFF;
-    --secondary: #A2A2A1FF;
-    --tertiary: #FFF1F4;
-}
-
-.theme-neon {
-    --primary: #1C1C1BFF;
-    --secondary: #CE4A7EFF;
-    --tertiary: #4ACE9A;
-}
-
-.theme-atoll {
-    --primary: #00B1D2FF;
-    --secondary: #FDDB27FF;
-    --tertiary: #00D28A;
+html {
+    height: 100%;
+    width: 100%;
 }
 
 body {
-    margin: 0;
-    padding: 0;
+    background-color: red;
+    margin: 0; padding: 0;
+    overflow-x: hidden;
     overflow: hidden;
-    font-family: "jgs7", "unifont", "unifont-upper";
-    font-size: 16px;
-    letter-spacing: normal;
-    background-color: var(--primary);
-    background-size: 50px 100px;
-    background-image: radial-gradient(circle, var(--secondary) 1px, transparent 0px);
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-}
-
-div#zone {
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    width: 120%;
     height: 100%;
 }
-
-div#grid {
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-div#cursor {
-    margin: 0;
-    padding: 0;
-    background-color: var(--secondary);
-    color: transparent;
-    white-space: pre;
-    position: absolute;
-    caret-color: transparent;
-}
-
-span {
-    font-family: "jgs7", "unifont", "unifont-upper";
-}
-
-span.paste-fallback:before {
-    content: 'Paste here!';
-    pointer-events: none;
-    display: block; /* For Firefox */
-}
-
-.selected {
-    color: var(--primary);
-    background: var(--secondary);
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.unselected {
-    color: var(--secondary);
-    background: var(--primary);
-}
-
-span.cell {
-    font-size: 20px;
-    line-height: 1em;
-    display: block;
-    color: var(--secondary);
-    background-color: var(--primary);
-    white-space: pre;
-    position: absolute;
-}
-
-span.inverted-cell {
-    font-size: 20px;
-    line-height: 1em;
-    background-color: var(--secondary);
-    color: var(--primary);
-    white-space: pre;
-    position: absolute;
-}
-
-span.action-area-cell {
-    font-size: 20px;
-    line-height: 1em;
-    outline: 0.05em dashed var(--tertiary);
-    outline-offset: -.5px;
-    color: var(--secondary);
-    white-space: pre;
-    position: absolute;
-}
-
-/* For pasteFromBeyond */
-[contenteditable] {
-    outline: 1px solid var(--secondary);
-}
-
-div#interface {
-    display: inline-flex;
-    gap:1.5em;
-    padding: 0;
-    background-color: var(--primary);
-    color: var(--secondary);
-    position: relative;
-    z-index: 1;
-}
-
-div#interface p:before {
-    content: "⬢ ";
-}
-
-div#interface p {
-    padding: 0; 
-    margin: 0;
-    display: inline-block;
-}
-
-div#cmd {
-    margin: 0pt;
-}
-
-input#prompt{
-    font-size: 16px;
-    font-family: "jgs7", "unifont", "unifont-upper";
-    padding: 0;
-    border: none;
-    margin: 0;
-    width: 100vw;
-}
-
-textarea:focus, input:focus{
-    outline: none;
-}
-
-button {
-    background: var(--secondary);
-    color: var(--primary);
-    border: none;
-    padding: 20;
-}
-
-
+  

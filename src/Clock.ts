@@ -81,6 +81,7 @@ export class Clock {
         this.time = 0;
         this.tick = 0;
         const clock = ctx.createClock((time: number, duration: number, tick: number) => {
+            // this.app.userAPI.beep()
             this.time = time; this.tick = tick; this.duration = duration;
             evaluate(this.app, this.app.context.mainScript);
             this.evaluations++;

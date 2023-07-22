@@ -55,7 +55,6 @@ export class UserAPI {
     }
 
     theme = (theme_name: string):void => {
-        this.app.interface?.setTheme(theme_name);
     }
 
     // Private methods
@@ -169,6 +168,14 @@ export class UserAPI {
 
     bpm = (bpm: string[]):void => {
     }
+
+    // beep = ():void => {
+    //     // This function should play short beep sound
+    //     let osc = this.app.audio_context?.createOscillator();
+    //     osc?.connect(this.app.audio_context?.destination);
+    //     osc?.start();
+    //     osc?.stop(this.app.audio_context?.currentTime + 0.1);
+    // }
 
     start = ():void => {
         // Start the scheduling engine
